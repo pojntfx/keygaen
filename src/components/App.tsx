@@ -1,12 +1,13 @@
-import { Button, TextArea } from "@patternfly/react-core";
+import { CodeEditor, Language } from "@patternfly/react-code-editor";
+import { Button } from "@patternfly/react-core";
 import * as openpgp from "openpgp";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export function App() {
   const [generatedKey, setGeneratedKey] = useState("");
 
   return (
-    <div>
+    <>
       <Button
         variant="primary"
         onClick={async () => {
@@ -27,12 +28,15 @@ export function App() {
       </Button>
 
       {generatedKey !== "" && (
-        <TextArea
-          value={generatedKey}
-          aria-label="Generated PGP key"
-          rows={generatedKey.split("\n").length}
+        <CodeEditor
+          isReadOnly
+          isMinimapVisible
+          code={generatedKey}
+          onChange={this.onChange}
+          language={Language.plaintext}
+          height="400px"
         />
       )}
-    </div>
+    </>
   );
 }
