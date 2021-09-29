@@ -1,0 +1,32 @@
+{
+  "name": "@pojntfx/gridge",
+  "version": "0.0.1",
+  "description": "Sign, verify, encrypt and decrypt data with GPG in your browser.",
+  "source": "src/index.html",
+  "dependencies": {
+    "@patternfly/react-core": "^4.157.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@types/react": "^17.0.25",
+    "@types/react-dom": "^17.0.9",
+    "parcel": "^2.0.0-rc.0"
+  },
+  "scripts": {
+    "start": "parcel",
+    "build": "parcel build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pojntfx/gridge.git"
+  },
+  "author": "Felix Pojtinger <felix@pojtinger.com>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/pojntfx/gridge/issues"
+  },
+  "homepage": "https://github.com/pojntfx/gridge#readme"
+}
