@@ -32,7 +32,6 @@ export function App() {
           isReadOnly
           isMinimapVisible
           code={generatedKey}
-          onChange={this.onChange}
           language={Language.plaintext}
           height="400px"
         />
