@@ -88,6 +88,7 @@ func (c *Index) Render() app.UI {
 															Class(linkClasses).
 															OnClick(func(ctx app.Context, e app.Event) {
 																c.activeTitle = title
+																c.closeSidebarOnMobile()
 															}).
 															Text(title),
 													)
@@ -136,6 +137,16 @@ func (c *Index) OnMount(ctx app.Context) {
 	c.activeTitle = "Home"
 
 	c.sidebarOpen = true
+	c.closeSidebarOnMobile()
+}
+
+func (c *Index) OnAppUpdate(ctx app.Context) {
+	if ctx.AppUpdateAvailable() {
+		ctx.Reload()
+	}
+}
+
+func (c *Index) closeSidebarOnMobile() {
 	if app.Window().Get("screen").Get("width").Int() < 1200 {
 		c.sidebarOpen = false
 	}
