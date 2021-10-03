@@ -7,12 +7,14 @@ import (
 
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 	"github.com/pojntfx/gridge/pkg/components"
+	"github.com/pojntfx/gridge/pkg/stories"
 )
 
 func main() {
 	// Client-side code
 	{
 		app.Route("/", &components.Home{})
+		app.Route("/stories", &stories.Index{})
 		app.RunWhenOnBrowser()
 	}
 
@@ -62,6 +64,7 @@ func main() {
 	// Serve if specified
 	if *serve {
 		log.Println("Listening on", *laddr)
+		log.Println("Stories can be found on /stories")
 
 		if err := http.ListenAndServe(*laddr, h); err != nil {
 			log.Fatal("could not serve:", err)
