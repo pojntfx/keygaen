@@ -10,5 +10,7 @@ type HomeStory struct {
 }
 
 func (c *HomeStory) Render() app.UI {
-	return &components.Home{}
+	return c.WithRoot(
+		&components.Home{},
+	)
 }

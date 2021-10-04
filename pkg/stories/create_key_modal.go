@@ -10,9 +10,7 @@ type CreateKeyModalStory struct {
 }
 
 func (c *CreateKeyModalStory) Render() app.UI {
-	if c.root == nil {
-		c.root = &components.CreateKeyModal{}
-	}
-
-	return c.root
+	return c.WithRoot(
+		&components.CreateKeyModal{},
+	)
 }
