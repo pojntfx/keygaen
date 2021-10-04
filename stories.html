@@ -8,11 +8,11 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:42161/stories">
+<meta property="og:url" content="http://127.0.0.1:39285/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
-<meta property="og:image" content>
+<meta content property="og:image">
 <title>
 gridge
 </title>
@@ -21,9 +21,9 @@ gridge
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
-<script src="/gridge/app.js" defer="true"></script>
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css">
+<script defer="true" src="/gridge/app.js"></script>
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -32,7 +32,7 @@ gridge
 <body>
 <div>
 <aside id="app-wasm-loader" class="goapp-app-info">
-<img src="/gridge/web/default.png" id="app-wasm-loader-icon" class="goapp-logo goapp-spin">
+<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
@@ -61,7 +61,7 @@ Stories
 </header>
 <div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
 <div class="pf-c-page__sidebar-body">
-<nav aria-label="Global" class="pf-c-nav">
+<nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list"></ul>
 </nav>
 </div>
@@ -82,6 +82,15 @@ Home
 <section class="pf-c-page__main-section pf-m-limit-width pf-m-no-fill pf-m-light pf-m-shadow-top">
 <div class="pf-c-page__main-body">
 <div class="pf-c-code-block">
+<div class="pf-c-code-block__header">
+<div class="pf-c-code-block__actions">
+<div class="pf-c-code-block__actions-item">
+<button aria-label="Reload props" class="pf-c-button pf-m-plain" type="button">
+<i class="fas fa-sync" aria-hidden="true"></i>
+</button>
+</div>
+</div>
+</div>
 <div class="pf-c-code-block__content">
 <pre class="pf-c-code-block__pre">
 
