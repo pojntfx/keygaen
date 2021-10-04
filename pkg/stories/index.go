@@ -3,6 +3,7 @@ package stories
 import (
 	"fmt"
 	"net/url"
+	"time"
 
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
@@ -10,6 +11,7 @@ import (
 type SelfReferencingComponent interface {
 	app.UI
 
+	WithRoot(app.UI) app.UI
 	Root() app.UI
 }
 
@@ -19,12 +21,21 @@ type Story struct {
 	root app.UI
 }
 
+func (c *Story) WithRoot(root app.UI) app.UI {
+	if c.root == nil {
+		c.root = root
+	}
+
+	return c.root
+}
+
 func (c *Story) Root() app.UI {
 	return c.root
 }
 
 const (
-	activeTitleKey = "activeTitle"
+	activeTitleKey    = "activeTitle"
+	sidebarBreakpoint = 1200
 )
 
 type Index struct {
@@ -209,6 +220,22 @@ func (c *Index) Render() app.UI {
 																	return ""
 																}
 
+																r := s.Root()
+																if r == nil {
+																	// Once the component becomes available, re-render
+																	go func() {
+																		for {
+																			if r := s.Root(); r != nil {
+																				c.Update()
+
+																				break
+																			}
+
+																			time.Sleep(time.Millisecond * 50)
+																		}
+																	}()
+																}
+
 																return fmt.Sprintf("%#v", s.Root())
 															}(),
 														),
@@ -230,6 +257,14 @@ func (c *Index) OnMount(ctx app.Context) {
 	c.closeSidebarOnMobile()
 }
 
+func (c *Index) OnResize(ctx app.Context) {
+	if c.sidebarOpen {
+		c.closeSidebarOnMobile()
+	} else {
+		c.openSidebarOnDesktop()
+	}
+}
+
 func (c *Index) OnAppUpdate(ctx app.Context) {
 	if ctx.AppUpdateAvailable() {
 		ctx.Reload()
@@ -249,7 +284,13 @@ func (c *Index) setActiveTitle(title string, ctx app.Context) {
 }
 
 func (c *Index) closeSidebarOnMobile() {
-	if app.Window().Get("screen").Get("width").Int() < 1200 {
+	if app.Window().Get("screen").Get("width").Int() < sidebarBreakpoint {
 		c.sidebarOpen = false
+	}
+}
+
+func (c *Index) openSidebarOnDesktop() {
+	if app.Window().Get("screen").Get("width").Int() >= sidebarBreakpoint {
+		c.sidebarOpen = true
 	}
 }
