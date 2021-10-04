@@ -1,6 +1,14 @@
 package stories
 
-import "github.com/maxence-charriere/go-app/v9/pkg/app"
+import (
+	"net/url"
+
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
+)
+
+const (
+	activeTitleKey = "activeTitle"
+)
 
 type Index struct {
 	app.Compo
@@ -14,6 +22,15 @@ func (c *Index) Render() app.UI {
 	additionalSidebarClasses := "pf-m-collapsed"
 	if c.sidebarOpen {
 		additionalSidebarClasses = "pf-m-expanded"
+	}
+
+	if c.activeTitle == "" {
+		t, err := url.QueryUnescape(app.Window().URL().Query().Get(activeTitleKey))
+		if err != nil {
+			panic(err)
+		}
+
+		c.activeTitle = t
 	}
 
 	return app.Div().
@@ -87,7 +104,8 @@ func (c *Index) Render() app.UI {
 														app.A().
 															Class(linkClasses).
 															OnClick(func(ctx app.Context, e app.Event) {
-																c.activeTitle = title
+																c.setActiveTitle(title, ctx)
+
 																c.closeSidebarOnMobile()
 															}).
 															Text(title),
@@ -134,7 +152,6 @@ func (c *Index) OnMount(ctx app.Context) {
 		"Home":             &HomeStory{},
 		"Create Key Modal": &CreateKeyModalStory{},
 	}
-	c.activeTitle = "Home"
 
 	c.sidebarOpen = true
 	c.closeSidebarOnMobile()
@@ -144,6 +161,18 @@ func (c *Index) OnAppUpdate(ctx app.Context) {
 	if ctx.AppUpdateAvailable() {
 		ctx.Reload()
 	}
+}
+
+func (c *Index) setActiveTitle(title string, ctx app.Context) {
+	c.activeTitle = title
+
+	u := app.Window().URL()
+
+	q := u.Query()
+	q.Set(activeTitleKey, url.QueryEscape(c.activeTitle))
+
+	u.RawQuery = q.Encode()
+	ctx.NavigateTo(u)
 }
 
 func (c *Index) closeSidebarOnMobile() {
