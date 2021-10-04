@@ -6,9 +6,13 @@ import (
 )
 
 type CreateKeyModalStory struct {
-	app.Compo
+	Story
 }
 
 func (c *CreateKeyModalStory) Render() app.UI {
-	return &components.CreateKeyModal{}
+	if c.root == nil {
+		c.root = &components.CreateKeyModal{}
+	}
+
+	return c.root
 }

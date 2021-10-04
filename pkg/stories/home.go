@@ -6,7 +6,7 @@ import (
 )
 
 type HomeStory struct {
-	app.Compo
+	Story
 }
 
 func (c *HomeStory) Render() app.UI {

@@ -1,10 +1,27 @@
 package stories
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
+
+type SelfReferencingComponent interface {
+	app.UI
+
+	Root() app.UI
+}
+
+type Story struct {
+	app.Compo
+
+	root app.UI
+}
+
+func (c *Story) Root() app.UI {
+	return c.root
+}
 
 const (
 	activeTitleKey = "activeTitle"
@@ -13,7 +30,7 @@ const (
 type Index struct {
 	app.Compo
 
-	stories     map[string]app.UI
+	stories     map[string]SelfReferencingComponent
 	activeTitle string
 	sidebarOpen bool
 }
@@ -30,7 +47,11 @@ func (c *Index) Render() app.UI {
 			panic(err)
 		}
 
-		c.activeTitle = t
+		if t == "" {
+			c.activeTitle = "Home"
+		} else {
+			c.activeTitle = t
+		}
 	}
 
 	return app.Div().
@@ -143,12 +164,40 @@ func (c *Index) Render() app.UI {
 									c.stories[c.activeTitle],
 								),
 						),
+					app.Section().
+						Class("pf-c-page__main-section pf-m-limit-width pf-m-no-fill pf-m-light pf-m-shadow-top").
+						Body(
+							app.Div().
+								Class("pf-c-page__main-body").
+								Body(
+									app.Div().
+										Class("pf-c-code-block").
+										Body(
+											app.Div().
+												Class("pf-c-code-block__content").
+												Body(
+													app.Pre().
+														Class("pf-c-code-block__pre").
+														Text(
+															func() string {
+																s := c.stories[c.activeTitle]
+																if s == nil {
+																	return ""
+																}
+
+																return fmt.Sprintf("%#v", s.Root())
+															}(),
+														),
+												),
+										),
+								),
+						),
 				),
 		)
 }
 
 func (c *Index) OnMount(ctx app.Context) {
-	c.stories = map[string]app.UI{
+	c.stories = map[string]SelfReferencingComponent{
 		"Home":             &HomeStory{},
 		"Create Key Modal": &CreateKeyModalStory{},
 	}
