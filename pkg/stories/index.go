@@ -174,6 +174,30 @@ func (c *Index) Render() app.UI {
 										Class("pf-c-code-block").
 										Body(
 											app.Div().
+												Class("pf-c-code-block__header").
+												Body(
+													app.Div().
+														Class("pf-c-code-block__actions").
+														Body(
+															app.Div().
+																Class("pf-c-code-block__actions-item").
+																Body(
+																	app.Button().
+																		Class("pf-c-button pf-m-plain").
+																		Type("button").
+																		Aria("label", "Reload props").
+																		OnClick(func(ctx app.Context, e app.Event) {
+																			c.Update()
+																		}).
+																		Body(
+																			app.I().
+																				Class("fas fa-sync").
+																				Aria("hidden", true),
+																		),
+																),
+														),
+												),
+											app.Div().
 												Class("pf-c-code-block__content").
 												Body(
 													app.Pre().
