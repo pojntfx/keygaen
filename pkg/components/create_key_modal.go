@@ -17,6 +17,8 @@ type CreateKeyModal struct {
 	email                string
 	password             string
 	passwordConfirmation string
+
+	passwordInvalid bool
 }
 
 func (c *CreateKeyModal) Render() app.UI {
@@ -25,7 +27,27 @@ func (c *CreateKeyModal) Render() app.UI {
 		OnSubmit(func(ctx app.Context, e app.Event) {
 			e.PreventDefault()
 
-			// TODO: Call `OnSubmit`
+			// Check if the password confirmation matches
+			if c.password != c.passwordConfirmation {
+				c.passwordInvalid = true
+
+				return
+			}
+
+			c.passwordInvalid = false
+
+			// Submit the form
+			c.OnSubmit(
+				c.fullName,
+				c.email,
+				c.password,
+			)
+
+			// Clear the form
+			c.fullName = ""
+			c.email = ""
+			c.password = ""
+			c.passwordConfirmation = ""
 		}).
 		Body(
 			app.Div().
@@ -165,11 +187,27 @@ func (c *CreateKeyModal) Render() app.UI {
 										Class("pf-c-form-control").
 										Type("password").
 										ID("confirm-password-input").
+										Aria("invalid", c.passwordInvalid).
+										Aria("describedby", func() string {
+											if c.passwordInvalid {
+												return "password-invalid-helper"
+											}
+
+											return ""
+										}).
 										Required(true).
 										OnInput(func(ctx app.Context, e app.Event) {
 											c.passwordConfirmation = ctx.JSSrc().Get("value").String()
 										}).
 										Value(c.passwordConfirmation),
+									app.If(
+										c.passwordInvalid,
+										app.P().
+											Class("pf-c-form__helper-text pf-m-error").
+											ID("password-invalid-helper").
+											Aria("live", "polite").
+											Text("The passwords don't match."),
+									),
 								),
 						),
 				),
