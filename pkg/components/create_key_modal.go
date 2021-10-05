@@ -12,6 +12,7 @@ type CreateKeyModal struct {
 		email string,
 		password string,
 	)
+	OnCancel func()
 
 	fullName             string
 	email                string
@@ -43,11 +44,7 @@ func (c *CreateKeyModal) Render() app.UI {
 				c.password,
 			)
 
-			// Clear the form
-			c.fullName = ""
-			c.email = ""
-			c.password = ""
-			c.passwordConfirmation = ""
+			c.clear()
 		}).
 		Body(
 			app.Div().
@@ -227,9 +224,21 @@ func (c *CreateKeyModal) Render() app.UI {
 									app.Button().
 										Class("pf-c-button pf-m-link").
 										Type("button").
-										Text("Cancel"),
+										Text("Cancel").
+										OnClick(func(ctx app.Context, e app.Event) {
+											c.clear()
+
+											c.OnCancel()
+										}),
 								),
 						),
 				),
 		)
+}
+
+func (c *CreateKeyModal) clear() {
+	c.fullName = ""
+	c.email = ""
+	c.password = ""
+	c.passwordConfirmation = ""
 }
