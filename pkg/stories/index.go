@@ -284,13 +284,13 @@ func (c *Index) setActiveTitle(title string, ctx app.Context) {
 }
 
 func (c *Index) closeSidebarOnMobile() {
-	if app.Window().Get("screen").Get("width").Int() < sidebarBreakpoint {
+	if app.Window().Get("innerWidth").Int() < sidebarBreakpoint {
 		c.sidebarOpen = false
 	}
 }
 
 func (c *Index) openSidebarOnDesktop() {
-	if app.Window().Get("screen").Get("width").Int() >= sidebarBreakpoint {
+	if app.Window().Get("innerWidth").Int() >= sidebarBreakpoint {
 		c.sidebarOpen = true
 	}
 }
