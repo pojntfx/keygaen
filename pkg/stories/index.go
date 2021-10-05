@@ -251,6 +251,7 @@ func (c *Index) OnMount(ctx app.Context) {
 	c.stories = map[string]SelfReferencingComponent{
 		"Home":             &HomeStory{},
 		"Create Key Modal": &CreateKeyModalStory{},
+		"Import Key Modal": &ImportKeyModalStory{},
 	}
 
 	c.sidebarOpen = true

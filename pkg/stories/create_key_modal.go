@@ -17,6 +17,7 @@ func (c *CreateKeyModalStory) Render() app.UI {
 			OnSubmit: func(fullName, email, _ string) {
 				app.Window().Call("alert", fmt.Sprintf("Created key with full name %v, email %v and a password", fullName, email))
 			},
+			OnCancel: func() {},
 		},
 	)
 }
