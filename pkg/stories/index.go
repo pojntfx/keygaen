@@ -159,10 +159,22 @@ func (c *Index) Render() app.UI {
 								Class("pf-c-page__main-body").
 								Body(
 									app.Div().
-										Class("pf-c-content").
+										Class("pf-c-content pf-u-display-flex pf-u-justify-content-space-between").
 										Body(
 											app.H1().
-												Text(c.activeTitle),
+												Class("pf-u-mb-0").
+												Body(
+													app.Text(c.activeTitle),
+												),
+											app.Button().
+												Class("pf-c-button pf-m-plain pf-u-ml-sm").
+												Type("button").
+												Aria("label", "Fullscreen").
+												Body(
+													app.I().
+														Class("fas fa-expand-arrows-alt").
+														Aria("hidden", true),
+												),
 										),
 								),
 						),
