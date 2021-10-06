@@ -4,6 +4,10 @@ import (
 	app "github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
+const (
+	fileInputID = "select-file-input"
+)
+
 type ImportKeyModal struct {
 	app.Compo
 
@@ -38,16 +42,36 @@ func (c *ImportKeyModal) Render() app.UI {
 										Body(
 											app.Input().
 												Class("pf-c-form-control").
-												ID("select-file-input").
+												ID(fileInputID).
+												Type("File").
 												Aria("label", "Drag and drop a key or select one").
 												ReadOnly(true).
 												Placeholder("Drag and drop a key or select one").
-												Aria("describedby", "select-file-button"),
-											app.Button().
-												Class("pf-c-button pf-m-control").
-												Type("button").
-												ID("select-file-button").
-												Text("Select Key"),
+												OnChange(func(ctx app.Context, e app.Event) {
+													e.PreventDefault()
+
+													reader := app.Window().JSValue().Get("FileReader").New()
+													input := app.Window().GetElementByID(fileInputID)
+
+													reader.Set("onload", app.FuncOf(func(this app.Value, args []app.Value) interface{} {
+														go func() {
+															rawFileContent := app.Window().Get("Uint8Array").New(args[0].Get("target").Get("result"))
+
+															fileContent := make([]byte, rawFileContent.Get("length").Int())
+															app.CopyBytesToGo(fileContent, rawFileContent)
+
+															c.key = string(fileContent)
+														}()
+
+														return nil
+													}))
+
+													if file := input.Get("files").Get("0"); !file.IsUndefined() {
+														reader.Call("readAsArrayBuffer", file)
+													} else {
+														c.clear()
+													}
+												}),
 											app.Button().
 												Class("pf-c-button pf-m-control").
 												Type("button").
@@ -103,5 +127,9 @@ func (c *ImportKeyModal) Render() app.UI {
 }
 
 func (c *ImportKeyModal) clear() {
+	// Clear input value
+	app.Window().GetElementByID(fileInputID).Set("value", app.Null())
+
+	// Clear key
 	c.key = ""
 }
