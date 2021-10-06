@@ -35,6 +35,7 @@ func (c *Story) Root() app.UI {
 
 const (
 	activeTitleKey    = "activeTitle"
+	standaloneKey     = "standalone"
 	sidebarBreakpoint = 1200
 )
 
@@ -63,6 +64,18 @@ func (c *Index) Render() app.UI {
 		} else {
 			c.activeTitle = t
 		}
+	}
+
+	if c.stories == nil {
+		c.stories = map[string]SelfReferencingComponent{
+			"Home":             &HomeStory{},
+			"Create Key Modal": &CreateKeyModalStory{},
+			"Import Key Modal": &ImportKeyModalStory{},
+		}
+	}
+
+	if app.Window().URL().Query().Has(standaloneKey) {
+		return c.stories[c.activeTitle]
 	}
 
 	return app.Div().
@@ -153,7 +166,7 @@ func (c *Index) Render() app.UI {
 				TabIndex(-1).
 				Body(
 					app.Section().
-						Class("pf-c-page__main-section pf-m-limit-width pf-m-light pf-m-shadow-bottom").
+						Class("pf-c-page__main-section pf-u-p-0 pf-m-light pf-m-shadow-bottom").
 						Body(
 							app.Div().
 								Class("pf-c-page__main-body").
@@ -166,10 +179,20 @@ func (c *Index) Render() app.UI {
 												Body(
 													app.Text(c.activeTitle),
 												),
-											app.Button().
+											app.A().
 												Class("pf-c-button pf-m-plain pf-u-ml-sm").
-												Type("button").
 												Aria("label", "Fullscreen").
+												OnClick(func(ctx app.Context, e app.Event) {
+													u := app.Window().URL()
+
+													q := u.Query()
+
+													q.Set(standaloneKey, "true")
+
+													u.RawQuery = q.Encode()
+
+													app.Window().Call("open", u.String(), "_blank")
+												}).
 												Body(
 													app.I().
 														Class("fas fa-expand-arrows-alt").
@@ -179,7 +202,7 @@ func (c *Index) Render() app.UI {
 								),
 						),
 					app.Section().
-						Class("pf-c-page__main-section pf-m-limit-width pf-m-overflow-scroll").
+						Class("pf-c-page__main-section pf-u-p-0 pf-m-overflow-scroll").
 						Body(
 							app.Div().
 								Class("pf-c-page__main-body").
@@ -188,7 +211,7 @@ func (c *Index) Render() app.UI {
 								),
 						),
 					app.Section().
-						Class("pf-c-page__main-section pf-m-limit-width pf-m-no-fill pf-m-light pf-m-shadow-top").
+						Class("pf-c-page__main-section pf-u-p-0 pf-m-no-fill pf-m-light pf-m-shadow-top").
 						Body(
 							app.Div().
 								Class("pf-c-page__main-body").
@@ -260,12 +283,6 @@ func (c *Index) Render() app.UI {
 }
 
 func (c *Index) OnMount(ctx app.Context) {
-	c.stories = map[string]SelfReferencingComponent{
-		"Home":             &HomeStory{},
-		"Create Key Modal": &CreateKeyModalStory{},
-		"Import Key Modal": &ImportKeyModalStory{},
-	}
-
 	c.sidebarOpen = true
 	c.closeSidebarOnMobile()
 }
