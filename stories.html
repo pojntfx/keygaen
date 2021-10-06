@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta httpequiv="Content-Type" content="text/html; charset=utf-8">
-<meta content="Felicitas Pojtinger" name="author">
+<meta name="author" content="Felicitas Pojtinger">
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
-<meta content="gpg, pgp, gopenpgp, encryption, signatures" name="keywords">
-<meta content="#151515" name="theme-color">
+<meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
+<meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:35895/stories">
+<meta property="og:url" content="http://127.0.0.1:39749/stories">
 <meta property="og:title" content="gridge">
-<meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
+<meta content="Sign, verify, encrypt and decrypt data with GPG." property="og:description">
 <meta property="og:type" content="website">
 <meta property="og:image" content>
 <title>
@@ -18,12 +18,12 @@ gridge
 </title>
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
-<link href="/gridge/manifest.webmanifest" rel="manifest">
-<link rel="stylesheet" href="/gridge/app.css" type="text/css">
+<link rel="manifest" href="/gridge/manifest.webmanifest">
+<link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
-<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -31,8 +31,8 @@ gridge
 </head>
 <body>
 <div>
-<aside id="app-wasm-loader" class="goapp-app-info">
-<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
+<aside class="goapp-app-info" id="app-wasm-loader">
+<img class="goapp-logo goapp-spin" src="/gridge/web/default.png" id="app-wasm-loader-icon">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
@@ -50,8 +50,8 @@ Skip to content
 </button>
 </span>
 <div class="pf-c-masthead__main">
-<a class="pf-c-masthead__brand" href="/">
-<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
+<a href="/" class="pf-c-masthead__brand">
+<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo.png">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -66,13 +66,16 @@ Stories
 </nav>
 </div>
 </div>
-<main id="main" class="pf-c-page__main" tabindex="-1">
+<main tabindex="-1" id="main" class="pf-c-page__main">
 <section class="pf-c-page__main-section pf-m-limit-width pf-m-light pf-m-shadow-bottom">
 <div class="pf-c-page__main-body">
-<div class="pf-c-content">
-<h1>
+<div class="pf-c-content pf-u-display-flex pf-u-justify-content-space-between">
+<h1 class="pf-u-mb-0">
 Home
 </h1>
+<button class="pf-c-button pf-m-plain pf-u-ml-sm" type="button" aria-label="Fullscreen">
+<i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
+</button>
 </div>
 </div>
 </section>
@@ -85,7 +88,7 @@ Home
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button class="pf-c-button pf-m-plain" type="button" aria-label="Reload props">
+<button type="button" aria-label="Reload props" class="pf-c-button pf-m-plain">
 <i class="fas fa-sync" aria-hidden="true"></i>
 </button>
 </div>
