@@ -145,14 +145,20 @@ func (c *EncryptAndSignModal) Render() app.UI {
 							app.Div().
 								Class("pf-c-check").
 								Body(
-									app.Input().
-										Class("pf-c-check__input").
-										Type("checkbox").
-										ID("encryption-checkbox").
-										Checked(!c.skipEncryption).
-										OnInput(func(ctx app.Context, e app.Event) {
-											c.skipEncryption = !c.skipEncryption
-										}),
+									&Controlled{
+										Component: app.Input().
+											Class("pf-c-check__input").
+											Type("checkbox").
+											ID("encryption-checkbox").
+											OnInput(func(ctx app.Context, e app.Event) {
+												if !(c.skipSigning && !c.skipEncryption) {
+													c.skipEncryption = !c.skipEncryption
+												}
+											}),
+										Properties: map[string]interface{}{
+											"checked": !c.skipEncryption,
+										},
+									},
 									app.Label().
 										Class("pf-c-check__label").
 										For("encryption-checkbox").
@@ -209,14 +215,20 @@ func (c *EncryptAndSignModal) Render() app.UI {
 							app.Div().
 								Class("pf-c-check").
 								Body(
-									app.Input().
-										Class("pf-c-check__input").
-										Type("checkbox").
-										ID("signature-checkbox").
-										Checked(!c.skipSigning).
-										OnInput(func(ctx app.Context, e app.Event) {
-											c.skipSigning = !c.skipSigning
-										}),
+									&Controlled{
+										Component: app.Input().
+											Class("pf-c-check__input").
+											Type("checkbox").
+											ID("signature-checkbox").
+											OnInput(func(ctx app.Context, e app.Event) {
+												if !(!c.skipSigning && c.skipEncryption) {
+													c.skipSigning = !c.skipSigning
+												}
+											}),
+										Properties: map[string]interface{}{
+											"checked": !c.skipSigning,
+										},
+									},
 									app.Label().
 										Class("pf-c-check__label").
 										For("signature-checkbox").
@@ -229,7 +241,7 @@ func (c *EncryptAndSignModal) Render() app.UI {
 										c.skipSigning,
 										app.Span().
 											Class("pf-c-check__description").
-											Text("If enabled, anyone will be able to verify that the file originates from a the person with selected key."),
+											Text("If enabled, anyone will be able to verify that the file originates from the person with the selected key."),
 									).Else(
 										app.Span().
 											Class("pf-c-check__description").
