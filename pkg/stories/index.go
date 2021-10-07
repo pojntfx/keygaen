@@ -68,9 +68,10 @@ func (c *Index) Render() app.UI {
 
 	if c.stories == nil {
 		c.stories = map[string]SelfReferencingComponent{
-			"Home":             &HomeStory{},
-			"Create Key Modal": &CreateKeyModalStory{},
-			"Import Key Modal": &ImportKeyModalStory{},
+			"Home":               &HomeStory{},
+			"Create Key Modal":   &CreateKeyModalStory{},
+			"Import Key Modal":   &ImportKeyModalStory{},
+			"Encrypt/Sign Modal": &EncryptAndSignModalStory{},
 		}
 	}
 
