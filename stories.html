@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta httpequiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="author" content="Felicitas Pojtinger">
+<meta content="Felicitas Pojtinger" name="author">
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
-<meta property="og:url" content="http://127.0.0.1:35335/stories">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+<meta property="og:url" content="http://127.0.0.1:44293/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -19,11 +19,11 @@ gridge
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link rel="stylesheet" href="/gridge/app.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css">
-<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
+<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css" rel="stylesheet">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -51,7 +51,7 @@ Skip to content
 </span>
 <div class="pf-c-masthead__main">
 <a class="pf-c-masthead__brand" href="/">
-<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
+<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -61,7 +61,7 @@ Stories
 </header>
 <div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
 <div class="pf-c-page__sidebar-body">
-<nav aria-label="Global" class="pf-c-nav">
+<nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
 <li class="pf-c-nav__item">
 <a class="pf-c-nav__link">
@@ -87,7 +87,7 @@ Import Key Modal
 </nav>
 </div>
 </div>
-<main id="main" class="pf-c-page__main" tabindex="-1">
+<main tabindex="-1" id="main" class="pf-c-page__main">
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-light pf-m-shadow-bottom">
 <div class="pf-c-page__main-body">
 <div class="pf-c-content pf-u-display-flex pf-u-justify-content-space-between">
@@ -95,7 +95,7 @@ Import Key Modal
 Home
 </h1>
 <a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen">
-<i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-expand-arrows-alt"></i>
 </a>
 </div>
 </div>
@@ -121,7 +121,7 @@ Hello, world!
 </div>
 <div class="pf-c-code-block__content">
 <pre class="pf-c-code-block__pre">
-&amp;components.Home{Compo:app.Compo{disp:(*app.engine)(0xc00007cd00), ctx:(*context.cancelCtx)(0xc000069480), ctxCancel:(func())(0x4e72a0), parentElem:(*stories.HomeStory)(0xc0001cc000), root:(*app.htmlH1)(0xc0001da320), this:(*components.Home)(0xc00006a5a0)}}
+&lt;nil&gt;
 </pre>
 </div>
 </div>
