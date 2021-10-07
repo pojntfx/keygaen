@@ -5,7 +5,8 @@ import (
 )
 
 const (
-	selectFileInput = "select-file-input"
+	selectFileInput   = "select-file-input"
+	publicKeySelector = "public-key-selector"
 )
 
 type EncryptionKey struct {
@@ -27,9 +28,12 @@ type EncryptAndSignModal struct {
 	)
 	OnCancel func()
 
+	fileIsBinary bool
 	file         []byte
-	isBinary     bool
-	publicKeyID  string
+
+	skipEncryption bool
+	publicKeyID    string
+
 	privateKeyID string
 }
 
@@ -80,7 +84,7 @@ func (c *EncryptAndSignModal) Render() app.UI {
 															fileContent := make([]byte, rawFileContent.Get("length").Int())
 															app.CopyBytesToGo(fileContent, rawFileContent)
 
-															c.isBinary = true
+															c.fileIsBinary = true
 															c.file = fileContent
 														}()
 
@@ -115,19 +119,83 @@ func (c *EncryptAndSignModal) Render() app.UI {
 										OnInput(func(ctx app.Context, e app.Event) {
 											c.file = []byte(ctx.JSSrc().Get("value").String())
 
-											if c.isBinary {
-												c.isBinary = false
+											if c.fileIsBinary {
+												c.fileIsBinary = false
 
 												app.Window().GetElementByID(selectFileInput).Set("value", app.Null())
 											}
 										}).
 										Text(func() string {
-											if c.isBinary {
+											if c.fileIsBinary {
 												return "File has been selected."
 											}
 
 											return string(c.file)
 										}()),
+								),
+						),
+				),
+			app.Div().
+				Class("pf-c-form__group").
+				Aria("role", "group").
+				Body(
+					app.Div().
+						Class("pf-c-form__group-control").
+						Body(
+							app.Div().
+								Class("pf-c-check").
+								Body(
+									app.Input().
+										Class("pf-c-check__input").
+										Type("checkbox").
+										ID("encryption-checkbox").
+										Checked(!c.skipEncryption).
+										OnInput(func(ctx app.Context, e app.Event) {
+											c.skipEncryption = !c.skipEncryption
+										}),
+									app.Label().
+										Class("pf-c-check__label").
+										For("encryption-checkbox").
+										Body(
+											app.I().
+												Class("fas fa-lock pf-u-mr-sm"),
+											app.Text("Encrypt file"),
+										),
+									app.If(
+										c.skipEncryption,
+										app.Span().
+											Class("pf-c-check__description").
+											Text("If enabled, only the person with the correct key will be able to read the message."),
+									).Else(
+										app.Span().
+											Class("pf-c-check__description").
+											Text("Allow only the person with the following key to read the message:"),
+										app.Div().
+											Class("pf-c-check__body pf-u-w-100").
+											Body(
+												app.Select().
+													Class("pf-c-form-control").
+													ID(publicKeySelector).
+													Required(true).
+													OnInput(func(ctx app.Context, e app.Event) {
+														c.publicKeyID = ctx.JSSrc().Get("value").String()
+													}).
+													Body(
+														app.Option().
+															Value("").
+															Text("Select one").
+															Selected(c.publicKeyID == ""),
+														app.Range(c.PublicKeys).Slice(func(i int) app.UI {
+															key := c.PublicKeys[i]
+
+															return app.Option().
+																Value(key.ID).
+																Text(getKeySummary(key)).
+																Selected(c.publicKeyID == key.ID)
+														}),
+													),
+											),
+									),
 								),
 						),
 				),
@@ -165,5 +233,11 @@ func (c *EncryptAndSignModal) clear() {
 
 	// Clear key
 	c.file = []byte{}
-	c.isBinary = false
+	c.fileIsBinary = false
+	c.skipEncryption = false
+	c.publicKeyID = ""
+}
+
+func getKeySummary(key EncryptionKey) string {
+	return key.ID + " " + key.FullName + " <" + key.Email + ">"
 }
