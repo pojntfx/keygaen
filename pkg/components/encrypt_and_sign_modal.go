@@ -5,25 +5,45 @@ import (
 )
 
 const (
-	selectKeyInput = "select-key-input"
+	selectFileInput = "select-file-input"
 )
 
-type ImportKeyModal struct {
-	app.Compo
-
-	OnSubmit func(key string)
-	OnCancel func()
-
-	key string
+type EncryptionKey struct {
+	ID       string
+	FullName string
+	Email    string
 }
 
-func (c *ImportKeyModal) Render() app.UI {
+type EncryptAndSignModal struct {
+	app.Compo
+
+	PrivateKeys []EncryptionKey
+	PublicKeys  []EncryptionKey
+
+	OnSubmit func(
+		file []byte,
+		publicKeyID string,
+		privateKeyID string,
+	)
+	OnCancel func()
+
+	file         []byte
+	isBinary     bool
+	publicKeyID  string
+	privateKeyID string
+}
+
+func (c *EncryptAndSignModal) Render() app.UI {
 	return app.Form().
 		Class("pf-c-form").
 		OnSubmit(func(ctx app.Context, e app.Event) {
 			e.PreventDefault()
 
-			c.OnSubmit(c.key)
+			c.OnSubmit(
+				c.file,
+				c.publicKeyID,
+				c.privateKeyID,
+			)
 
 			c.clear()
 		}).
@@ -42,16 +62,16 @@ func (c *ImportKeyModal) Render() app.UI {
 										Body(
 											app.Input().
 												Class("pf-c-form-control").
-												ID(selectKeyInput).
+												ID(selectFileInput).
 												Type("File").
-												Aria("label", "Drag and drop a key or select one").
+												Aria("label", "Drag and drop a file or select one").
 												ReadOnly(true).
-												Placeholder("Drag and drop a key or select one").
+												Placeholder("Drag and drop a file or select one").
 												OnChange(func(ctx app.Context, e app.Event) {
 													e.PreventDefault()
 
 													reader := app.Window().JSValue().Get("FileReader").New()
-													input := app.Window().GetElementByID(selectKeyInput)
+													input := app.Window().GetElementByID(selectFileInput)
 
 													reader.Set("onload", app.FuncOf(func(this app.Value, args []app.Value) interface{} {
 														go func() {
@@ -60,7 +80,8 @@ func (c *ImportKeyModal) Render() app.UI {
 															fileContent := make([]byte, rawFileContent.Get("length").Int())
 															app.CopyBytesToGo(fileContent, rawFileContent)
 
-															c.key = string(fileContent)
+															c.isBinary = true
+															c.file = fileContent
 														}()
 
 														return nil
@@ -75,7 +96,7 @@ func (c *ImportKeyModal) Render() app.UI {
 											app.Button().
 												Class("pf-c-button pf-m-control").
 												Type("button").
-												Disabled(c.key == "").
+												Disabled(len(c.file) == 0).
 												Text("Clear").
 												OnClick(func(ctx app.Context, e app.Event) {
 													c.clear()
@@ -88,13 +109,25 @@ func (c *ImportKeyModal) Render() app.UI {
 									app.Textarea().
 										Class("pf-c-form-control pf-m-resize-vertical").
 										ID("enter-key-input").
-										Aria("label", "Paste the key's contents here").
-										Placeholder("Or paste the key's contents here").
+										Aria("label", "Enter text here").
+										Placeholder("Or enter text here").
 										Required(true).
 										OnInput(func(ctx app.Context, e app.Event) {
-											c.key = ctx.JSSrc().Get("value").String()
+											c.file = []byte(ctx.JSSrc().Get("value").String())
+
+											if c.isBinary {
+												c.isBinary = false
+
+												app.Window().GetElementByID(selectFileInput).Set("value", app.Null())
+											}
 										}).
-										Text(c.key),
+										Text(func() string {
+											if c.isBinary {
+												return "File has been selected."
+											}
+
+											return string(c.file)
+										}()),
 								),
 						),
 				),
@@ -110,7 +143,7 @@ func (c *ImportKeyModal) Render() app.UI {
 									app.Button().
 										Class("pf-c-button pf-m-primary").
 										Type("submit").
-										Text("Import Key"),
+										Text("Encrypt and Sign"),
 									app.Button().
 										Class("pf-c-button pf-m-link").
 										Type("button").
@@ -126,10 +159,11 @@ func (c *ImportKeyModal) Render() app.UI {
 		)
 }
 
-func (c *ImportKeyModal) clear() {
+func (c *EncryptAndSignModal) clear() {
 	// Clear input value
-	app.Window().GetElementByID(selectKeyInput).Set("value", app.Null())
+	app.Window().GetElementByID(selectFileInput).Set("value", app.Null())
 
 	// Clear key
-	c.key = ""
+	c.file = []byte{}
+	c.isBinary = false
 }
