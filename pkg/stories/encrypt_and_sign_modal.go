@@ -14,7 +14,18 @@ type EncryptAndSignModalStory struct {
 func (c *EncryptAndSignModalStory) Render() app.UI {
 	return c.WithRoot(
 		&components.EncryptAndSignModal{
-			PrivateKeys: []components.EncryptionKey{},
+			PrivateKeys: []components.EncryptionKey{
+				{
+					ID:       "039292",
+					FullName: "Isegard Example",
+					Email:    "isegard@example.com",
+				},
+				{
+					ID:       "838431",
+					FullName: "Fred Example",
+					Email:    "fred@example.com",
+				},
+			},
 			PublicKeys: []components.EncryptionKey{
 				{
 					ID:       "123456",
