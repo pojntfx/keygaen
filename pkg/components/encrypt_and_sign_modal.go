@@ -5,8 +5,7 @@ import (
 )
 
 const (
-	selectFileInput   = "select-file-input"
-	publicKeySelector = "public-key-selector"
+	selectFileInput = "select-file-input"
 )
 
 type EncryptionKey struct {
@@ -34,6 +33,7 @@ type EncryptAndSignModal struct {
 	skipEncryption bool
 	publicKeyID    string
 
+	skipSigning  bool
 	privateKeyID string
 }
 
@@ -175,7 +175,7 @@ func (c *EncryptAndSignModal) Render() app.UI {
 											Body(
 												app.Select().
 													Class("pf-c-form-control").
-													ID(publicKeySelector).
+													ID("public-key-selector").
 													Required(true).
 													OnInput(func(ctx app.Context, e app.Event) {
 														c.publicKeyID = ctx.JSSrc().Get("value").String()
@@ -192,6 +192,70 @@ func (c *EncryptAndSignModal) Render() app.UI {
 																Value(key.ID).
 																Text(getKeySummary(key)).
 																Selected(c.publicKeyID == key.ID)
+														}),
+													),
+											),
+									),
+								),
+						),
+				),
+			app.Div().
+				Class("pf-c-form__group").
+				Aria("role", "group").
+				Body(
+					app.Div().
+						Class("pf-c-form__group-control").
+						Body(
+							app.Div().
+								Class("pf-c-check").
+								Body(
+									app.Input().
+										Class("pf-c-check__input").
+										Type("checkbox").
+										ID("signature-checkbox").
+										Checked(!c.skipSigning).
+										OnInput(func(ctx app.Context, e app.Event) {
+											c.skipSigning = !c.skipSigning
+										}),
+									app.Label().
+										Class("pf-c-check__label").
+										For("signature-checkbox").
+										Body(
+											app.I().
+												Class("fas fa-signature pf-u-mr-sm"),
+											app.Text("Sign file"),
+										),
+									app.If(
+										c.skipSigning,
+										app.Span().
+											Class("pf-c-check__description").
+											Text("If enabled, anyone will be able to verify that the file originates from a the person with selected key."),
+									).Else(
+										app.Span().
+											Class("pf-c-check__description").
+											Text("This will anyone to verify that the file originates from the person with the following key:"),
+										app.Div().
+											Class("pf-c-check__body pf-u-w-100").
+											Body(
+												app.Select().
+													Class("pf-c-form-control").
+													ID("private-key-selector").
+													Required(true).
+													OnInput(func(ctx app.Context, e app.Event) {
+														c.privateKeyID = ctx.JSSrc().Get("value").String()
+													}).
+													Body(
+														app.Option().
+															Value("").
+															Text("Select one").
+															Selected(c.privateKeyID == ""),
+														app.Range(c.PrivateKeys).Slice(func(i int) app.UI {
+															key := c.PrivateKeys[i]
+
+															return app.Option().
+																Value(key.ID).
+																Text(getKeySummary(key)).
+																Selected(c.privateKeyID == key.ID)
 														}),
 													),
 											),
@@ -234,8 +298,12 @@ func (c *EncryptAndSignModal) clear() {
 	// Clear key
 	c.file = []byte{}
 	c.fileIsBinary = false
+
 	c.skipEncryption = false
 	c.publicKeyID = ""
+
+	c.skipSigning = false
+	c.privateKeyID = ""
 }
 
 func getKeySummary(key EncryptionKey) string {
