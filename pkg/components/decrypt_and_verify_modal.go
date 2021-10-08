@@ -22,8 +22,7 @@ type DecryptAndVerifyModal struct {
 	)
 	OnCancel func()
 
-	fileIsBinary bool
-	file         []byte
+	fileContents []byte
 
 	skipDecryption bool
 	publicKeyID    string
@@ -42,7 +41,7 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 			e.PreventDefault()
 
 			c.OnSubmit(
-				c.file,
+				c.fileContents,
 				c.publicKeyID,
 				c.privateKeyID,
 				c.detachedSignature,
@@ -54,85 +53,21 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 			app.Div().
 				Class("pf-c-form__group").
 				Body(
-					app.Div().
-						Class("pf-c-file-upload").
-						Body(
-							app.Div().
-								Class("pf-c-file-upload__file-select").
-								Body(
-									app.Div().
-										Class("pf-c-input-group").
-										Body(
-											app.Input().
-												Class("pf-c-form-control").
-												ID(selectDecryptionFileInput).
-												Type("File").
-												Aria("label", "Drag and drop a file or select one").
-												ReadOnly(true).
-												Placeholder("Drag and drop a file or select one").
-												OnChange(func(ctx app.Context, e app.Event) {
-													e.PreventDefault()
+					&FileUpload{
+						ID:                    selectDecryptionFileInput,
+						FileSelectionLabel:    "Drag and drop a file or select one",
+						ClearLabel:            "Clear",
+						TextEntryLabel:        "Or enter text here",
+						TextEntryBlockedLabel: "File has been selected.",
+						FileContents:          c.fileContents,
 
-													reader := app.Window().JSValue().Get("FileReader").New()
-													input := app.Window().GetElementByID(selectDecryptionFileInput)
-
-													reader.Set("onload", app.FuncOf(func(this app.Value, args []app.Value) interface{} {
-														go func() {
-															rawFileContent := app.Window().Get("Uint8Array").New(args[0].Get("target").Get("result"))
-
-															fileContent := make([]byte, rawFileContent.Get("length").Int())
-															app.CopyBytesToGo(fileContent, rawFileContent)
-
-															c.fileIsBinary = true
-															c.file = fileContent
-														}()
-
-														return nil
-													}))
-
-													if file := input.Get("files").Get("0"); !file.IsUndefined() {
-														reader.Call("readAsArrayBuffer", file)
-													} else {
-														c.clear()
-													}
-												}),
-											app.Button().
-												Class("pf-c-button pf-m-control").
-												Type("button").
-												Disabled(len(c.file) == 0).
-												Text("Clear").
-												OnClick(func(ctx app.Context, e app.Event) {
-													c.clear()
-												}),
-										),
-								),
-							app.Div().
-								Class("pf-c-file-upload__file-details").
-								Body(
-									app.Textarea().
-										Class("pf-c-form-control pf-m-resize-vertical").
-										ID("enter-key-input").
-										Aria("label", "Enter text here").
-										Placeholder("Or enter text here").
-										Required(true).
-										OnInput(func(ctx app.Context, e app.Event) {
-											c.file = []byte(ctx.JSSrc().Get("value").String())
-
-											if c.fileIsBinary {
-												c.fileIsBinary = false
-
-												app.Window().GetElementByID(selectDecryptionFileInput).Set("value", app.Null())
-											}
-										}).
-										Text(func() string {
-											if c.fileIsBinary {
-												return "File has been selected."
-											}
-
-											return string(c.file)
-										}()),
-								),
-						),
+						OnChange: func(fileContents []byte) {
+							c.fileContents = fileContents
+						},
+						OnClear: func() {
+							c.fileContents = []byte{}
+						},
+					},
 				),
 			app.Div().
 				Class("pf-c-form__group").
@@ -269,6 +204,56 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																Selected(c.publicKeyID == key.ID)
 														}),
 													),
+												app.Div().
+													Class("pf-c-form__group pf-u-mt-lg").
+													Aria("role", "group").
+													Body(
+														app.Div().
+															Class("pf-c-form__group-control").
+															Body(
+																app.Div().
+																	Class("pf-c-check").
+																	Body(
+																		&Controlled{
+																			Component: app.Input().
+																				Class("pf-c-check__input").
+																				Type("checkbox").
+																				ID("detached-signature-checkbox").
+																				OnInput(func(ctx app.Context, e app.Event) {
+																					if !(!c.skipVerification && c.skipDecryption) {
+																						c.skipVerification = !c.skipVerification
+																					}
+																				}),
+																			Properties: map[string]interface{}{
+																				"checked": !c.skipVerification,
+																			},
+																		},
+																		app.Label().
+																			Class("pf-c-check__label").
+																			For("detached-signature-checkbox").
+																			Body(
+																				app.I().
+																					Class("fas fa-unlink pf-u-mr-sm"),
+																				app.Text("Use Detached Signature"),
+																			),
+																		app.If(
+																			c.skipVerification,
+																			app.Span().
+																				Class("pf-c-check__description").
+																				Text("If enabled, validate the file using a detached signature (.asc file)."),
+																		).Else(
+																			app.Span().
+																				Class("pf-c-check__description").
+																				Text("Validate the file using the following detached signature (.asc file):"),
+																			app.Div().
+																				Class("pf-c-check__body pf-u-w-100").
+																				Body(
+																				// TODO: Add file selector
+																				),
+																		),
+																	),
+															),
+													),
 											),
 									),
 								),
@@ -307,8 +292,7 @@ func (c *DecryptAndVerifyModal) clear() {
 	app.Window().GetElementByID(selectDecryptionFileInput).Set("value", app.Null())
 
 	// Clear key
-	c.file = []byte{}
-	c.fileIsBinary = false
+	c.fileContents = []byte{}
 
 	c.skipDecryption = false
 	c.publicKeyID = ""
