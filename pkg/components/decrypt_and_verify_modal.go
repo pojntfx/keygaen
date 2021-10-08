@@ -5,7 +5,8 @@ import (
 )
 
 const (
-	selectDecryptionFileInput = "select-decryption-file-input"
+	selectDecryptionFileInput        = "select-decryption-file-input"
+	selectDetachedSignatureFileInput = "select-detached-signature-file-input"
 )
 
 type DecryptAndVerifyModal struct {
@@ -220,12 +221,10 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																				Type("checkbox").
 																				ID("detached-signature-checkbox").
 																				OnInput(func(ctx app.Context, e app.Event) {
-																					if !(!c.skipVerification && c.skipDecryption) {
-																						c.skipVerification = !c.skipVerification
-																					}
+																					c.useDetachedSignature = !c.useDetachedSignature
 																				}),
 																			Properties: map[string]interface{}{
-																				"checked": !c.skipVerification,
+																				"checked": c.useDetachedSignature,
 																			},
 																		},
 																		app.Label().
@@ -237,7 +236,7 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																				app.Text("Use Detached Signature"),
 																			),
 																		app.If(
-																			c.skipVerification,
+																			!c.useDetachedSignature,
 																			app.Span().
 																				Class("pf-c-check__description").
 																				Text("If enabled, validate the file using a detached signature (.asc file)."),
@@ -248,7 +247,21 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																			app.Div().
 																				Class("pf-c-check__body pf-u-w-100").
 																				Body(
-																				// TODO: Add file selector
+																					&FileUpload{
+																						ID:                    selectDetachedSignatureFileInput,
+																						FileSelectionLabel:    "Drag and drop a detached signature or select one",
+																						ClearLabel:            "Clear",
+																						TextEntryLabel:        "Or enter the detached signature's content here",
+																						TextEntryBlockedLabel: c.detachedSignature,
+																						FileContents:          []byte(c.detachedSignature),
+
+																						OnChange: func(fileContents []byte) {
+																							c.detachedSignature = string(fileContents)
+																						},
+																						OnClear: func() {
+																							c.detachedSignature = ""
+																						},
+																					},
 																				),
 																		),
 																	),
@@ -301,8 +314,11 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 }
 
 func (c *DecryptAndVerifyModal) clear() {
-	// Clear input value
+	// Clear file input values
 	app.Window().GetElementByID(selectDecryptionFileInput).Set("value", app.Null())
+	if c.useDetachedSignature {
+		app.Window().GetElementByID(selectDetachedSignatureFileInput).Set("value", app.Null())
+	}
 
 	// Clear key
 	c.fileContents = []byte{}
