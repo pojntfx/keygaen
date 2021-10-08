@@ -74,6 +74,7 @@ func (c *Index) Render() app.UI {
 			"Encrypt/Sign Modal":   &EncryptAndSignModalStory{},
 			"Decrypt/Verify Modal": &DecryptAndVerifyModalStory{},
 			"File Upload":          &FileUploadStory{},
+			"Password Modal":       &PasswordModalStory{},
 		}
 	}
 
