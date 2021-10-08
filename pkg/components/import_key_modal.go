@@ -31,72 +31,21 @@ func (c *ImportKeyModal) Render() app.UI {
 			app.Div().
 				Class("pf-c-form__group").
 				Body(
-					app.Div().
-						Class("pf-c-file-upload").
-						Body(
-							app.Div().
-								Class("pf-c-file-upload__file-select").
-								Body(
-									app.Div().
-										Class("pf-c-input-group").
-										Body(
-											app.Input().
-												Class("pf-c-form-control").
-												ID(selectKeyInput).
-												Type("File").
-												Aria("label", "Drag and drop a key or select one").
-												ReadOnly(true).
-												Placeholder("Drag and drop a key or select one").
-												OnChange(func(ctx app.Context, e app.Event) {
-													e.PreventDefault()
+					&FileUpload{
+						ID:                    selectKeyInput,
+						FileSelectionLabel:    "Drag and drop a key or select one",
+						ClearLabel:            "Clear",
+						TextEntryLabel:        "Or paste the key's contents here",
+						TextEntryBlockedLabel: c.key,
+						FileContents:          []byte(c.key),
 
-													reader := app.Window().JSValue().Get("FileReader").New()
-													input := app.Window().GetElementByID(selectKeyInput)
-
-													reader.Set("onload", app.FuncOf(func(this app.Value, args []app.Value) interface{} {
-														go func() {
-															rawFileContent := app.Window().Get("Uint8Array").New(args[0].Get("target").Get("result"))
-
-															fileContent := make([]byte, rawFileContent.Get("length").Int())
-															app.CopyBytesToGo(fileContent, rawFileContent)
-
-															c.key = string(fileContent)
-														}()
-
-														return nil
-													}))
-
-													if file := input.Get("files").Get("0"); !file.IsUndefined() {
-														reader.Call("readAsArrayBuffer", file)
-													} else {
-														c.clear()
-													}
-												}),
-											app.Button().
-												Class("pf-c-button pf-m-control").
-												Type("button").
-												Disabled(c.key == "").
-												Text("Clear").
-												OnClick(func(ctx app.Context, e app.Event) {
-													c.clear()
-												}),
-										),
-								),
-							app.Div().
-								Class("pf-c-file-upload__file-details").
-								Body(
-									app.Textarea().
-										Class("pf-c-form-control pf-m-resize-vertical").
-										ID("enter-key-input").
-										Aria("label", "Paste the key's contents here").
-										Placeholder("Or paste the key's contents here").
-										Required(true).
-										OnInput(func(ctx app.Context, e app.Event) {
-											c.key = ctx.JSSrc().Get("value").String()
-										}).
-										Text(c.key),
-								),
-						),
+						OnChange: func(fileContents []byte) {
+							c.key = string(fileContents)
+						},
+						OnClear: func() {
+							c.key = ""
+						},
+					},
 				),
 			app.Div().
 				Class("pf-c-form__group pf-m-action").
