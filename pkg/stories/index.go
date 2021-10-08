@@ -73,6 +73,7 @@ func (c *Index) Render() app.UI {
 			"Import Key Modal":     &ImportKeyModalStory{},
 			"Encrypt/Sign Modal":   &EncryptAndSignModalStory{},
 			"Decrypt/Verify Modal": &DecryptAndVerifyModalStory{},
+			"File Upload":          &FileUploadStory{},
 		}
 	}
 
