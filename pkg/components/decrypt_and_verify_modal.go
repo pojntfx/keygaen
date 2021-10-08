@@ -271,7 +271,20 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 									app.Button().
 										Class("pf-c-button pf-m-primary").
 										Type("submit").
-										Text("Decrypt and Verify"),
+										Text("Decrypt and Verify").
+										Text(
+											func() string {
+												if c.skipDecryption && !c.skipVerification {
+													return "Verify"
+												}
+
+												if !c.skipDecryption && c.skipVerification {
+													return "Decrypt"
+												}
+
+												return "Decrypt and Verify"
+											}(),
+										),
 									app.Button().
 										Class("pf-c-button pf-m-link").
 										Type("button").

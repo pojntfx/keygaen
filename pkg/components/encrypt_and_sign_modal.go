@@ -287,7 +287,19 @@ func (c *EncryptAndSignModal) Render() app.UI {
 									app.Button().
 										Class("pf-c-button pf-m-primary").
 										Type("submit").
-										Text("Encrypt and Sign"),
+										Text(
+											func() string {
+												if c.skipEncryption && !c.skipSigning {
+													return "Sign"
+												}
+
+												if !c.skipEncryption && c.skipSigning {
+													return "Encrypt"
+												}
+
+												return "Encrypt and Sign"
+											}(),
+										),
 									app.Button().
 										Class("pf-c-button pf-m-link").
 										Type("button").
