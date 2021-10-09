@@ -74,16 +74,19 @@ func (c *CreateKeyModal) Render() app.UI {
 							app.Div().
 								Class("pf-c-form__group-control").
 								Body(
-									app.Input().
-										Class("pf-c-form-control").
-										Required(true).
-										Type("text").
-										ID("full-name-input").
-										Aria("describedby", "form-demo-basic-name-helper").
-										OnInput(func(ctx app.Context, e app.Event) {
-											c.fullName = ctx.JSSrc().Get("value").String()
-										}).
-										Value(c.fullName),
+									&Autofocused{
+										Component: app.Input().
+											Class("pf-c-form-control").
+											Required(true).
+											Type("text").
+											Placeholder("Jean Doe").
+											ID("full-name-input").
+											Aria("describedby", "form-demo-basic-name-helper").
+											OnInput(func(ctx app.Context, e app.Event) {
+												c.fullName = ctx.JSSrc().Get("value").String()
+											}).
+											Value(c.fullName),
+									},
 								),
 						),
 					app.Div().
@@ -114,6 +117,7 @@ func (c *CreateKeyModal) Render() app.UI {
 											app.Input().
 												Class("pf-c-form-control").
 												Type("email").
+												Placeholder("jean@example.com").
 												ID("email-input").
 												Required(true).
 												OnInput(func(ctx app.Context, e app.Event) {
