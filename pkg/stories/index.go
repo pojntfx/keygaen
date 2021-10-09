@@ -13,22 +13,31 @@ type SelfReferencingComponent interface {
 
 	WithRoot(app.UI) app.UI
 	Root() app.UI
+
+	EnableShallowReflection()
 }
 
 type Story struct {
 	app.Compo
 
-	root app.UI
+	root              app.UI
+	shallowReflection bool
 }
 
 func (c *Story) WithRoot(root app.UI) app.UI {
-	c.root = root
+	if c.shallowReflection || c.root == nil {
+		c.root = root
+	}
 
 	return c.root
 }
 
 func (c *Story) Root() app.UI {
 	return c.root
+}
+
+func (c *Story) EnableShallowReflection() {
+	c.shallowReflection = true
 }
 
 const (

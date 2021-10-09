@@ -12,6 +12,8 @@ type ModalStory struct {
 }
 
 func (c *ModalStory) Render() app.UI {
+	c.EnableShallowReflection()
+
 	return c.WithRoot(
 		app.Div().Body(
 			app.Button().
