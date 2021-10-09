@@ -38,16 +38,18 @@ func (c *PasswordModal) Render() app.UI {
 							app.Div().
 								Class("pf-c-form__group-control").
 								Body(
-									app.Input().
-										Class("pf-c-form-control").
-										Required(true).
-										Type("password").
-										Placeholder("Enter password").
-										Aria("label", "Enter password").
-										OnInput(func(ctx app.Context, e app.Event) {
-											c.password = ctx.JSSrc().Get("value").String()
-										}).
-										Value(c.password),
+									&Autofocused{
+										Component: app.Input().
+											Class("pf-c-form-control").
+											Required(true).
+											Type("password").
+											Placeholder("Enter password").
+											Aria("label", "Enter password").
+											OnInput(func(ctx app.Context, e app.Event) {
+												c.password = ctx.JSSrc().Get("value").String()
+											}).
+											Value(c.password),
+									},
 								),
 						),
 				),
