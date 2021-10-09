@@ -22,9 +22,7 @@ type Story struct {
 }
 
 func (c *Story) WithRoot(root app.UI) app.UI {
-	if c.root == nil {
-		c.root = root
-	}
+	c.root = root
 
 	return c.root
 }
@@ -75,6 +73,7 @@ func (c *Index) Render() app.UI {
 			"Decrypt/Verify Modal": &DecryptAndVerifyModalStory{},
 			"File Upload":          &FileUploadStory{},
 			"Password Modal":       &PasswordModalStory{},
+			"Success Modal":        &SuccessModalStory{},
 		}
 	}
 
