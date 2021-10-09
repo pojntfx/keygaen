@@ -9,40 +9,62 @@ import (
 
 type EncryptAndSignModalStory struct {
 	Story
+
+	modalOpen bool
 }
 
 func (c *EncryptAndSignModalStory) Render() app.UI {
-	return c.WithRoot(
-		&components.EncryptAndSignModal{
-			PrivateKeys: []components.EncryptionKey{
-				{
-					ID:       "039292",
-					FullName: "Isegard Example",
-					Email:    "isegard@example.com",
-				},
-				{
-					ID:       "838431",
-					FullName: "Fred Example",
-					Email:    "fred@example.com",
-				},
-			},
-			PublicKeys: []components.EncryptionKey{
-				{
-					ID:       "123456",
-					FullName: "Alice Example",
-					Email:    "alice@example.com",
-				},
-				{
-					ID:       "319312",
-					FullName: "Bob Example",
-					Email:    "bob@example.com",
-				},
-			},
+	c.EnableShallowReflection()
 
-			OnSubmit: func(file []byte, publicKeyID, privateKeyID string) {
-				app.Window().Call("alert", fmt.Sprintf("Encrypted and signed file %v, using public key ID %v and private key ID %v", file, publicKeyID, privateKeyID))
-			},
-			OnCancel: func() {},
-		},
+	return c.WithRoot(
+		app.Div().Body(
+			app.Button().
+				Class("pf-c-button pf-m-primary").
+				Type("button").
+				Text("Encrypt/Sign").
+				OnClick(func(ctx app.Context, e app.Event) {
+					c.modalOpen = !c.modalOpen
+				}),
+			app.If(
+				c.modalOpen,
+				&components.EncryptAndSignModal{
+					PrivateKeys: []components.EncryptionKey{
+						{
+							ID:       "039292",
+							FullName: "Isegard Example",
+							Email:    "isegard@example.com",
+						},
+						{
+							ID:       "838431",
+							FullName: "Fred Example",
+							Email:    "fred@example.com",
+						},
+					},
+					PublicKeys: []components.EncryptionKey{
+						{
+							ID:       "123456",
+							FullName: "Alice Example",
+							Email:    "alice@example.com",
+						},
+						{
+							ID:       "319312",
+							FullName: "Bob Example",
+							Email:    "bob@example.com",
+						},
+					},
+
+					OnSubmit: func(file []byte, publicKeyID, privateKeyID string) {
+						app.Window().Call("alert", fmt.Sprintf("Encrypted and signed file %v, using public key ID %v and private key ID %v", file, publicKeyID, privateKeyID))
+
+						c.modalOpen = false
+					},
+					OnCancel: func() {
+						c.modalOpen = false
+
+						c.Update()
+					},
+				},
+			),
+		),
 	)
 }

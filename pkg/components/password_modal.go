@@ -14,63 +14,64 @@ type PasswordModal struct {
 }
 
 func (c *PasswordModal) Render() app.UI {
-	return app.Form().
-		Class("pf-c-form").
-		OnSubmit(func(ctx app.Context, e app.Event) {
-			e.PreventDefault()
+	return &Modal{
+		ID:    "password-modal",
+		Title: "Enter Password",
+		Body: []app.UI{
+			app.Form().
+				Class("pf-c-form").
+				ID("password-modal-form").
+				OnSubmit(func(ctx app.Context, e app.Event) {
+					e.PreventDefault()
 
-			// Submit the form
-			c.OnSubmit(
-				c.password,
-			)
+					// Submit the form
+					c.OnSubmit(
+						c.password,
+					)
 
-			c.clear()
-		}).
-		Body(
-			app.Div().
-				Class("pf-c-form__group").
+					c.clear()
+				}).
 				Body(
 					app.Div().
-						Class("pf-c-form__group-control").
-						Body(
-							app.Input().
-								Class("pf-c-form-control").
-								Required(true).
-								Type("password").
-								Placeholder("Enter password").
-								Aria("label", "Enter password").
-								OnInput(func(ctx app.Context, e app.Event) {
-									c.password = ctx.JSSrc().Get("value").String()
-								}).
-								Value(c.password),
-						),
-				),
-			app.Div().
-				Class("pf-c-form__group pf-m-action").
-				Body(
-					app.Div().
-						Class("pf-c-form__group-control").
+						Class("pf-c-form__group").
 						Body(
 							app.Div().
-								Class("pf-c-form__actions").
+								Class("pf-c-form__group-control").
 								Body(
-									app.Button().
-										Class("pf-c-button pf-m-primary").
-										Type("submit").
-										Text("Continue"),
-									app.Button().
-										Class("pf-c-button pf-m-link").
-										Type("button").
-										Text("Cancel").
-										OnClick(func(ctx app.Context, e app.Event) {
-											c.clear()
-
-											c.OnCancel()
-										}),
+									app.Input().
+										Class("pf-c-form-control").
+										Required(true).
+										Type("password").
+										Placeholder("Enter password").
+										Aria("label", "Enter password").
+										OnInput(func(ctx app.Context, e app.Event) {
+											c.password = ctx.JSSrc().Get("value").String()
+										}).
+										Value(c.password),
 								),
 						),
 				),
-		)
+		},
+		Footer: []app.UI{
+			app.Button().
+				Class("pf-c-button pf-m-primary").
+				Type("submit").
+				Form("password-modal-form").
+				Text("Continue"),
+			app.Button().
+				Class("pf-c-button pf-m-link").
+				Type("button").
+				Text("Cancel").
+				OnClick(func(ctx app.Context, e app.Event) {
+					c.clear()
+
+					c.OnCancel()
+				}),
+		},
+		OnClose: func() {
+			c.OnCancel()
+		},
+	}
 }
 
 func (c *PasswordModal) clear() {
