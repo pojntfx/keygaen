@@ -74,6 +74,7 @@ func (c *Index) Render() app.UI {
 			"File Upload":          &FileUploadStory{},
 			"Password Modal":       &PasswordModalStory{},
 			"Success Modal":        &SuccessModalStory{},
+			"Modal":                &ModalStory{},
 		}
 	}
 

@@ -19,7 +19,7 @@ func (c *SuccessModalStory) Render() app.UI {
 				Type("button").
 				Text("Open Success Modal").
 				OnClick(func(ctx app.Context, e app.Event) {
-					c.modalOpen = true
+					c.modalOpen = !c.modalOpen
 				}),
 			app.If(
 				c.modalOpen,
