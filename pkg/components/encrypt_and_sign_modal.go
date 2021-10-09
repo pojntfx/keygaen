@@ -287,6 +287,7 @@ func (c *EncryptAndSignModal) Render() app.UI {
 				}),
 		},
 		OnClose: func() {
+			c.clear()
 			c.OnCancel()
 		},
 	}

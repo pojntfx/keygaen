@@ -14,19 +14,17 @@ type CreateKeyModalStory struct {
 }
 
 func (c *CreateKeyModalStory) Render() app.UI {
-	c.EnableShallowReflection()
-
-	return c.WithRoot(
-		app.Div().Body(
-			app.Button().
-				Class("pf-c-button pf-m-primary").
-				Type("button").
-				Text("Create Key").
-				OnClick(func(ctx app.Context, e app.Event) {
-					c.modalOpen = !c.modalOpen
-				}),
-			app.If(
-				c.modalOpen,
+	return app.Div().Body(
+		app.Button().
+			Class("pf-c-button pf-m-primary").
+			Type("button").
+			Text("Create Key").
+			OnClick(func(ctx app.Context, e app.Event) {
+				c.modalOpen = !c.modalOpen
+			}),
+		app.If(
+			c.modalOpen,
+			c.WithRoot(
 				&components.CreateKeyModal{
 					OnSubmit: func(fullName, email, _ string) {
 						app.Window().Call("alert", fmt.Sprintf("Created key with full name %v, email %v and a password", fullName, email))

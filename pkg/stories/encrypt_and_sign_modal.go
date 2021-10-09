@@ -14,19 +14,17 @@ type EncryptAndSignModalStory struct {
 }
 
 func (c *EncryptAndSignModalStory) Render() app.UI {
-	c.EnableShallowReflection()
-
-	return c.WithRoot(
-		app.Div().Body(
-			app.Button().
-				Class("pf-c-button pf-m-primary").
-				Type("button").
-				Text("Encrypt/Sign").
-				OnClick(func(ctx app.Context, e app.Event) {
-					c.modalOpen = !c.modalOpen
-				}),
-			app.If(
-				c.modalOpen,
+	return app.Div().Body(
+		app.Button().
+			Class("pf-c-button pf-m-primary").
+			Type("button").
+			Text("Encrypt/Sign").
+			OnClick(func(ctx app.Context, e app.Event) {
+				c.modalOpen = !c.modalOpen
+			}),
+		app.If(
+			c.modalOpen,
+			c.WithRoot(
 				&components.EncryptAndSignModal{
 					PrivateKeys: []components.EncryptionKey{
 						{

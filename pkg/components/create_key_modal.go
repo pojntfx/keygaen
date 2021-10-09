@@ -237,6 +237,7 @@ func (c *CreateKeyModal) Render() app.UI {
 		},
 
 		OnClose: func() {
+			c.clear()
 			c.OnCancel()
 		},
 	}

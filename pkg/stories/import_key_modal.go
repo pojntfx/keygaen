@@ -14,19 +14,17 @@ type ImportKeyModalStory struct {
 }
 
 func (c *ImportKeyModalStory) Render() app.UI {
-	c.EnableShallowReflection()
-
-	return c.WithRoot(
-		app.Div().Body(
-			app.Button().
-				Class("pf-c-button pf-m-primary").
-				Type("button").
-				Text("Import Key").
-				OnClick(func(ctx app.Context, e app.Event) {
-					c.modalOpen = !c.modalOpen
-				}),
-			app.If(
-				c.modalOpen,
+	return app.Div().Body(
+		app.Button().
+			Class("pf-c-button pf-m-primary").
+			Type("button").
+			Text("Import Key").
+			OnClick(func(ctx app.Context, e app.Event) {
+				c.modalOpen = !c.modalOpen
+			}),
+		app.If(
+			c.modalOpen,
+			c.WithRoot(
 				&components.ImportKeyModal{
 					OnSubmit: func(key string) {
 						app.Window().Call("alert", fmt.Sprintf("Imported key with contents %v", key))
