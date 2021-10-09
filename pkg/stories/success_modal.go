@@ -12,6 +12,8 @@ type SuccessModalStory struct {
 }
 
 func (c *SuccessModalStory) Render() app.UI {
+	c.EnableShallowReflection()
+
 	return c.WithRoot(
 		app.Div().Body(
 			app.Button().
@@ -27,6 +29,7 @@ func (c *SuccessModalStory) Render() app.UI {
 					ID:          "success-modal-story",
 					Icon:        "fas fa-check",
 					Title:       "Key successfully generated!",
+					Class:       "pf-m-success",
 					Body:        "It has been added to the key list.",
 					ActionLabel: "Continue to key list",
 

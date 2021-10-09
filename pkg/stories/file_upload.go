@@ -12,6 +12,8 @@ type FileUploadStory struct {
 }
 
 func (c *FileUploadStory) Render() app.UI {
+	c.EnableShallowReflection()
+
 	return c.WithRoot(
 		&components.FileUpload{
 			ID:                    "file-upload-story",
