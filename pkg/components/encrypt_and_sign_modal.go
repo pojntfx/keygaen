@@ -24,6 +24,7 @@ type EncryptAndSignModal struct {
 		file []byte,
 		publicKeyID string,
 		privateKeyID string,
+		createDetachedSignature bool,
 	)
 	OnCancel func()
 
@@ -35,6 +36,8 @@ type EncryptAndSignModal struct {
 
 	skipSigning  bool
 	privateKeyID string
+
+	createDetachedSignature bool
 }
 
 func (c *EncryptAndSignModal) Render() app.UI {
@@ -52,6 +55,7 @@ func (c *EncryptAndSignModal) Render() app.UI {
 						c.fileContents,
 						c.publicKeyID,
 						c.privateKeyID,
+						c.createDetachedSignature,
 					)
 
 					c.clear()
@@ -211,6 +215,42 @@ func (c *EncryptAndSignModal) Render() app.UI {
 																		Selected(c.privateKeyID == key.ID)
 																}),
 															),
+														app.Div().
+															Class("pf-c-form__group pf-u-mt-lg").
+															Aria("role", "group").
+															Body(
+																app.Div().
+																	Class("pf-c-form__group-control").
+																	Body(
+																		app.Div().
+																			Class("pf-c-check").
+																			Body(
+																				&Controlled{
+																					Component: app.Input().
+																						Class("pf-c-check__input").
+																						Type("checkbox").
+																						ID("detached-signature-checkbox").
+																						OnInput(func(ctx app.Context, e app.Event) {
+																							c.createDetachedSignature = !c.createDetachedSignature
+																						}),
+																					Properties: map[string]interface{}{
+																						"checked": c.createDetachedSignature,
+																					},
+																				},
+																				app.Label().
+																					Class("pf-c-check__label").
+																					For("detached-signature-checkbox").
+																					Body(
+																						app.I().
+																							Class("fas fa-unlink pf-u-mr-sm"),
+																						app.Text("Create detached signature"),
+																					),
+																				app.Span().
+																					Class("pf-c-check__description").
+																					Text("If enabled, create a separate .asc file containing the signature."),
+																			),
+																	),
+															),
 													),
 											),
 										),
@@ -265,6 +305,8 @@ func (c *EncryptAndSignModal) clear() {
 
 	c.skipSigning = false
 	c.privateKeyID = ""
+
+	c.createDetachedSignature = false
 }
 
 func getKeySummary(key EncryptionKey) string {

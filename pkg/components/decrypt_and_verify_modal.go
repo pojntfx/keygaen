@@ -238,7 +238,7 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																					Body(
 																						app.I().
 																							Class("fas fa-unlink pf-u-mr-sm"),
-																						app.Text("Use Detached Signature"),
+																						app.Text("Use detached signature"),
 																					),
 																				app.If(
 																					!c.useDetachedSignature,
