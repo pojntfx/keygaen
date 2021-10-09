@@ -71,6 +71,7 @@ func (c *PasswordModal) Render() app.UI {
 				}),
 		},
 		OnClose: func() {
+			c.clear()
 			c.OnCancel()
 		},
 	}

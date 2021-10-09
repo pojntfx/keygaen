@@ -14,19 +14,17 @@ type DecryptAndVerifyModalStory struct {
 }
 
 func (c *DecryptAndVerifyModalStory) Render() app.UI {
-	c.EnableShallowReflection()
-
-	return c.WithRoot(
-		app.Div().Body(
-			app.Button().
-				Class("pf-c-button pf-m-primary").
-				Type("button").
-				Text("Decrypt/Verify").
-				OnClick(func(ctx app.Context, e app.Event) {
-					c.modalOpen = !c.modalOpen
-				}),
-			app.If(
-				c.modalOpen,
+	return app.Div().Body(
+		app.Button().
+			Class("pf-c-button pf-m-primary").
+			Type("button").
+			Text("Decrypt/Verify").
+			OnClick(func(ctx app.Context, e app.Event) {
+				c.modalOpen = !c.modalOpen
+			}),
+		app.If(
+			c.modalOpen,
+			c.WithRoot(
 				&components.DecryptAndVerifyModal{
 					PrivateKeys: []components.EncryptionKey{
 						{

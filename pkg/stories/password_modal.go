@@ -12,19 +12,17 @@ type PasswordModalStory struct {
 }
 
 func (c *PasswordModalStory) Render() app.UI {
-	c.EnableShallowReflection()
-
-	return c.WithRoot(
-		app.Div().Body(
-			app.Button().
-				Class("pf-c-button pf-m-primary").
-				Type("button").
-				Text("Open Password Modal").
-				OnClick(func(ctx app.Context, e app.Event) {
-					c.modalOpen = !c.modalOpen
-				}),
-			app.If(
-				c.modalOpen,
+	return app.Div().Body(
+		app.Button().
+			Class("pf-c-button pf-m-primary").
+			Type("button").
+			Text("Open Password Modal").
+			OnClick(func(ctx app.Context, e app.Event) {
+				c.modalOpen = !c.modalOpen
+			}),
+		app.If(
+			c.modalOpen,
+			c.WithRoot(
 				&components.PasswordModal{
 					OnSubmit: func(password string) {
 						app.Window().Call("alert", "Successfully entered a password")

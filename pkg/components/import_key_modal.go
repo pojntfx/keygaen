@@ -71,6 +71,7 @@ func (c *ImportKeyModal) Render() app.UI {
 				}),
 		},
 		OnClose: func() {
+			c.clear()
 			c.OnCancel()
 		},
 	}

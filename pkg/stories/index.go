@@ -3,7 +3,6 @@ package stories
 import (
 	"fmt"
 	"net/url"
-	"time"
 
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
@@ -12,9 +11,9 @@ type SelfReferencingComponent interface {
 	app.UI
 
 	WithRoot(app.UI) app.UI
-	Root() app.UI
 
 	EnableShallowReflection()
+	SetOnRoot(onRoot func(root app.UI))
 }
 
 type Story struct {
@@ -22,6 +21,8 @@ type Story struct {
 
 	root              app.UI
 	shallowReflection bool
+
+	onRoot func(root app.UI)
 }
 
 func (c *Story) WithRoot(root app.UI) app.UI {
@@ -29,15 +30,23 @@ func (c *Story) WithRoot(root app.UI) app.UI {
 		c.root = root
 	}
 
-	return c.root
-}
+	if c.onRoot != nil {
+		c.onRoot(c.root)
+	}
 
-func (c *Story) Root() app.UI {
 	return c.root
 }
 
 func (c *Story) EnableShallowReflection() {
 	c.shallowReflection = true
+}
+
+func (c *Story) SetOnRoot(onRoot func(root app.UI)) {
+	c.onRoot = onRoot
+
+	if c.root != nil {
+		c.onRoot(c.root)
+	}
 }
 
 const (
@@ -49,7 +58,9 @@ const (
 type Index struct {
 	app.Compo
 
-	stories     map[string]SelfReferencingComponent
+	stories   map[string]SelfReferencingComponent
+	storyCode string
+
 	activeTitle string
 	sidebarOpen bool
 }
@@ -85,6 +96,8 @@ func (c *Index) Render() app.UI {
 			"Success Modal":        &SuccessModalStory{},
 			"Modal":                &ModalStory{},
 		}
+
+		c.updateCodeQueries()
 	}
 
 	if app.Window().URL().Query().Has(standaloneKey) {
@@ -219,9 +232,7 @@ func (c *Index) Render() app.UI {
 						Body(
 							app.Div().
 								Class("pf-c-page__main-body").
-								Body(
-									c.stories[c.activeTitle],
-								),
+								Body(c.stories[c.activeTitle]),
 						),
 					app.Section().
 						Class("pf-c-page__main-section pf-u-p-0 pf-m-no-fill pf-m-light pf-m-shadow-top").
@@ -261,32 +272,7 @@ func (c *Index) Render() app.UI {
 												Body(
 													app.Pre().
 														Class("pf-c-code-block__pre").
-														Text(
-															func() string {
-																s := c.stories[c.activeTitle]
-																if s == nil {
-																	return ""
-																}
-
-																r := s.Root()
-																if r == nil {
-																	// Once the component becomes available, re-render
-																	go func() {
-																		for {
-																			if r := s.Root(); r != nil {
-																				c.Update()
-
-																				break
-																			}
-
-																			time.Sleep(time.Millisecond * 50)
-																		}
-																	}()
-																}
-
-																return fmt.Sprintf("%#v", s.Root())
-															}(),
-														),
+														Text(c.storyCode),
 												),
 										),
 								),
@@ -311,6 +297,24 @@ func (c *Index) OnResize(ctx app.Context) {
 func (c *Index) OnAppUpdate(ctx app.Context) {
 	if ctx.AppUpdateAvailable() {
 		ctx.Reload()
+	}
+}
+
+func (c *Index) OnNav(ctx app.Context) {
+	if c.stories == nil {
+		return
+	}
+
+	c.updateCodeQueries()
+}
+
+func (c *Index) updateCodeQueries() {
+	for titleCandidate, story := range c.stories {
+		if c.activeTitle == titleCandidate {
+			story.SetOnRoot(func(root app.UI) {
+				c.storyCode = fmt.Sprintf("%#v", root)
+			})
+		}
 	}
 }
 
