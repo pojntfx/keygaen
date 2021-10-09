@@ -53,8 +53,8 @@ func (c *EncryptAndSignModalStory) Render() app.UI {
 						},
 					},
 
-					OnSubmit: func(file []byte, publicKeyID, privateKeyID string) {
-						app.Window().Call("alert", fmt.Sprintf("Encrypted and signed file %v, using public key ID %v and private key ID %v", file, publicKeyID, privateKeyID))
+					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature bool) {
+						app.Window().Call("alert", fmt.Sprintf("Encrypted and signed file %v, using public key ID %v and private key ID %v and createDetachedSignature set to %v", file, publicKeyID, privateKeyID, createDetachedSignature))
 
 						c.modalOpen = false
 					},
