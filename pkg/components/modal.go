@@ -11,8 +11,8 @@ type Modal struct {
 	Icon   string
 	Title  string
 	Class  string
-	Body   app.UI
-	Footer app.UI
+	Body   []app.UI
+	Footer []app.UI
 
 	OnClose func()
 
@@ -83,12 +83,12 @@ func (c *Modal) Render() app.UI {
 								),
 							app.Div().
 								Class("pf-c-modal-box__body").
-								Body(c.Body),
+								Body(c.Body...),
 							app.If(
 								c.Footer != nil,
 								app.Footer().
 									Class("pf-c-modal-box__footer").
-									Body(c.Footer),
+									Body(c.Footer...),
 							),
 						),
 				),

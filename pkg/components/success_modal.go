@@ -24,15 +24,19 @@ func (c *SuccessModal) Render() app.UI {
 		Icon:  c.Icon,
 		Title: c.Title,
 		Class: c.Class,
-		Body:  app.Text(c.Body),
-		Footer: app.Button().
-			Aria("disabled", "false").
-			Class("pf-c-button pf-m-primary").
-			Type("button").
-			Text(c.ActionLabel).
-			OnClick(func(ctx app.Context, e app.Event) {
-				c.OnAction()
-			}),
+		Body: []app.UI{
+			app.Text(c.Body),
+		},
+		Footer: []app.UI{
+			app.Button().
+				Aria("disabled", "false").
+				Class("pf-c-button pf-m-primary").
+				Type("button").
+				Text(c.ActionLabel).
+				OnClick(func(ctx app.Context, e app.Event) {
+					c.OnAction()
+				}),
+		},
 
 		OnClose: func() {
 			c.OnClose()

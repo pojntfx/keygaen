@@ -30,15 +30,19 @@ func (c *ModalStory) Render() app.UI {
 					Icon:  "fas fa-check",
 					Title: "Key successfully generated!",
 					Class: "pf-m-success",
-					Body:  app.Text("It has been added to the key list."),
-					Footer: app.Button().
-						Aria("disabled", "false").
-						Class("pf-c-button pf-m-primary").
-						Type("button").
-						Text("Continue to key list").
-						OnClick(func(ctx app.Context, e app.Event) {
-							c.modalOpen = false
-						}),
+					Body: []app.UI{
+						app.Text("It has been added to the key list."),
+					},
+					Footer: []app.UI{
+						app.Button().
+							Aria("disabled", "false").
+							Class("pf-c-button pf-m-primary").
+							Type("button").
+							Text("Continue to key list").
+							OnClick(func(ctx app.Context, e app.Event) {
+								c.modalOpen = false
+							}),
+					},
 
 					OnClose: func() {
 						c.modalOpen = false
