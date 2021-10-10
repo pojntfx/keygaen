@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta httpequiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="author" content="Felicitas Pojtinger">
+<meta content="Felicitas Pojtinger" name="author">
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:34903/stories">
-<meta property="og:title" content="gridge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
+<meta property="og:url" content="http://127.0.0.1:39053/stories">
+<meta content="gridge" property="og:title">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
-<meta property="og:type" content="website">
+<meta content="website" property="og:type">
 <meta property="og:image" content>
 <title>
 gridge
@@ -19,10 +19,10 @@ gridge
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link href="/gridge/app.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
@@ -32,7 +32,7 @@ gridge
 <body>
 <div>
 <aside id="app-wasm-loader" class="goapp-app-info">
-<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
+<img src="/gridge/web/default.png" id="app-wasm-loader-icon" class="goapp-logo goapp-spin">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
@@ -40,18 +40,18 @@ Sign, verify, encrypt and decrypt data with GPG.
 <div id="app-pre-render">
 <div class="pf-c-page">
 <header class="pf-c-page__header">
-<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#main">
+<a href="#main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
 Skip to content
 </a>
 <header class="pf-c-masthead">
 <span class="pf-c-masthead__toggle">
 <button class="pf-c-button pf-m-plain" type="button" aria-label="Global navigation">
-<i aria-hidden="true" class="fas fa-bars"></i>
+<i class="fas fa-bars" aria-hidden="true"></i>
 </button>
 </span>
 <div class="pf-c-masthead__main">
 <a class="pf-c-masthead__brand" href="/">
-<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo.png">
+<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -115,6 +115,11 @@ Password Modal
 </li>
 <li class="pf-c-nav__item">
 <a class="pf-c-nav__link">
+Post Encrypt and Sign Modal
+</a>
+</li>
+<li class="pf-c-nav__item">
+<a class="pf-c-nav__link">
 Success Modal
 </a>
 </li>
@@ -148,8 +153,8 @@ Hello, world!
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button aria-label="Reload props" class="pf-c-button pf-m-plain" type="button">
-<i class="fas fa-sync" aria-hidden="true"></i>
+<button class="pf-c-button pf-m-plain" type="button" aria-label="Reload props">
+<i aria-hidden="true" class="fas fa-sync"></i>
 </button>
 </div>
 </div>
