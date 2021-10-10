@@ -26,12 +26,21 @@ func (c *ExportKeyModalStory) Render() app.UI {
 			c.modalOpen,
 			c.WithRoot(
 				&components.ExportKeyModal{
-					OnSubmit: func(armor bool) {
-						app.Window().Call("alert", fmt.Sprintf("Exported key with armor set to %v", armor))
-
-						c.modalOpen = false
+					OnDownloadPublicKey: func(armor bool) {
+						app.Window().Call("alert", fmt.Sprintf("Downloaded public key with armor set to %v", armor))
 					},
-					OnCancel: func() {
+					OnViewPublicKey: func() {
+						app.Window().Call("alert", "Viewed public key")
+					},
+
+					OnDownloadPrivateKey: func(armor bool) {
+						app.Window().Call("alert", fmt.Sprintf("Downloaded private key with armor set to %v", armor))
+					},
+					OnViewPrivateKey: func() {
+						app.Window().Call("alert", "Viewed private key")
+					},
+
+					OnOK: func() {
 						c.modalOpen = false
 
 						c.Update()
