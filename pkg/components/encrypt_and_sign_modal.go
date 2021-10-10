@@ -282,7 +282,6 @@ func (c *EncryptAndSignModal) Render() app.UI {
 				Text("Cancel").
 				OnClick(func(ctx app.Context, e app.Event) {
 					c.clear()
-
 					c.OnCancel()
 				}),
 		},
