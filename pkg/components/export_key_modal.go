@@ -42,8 +42,7 @@ func (c *ExportKeyModal) Render() app.UI {
 					app.Div().
 						Class("pf-c-card__body").
 						Body(
-							app.P().
-								Text("Anyone can use this key to encrypt messages to you and verify your identity; you may share it with the public."),
+							app.Text("Anyone can use this key to encrypt messages to you and verify your identity; you may share it with the public."),
 							app.Form().
 								Class("pf-c-form pf-u-mt-lg").
 								ID(exportPublicKeyForm).
@@ -144,8 +143,7 @@ func (c *ExportKeyModal) Render() app.UI {
 					app.Div().
 						Class("pf-c-card__body").
 						Body(
-							app.P().
-								Text("You can use this key to decrypt messages and sign with your identity; don't share it with anyone."),
+							app.Text("You can use this key to decrypt messages and sign with your identity; don't share it with anyone."),
 							app.Form().
 								Class("pf-c-form pf-u-mt-lg").
 								ID(exportPrivateKeyForm).

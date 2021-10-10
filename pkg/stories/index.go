@@ -86,17 +86,18 @@ func (c *Index) Render() app.UI {
 
 	if c.stories == nil {
 		c.stories = map[string]SelfReferencingComponent{
-			"Home":                 &HomeStory{},
-			"Create Key Modal":     &CreateKeyModalStory{},
-			"Import Key Modal":     &ImportKeyModalStory{},
-			"Encrypt/Sign Modal":   &EncryptAndSignModalStory{},
-			"Decrypt/Verify Modal": &DecryptAndVerifyModalStory{},
-			"File Upload":          &FileUploadStory{},
-			"Password Modal":       &PasswordModalStory{},
-			"Success Modal":        &SuccessModalStory{},
-			"Modal":                &ModalStory{},
-			"Export Key":           &ExportKeyModalStory{},
-			"Confirmation Modal":   &ConfirmationModalStory{},
+			"Home":                        &HomeStory{},
+			"Create Key Modal":            &CreateKeyModalStory{},
+			"Import Key Modal":            &ImportKeyModalStory{},
+			"Encrypt/Sign Modal":          &EncryptAndSignModalStory{},
+			"Decrypt/Verify Modal":        &DecryptAndVerifyModalStory{},
+			"File Upload":                 &FileUploadStory{},
+			"Password Modal":              &PasswordModalStory{},
+			"Success Modal":               &SuccessModalStory{},
+			"Modal":                       &ModalStory{},
+			"Export Key":                  &ExportKeyModalStory{},
+			"Confirmation Modal":          &ConfirmationModalStory{},
+			"Post Encrypt and Sign Modal": &PostEncryptAndSignModalStory{},
 		}
 
 		c.updateCodeQueries()
