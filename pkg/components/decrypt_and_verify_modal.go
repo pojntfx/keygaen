@@ -294,7 +294,7 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 							return "Decrypt"
 						}
 
-						return "Decrypt and Verify"
+						return "Decrypt and verify"
 					}(),
 				),
 			app.Button().

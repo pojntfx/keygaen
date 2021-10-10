@@ -273,7 +273,7 @@ func (c *EncryptAndSignModal) Render() app.UI {
 							return "Encrypt"
 						}
 
-						return "Encrypt and Sign"
+						return "Encrypt and sign"
 					}(),
 				),
 			app.Button().

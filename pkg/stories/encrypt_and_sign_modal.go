@@ -18,7 +18,7 @@ func (c *EncryptAndSignModalStory) Render() app.UI {
 		app.Button().
 			Class("pf-c-button pf-m-primary").
 			Type("button").
-			Text("Encrypt/Sign").
+			Text("Encrypt/sign").
 			OnClick(func(ctx app.Context, e app.Event) {
 				c.modalOpen = !c.modalOpen
 			}),

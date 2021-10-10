@@ -95,6 +95,7 @@ func (c *Index) Render() app.UI {
 			"Password Modal":       &PasswordModalStory{},
 			"Success Modal":        &SuccessModalStory{},
 			"Modal":                &ModalStory{},
+			"Export Key":           &ExportKeyModalStory{},
 		}
 
 		c.updateCodeQueries()

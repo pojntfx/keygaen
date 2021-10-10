@@ -18,7 +18,7 @@ func (c *ImportKeyModalStory) Render() app.UI {
 		app.Button().
 			Class("pf-c-button pf-m-primary").
 			Type("button").
-			Text("Import Key").
+			Text("Import key").
 			OnClick(func(ctx app.Context, e app.Event) {
 				c.modalOpen = !c.modalOpen
 			}),

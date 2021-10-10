@@ -19,7 +19,7 @@ func (c *ModalStory) Render() app.UI {
 			app.Button().
 				Class("pf-c-button pf-m-primary").
 				Type("button").
-				Text("Open Modal").
+				Text("Open modal").
 				OnClick(func(ctx app.Context, e app.Event) {
 					c.modalOpen = !c.modalOpen
 				}),

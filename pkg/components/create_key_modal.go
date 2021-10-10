@@ -179,7 +179,7 @@ func (c *CreateKeyModal) Render() app.UI {
 												Body(
 													app.Span().
 														Class("pf-c-form__label-text").
-														Text("Confirm Password"),
+														Text("Confirm password"),
 													app.Span().
 														Class("pf-c-form__label-required").
 														Aria("hidden", true).
@@ -223,7 +223,7 @@ func (c *CreateKeyModal) Render() app.UI {
 			app.Button().
 				Class("pf-c-button pf-m-primary").
 				Type("submit").
-				Text("Create Key").
+				Text("Create key").
 				Form("create-key-form"),
 			app.Button().
 				Class("pf-c-button pf-m-link").
