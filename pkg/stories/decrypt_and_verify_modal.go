@@ -18,7 +18,7 @@ func (c *DecryptAndVerifyModalStory) Render() app.UI {
 		app.Button().
 			Class("pf-c-button pf-m-primary").
 			Type("button").
-			Text("Decrypt/Verify").
+			Text("Decrypt/verify").
 			OnClick(func(ctx app.Context, e app.Event) {
 				c.modalOpen = !c.modalOpen
 			}),

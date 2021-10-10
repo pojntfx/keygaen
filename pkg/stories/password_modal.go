@@ -16,7 +16,7 @@ func (c *PasswordModalStory) Render() app.UI {
 		app.Button().
 			Class("pf-c-button pf-m-primary").
 			Type("button").
-			Text("Open Password Modal").
+			Text("Open password modal").
 			OnClick(func(ctx app.Context, e app.Event) {
 				c.modalOpen = !c.modalOpen
 			}),

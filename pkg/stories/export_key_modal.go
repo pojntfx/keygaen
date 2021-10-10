@@ -7,27 +7,27 @@ import (
 	"github.com/pojntfx/gridge/pkg/components"
 )
 
-type CreateKeyModalStory struct {
+type ExportKeyModalStory struct {
 	Story
 
 	modalOpen bool
 }
 
-func (c *CreateKeyModalStory) Render() app.UI {
+func (c *ExportKeyModalStory) Render() app.UI {
 	return app.Div().Body(
 		app.Button().
 			Class("pf-c-button pf-m-primary").
 			Type("button").
-			Text("Create key").
+			Text("Export key").
 			OnClick(func(ctx app.Context, e app.Event) {
 				c.modalOpen = !c.modalOpen
 			}),
 		app.If(
 			c.modalOpen,
 			c.WithRoot(
-				&components.CreateKeyModal{
-					OnSubmit: func(fullName, email, _ string) {
-						app.Window().Call("alert", fmt.Sprintf("Created key with full name %v, email %v and a password", fullName, email))
+				&components.ExportKeyModal{
+					OnSubmit: func(armor bool) {
+						app.Window().Call("alert", fmt.Sprintf("Exported key with armor set to %v", armor))
 
 						c.modalOpen = false
 					},

@@ -43,8 +43,8 @@ func (c *PasswordModal) Render() app.UI {
 											Class("pf-c-form-control").
 											Required(true).
 											Type("password").
-											Placeholder("Enter password").
-											Aria("label", "Enter password").
+											Placeholder("Password").
+											Aria("label", "Password").
 											OnInput(func(ctx app.Context, e app.Event) {
 												c.password = ctx.JSSrc().Get("value").String()
 											}).

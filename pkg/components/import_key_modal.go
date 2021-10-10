@@ -59,7 +59,7 @@ func (c *ImportKeyModal) Render() app.UI {
 				Class("pf-c-button pf-m-primary").
 				Type("submit").
 				Form("import-key-form").
-				Text("Import Key"),
+				Text("Import key"),
 			app.Button().
 				Class("pf-c-button pf-m-link").
 				Type("button").

@@ -16,7 +16,7 @@ func (c *SuccessModalStory) Render() app.UI {
 		app.Button().
 			Class("pf-c-button pf-m-primary").
 			Type("button").
-			Text("Open Success Modal").
+			Text("Open success modal").
 			OnClick(func(ctx app.Context, e app.Event) {
 				c.modalOpen = !c.modalOpen
 			}),
