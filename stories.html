@@ -8,7 +8,7 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:34215/stories">
+<meta property="og:url" content="http://127.0.0.1:46529/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -16,13 +16,13 @@
 <title>
 gridge
 </title>
-<link href="/gridge/web/default.png" rel="icon" type="image/png">
+<link type="image/png" href="/gridge/web/default.png" rel="icon">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
@@ -31,26 +31,26 @@ gridge
 </head>
 <body>
 <div>
-<aside class="goapp-app-info" id="app-wasm-loader">
-<img class="goapp-logo goapp-spin" src="/gridge/web/default.png" id="app-wasm-loader-icon">
-<p class="goapp-label" id="app-wasm-loader-label">
+<aside id="app-wasm-loader" class="goapp-app-info">
+<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
+<p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
 </aside>
 <div id="app-pre-render">
 <div class="pf-c-page">
 <header class="pf-c-page__header">
-<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#main">
+<a href="#main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
 Skip to content
 </a>
 <header class="pf-c-masthead">
 <span class="pf-c-masthead__toggle">
 <button class="pf-c-button pf-m-plain" type="button" aria-label="Global navigation">
-<i class="fas fa-bars" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-bars"></i>
 </button>
 </span>
 <div class="pf-c-masthead__main">
-<a href="/" class="pf-c-masthead__brand">
+<a class="pf-c-masthead__brand" href="/">
 <img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
@@ -63,6 +63,11 @@ Stories
 <div class="pf-c-page__sidebar-body">
 <nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
+<li class="pf-c-nav__item">
+<a class="pf-c-nav__link">
+Confirmation Modal
+</a>
+</li>
 <li class="pf-c-nav__item">
 <a class="pf-c-nav__link">
 Create Key Modal
@@ -117,7 +122,7 @@ Success Modal
 </nav>
 </div>
 </div>
-<main class="pf-c-page__main" tabindex="-1" id="main">
+<main id="main" class="pf-c-page__main" tabindex="-1">
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-light pf-m-shadow-bottom">
 <div class="pf-c-page__main-body">
 <div class="pf-c-content pf-u-display-flex pf-u-justify-content-space-between">
