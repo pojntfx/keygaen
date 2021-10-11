@@ -98,6 +98,7 @@ func (c *Index) Render() app.UI {
 			"Export Key":                  &ExportKeyModalStory{},
 			"Confirmation Modal":          &ConfirmationModalStory{},
 			"Post Encrypt and Sign Modal": &PostEncryptAndSignModalStory{},
+			"Text Output Modal":           &TextOutputModalStory{},
 		}
 
 		c.updateCodeQueries()
