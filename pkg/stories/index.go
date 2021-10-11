@@ -99,6 +99,7 @@ func (c *Index) Render() app.UI {
 			"Confirmation Modal":     &ConfirmationModalStory{},
 			"Download or View Modal": &DownloadOrViewModalStory{},
 			"Text Output Modal":      &TextOutputModalStory{},
+			"Error Modal":            &ErrorModalStory{},
 		}
 
 		c.updateCodeQueries()
