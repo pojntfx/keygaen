@@ -4,25 +4,25 @@
 <meta charset="UTF-8">
 <meta httpequiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="author" content="Felicitas Pojtinger">
-<meta content="Sign, verify, encrypt and decrypt data with GPG." name="description">
+<meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:34035/stories">
+<meta property="og:url" content="http://127.0.0.1:46075/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
-<meta property="og:image" content>
+<meta content property="og:image">
 <title>
 gridge
 </title>
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
-<link rel="apple-touch-icon" href="/gridge/web/default.png">
+<link href="/gridge/web/default.png" rel="apple-touch-icon">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link href="/gridge/app.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="/gridge/app.css" type="text/css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
@@ -59,7 +59,7 @@ Stories
 </div>
 </header>
 </header>
-<div aria-hidden="true" class="pf-c-page__sidebar pf-m-collapsed">
+<div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
 <div class="pf-c-page__sidebar-body">
 <nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
@@ -76,6 +76,11 @@ Create Key Modal
 <li class="pf-c-nav__item">
 <a class="pf-c-nav__link">
 Decrypt/Verify Modal
+</a>
+</li>
+<li class="pf-c-nav__item">
+<a class="pf-c-nav__link">
+Download or View Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
@@ -115,11 +120,6 @@ Password Modal
 </li>
 <li class="pf-c-nav__item">
 <a class="pf-c-nav__link">
-Post Encrypt and Sign Modal
-</a>
-</li>
-<li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
 Success Modal
 </a>
 </li>
@@ -140,7 +140,7 @@ Text Output Modal
 Home
 </h1>
 <a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen">
-<i aria-hidden="true" class="fas fa-expand-arrows-alt"></i>
+<i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
 </div>
@@ -159,7 +159,7 @@ Hello, world!
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
 <button class="pf-c-button pf-m-plain" type="button" aria-label="Reload props">
-<i class="fas fa-sync" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-sync"></i>
 </button>
 </div>
 </div>
