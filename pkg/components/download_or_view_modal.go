@@ -4,36 +4,52 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
-type PostEncryptAndSignModal struct {
+type DownloadOrViewModal struct {
 	app.Compo
 
-	Signed    bool
-	Encrypted bool
+	SubjectA     bool
+	SubjectANoun string
+	SubjectAVerb string
+
+	SubjectB     bool
+	SubjectBNoun string
+	SubjectBVerb string
 
 	OnClose    func()
 	OnDownload func()
 	OnView     func()
 }
 
-func (c *PostEncryptAndSignModal) Render() app.UI {
+func (c *DownloadOrViewModal) Render() app.UI {
 	title := "File successfully "
 	downloadLabel := "Download "
 	viewLabel := "View "
 	body := "You may now download or view "
-	if c.Signed && c.Encrypted {
-		title += "encrypted and signed"
-		downloadLabel += "cypher and signature"
-		viewLabel += "cypher and signature"
-		body += "them"
-	} else if c.Signed {
-		title += "signed"
-		downloadLabel += "signature"
-		viewLabel += "signature"
+	if c.SubjectA && c.SubjectB {
+		title += c.SubjectBVerb + " and " + c.SubjectAVerb
+
+		if c.SubjectANoun == "" {
+			downloadLabel += c.SubjectBNoun
+			viewLabel += c.SubjectBNoun
+			body += "it"
+		} else if c.SubjectBNoun == "" {
+			downloadLabel += c.SubjectANoun
+			viewLabel += c.SubjectANoun
+			body += "it"
+		} else {
+			downloadLabel += c.SubjectBNoun + " and " + c.SubjectANoun
+			viewLabel += c.SubjectBNoun + " and " + c.SubjectANoun
+			body += "them"
+		}
+	} else if c.SubjectA {
+		title += c.SubjectAVerb
+		downloadLabel += c.SubjectANoun
+		viewLabel += c.SubjectANoun
 		body += "it"
 	} else {
-		title += "encrypted"
-		downloadLabel += "cypher"
-		viewLabel += "cypher"
+		title += c.SubjectBVerb
+		downloadLabel += c.SubjectBNoun
+		viewLabel += c.SubjectBNoun
 		body += "it"
 	}
 	title += "!"
