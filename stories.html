@@ -8,7 +8,7 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:38311/stories">
+<meta property="og:url" content="http://127.0.0.1:40025/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -16,7 +16,7 @@
 <title>
 gridge
 </title>
-<link type="image/png" href="/gridge/web/default.png" rel="icon">
+<link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
@@ -51,7 +51,7 @@ Skip to content
 </span>
 <div class="pf-c-masthead__main">
 <a class="pf-c-masthead__brand" href="/">
-<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
+<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -99,7 +99,7 @@ Error Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Export%2BKey" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Export%2BKey">
 Export Key
 </a>
 </li>
@@ -114,8 +114,13 @@ Home
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Import%2BKey%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Import%2BKey%2BModal">
 Import Key Modal
+</a>
+</li>
+<li class="pf-c-nav__item">
+<a class="pf-c-nav__link" href="?activeTitle=Key%2BList">
+Key List
 </a>
 </li>
 <li class="pf-c-nav__item">
@@ -129,7 +134,7 @@ Password Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Success%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Success%2BModal">
 Success Modal
 </a>
 </li>
@@ -168,7 +173,7 @@ Hello, world!
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button class="pf-c-button pf-m-plain" type="button" aria-label="Reload props">
+<button type="button" aria-label="Reload props" class="pf-c-button pf-m-plain">
 <i class="fas fa-sync" aria-hidden="true"></i>
 </button>
 </div>
