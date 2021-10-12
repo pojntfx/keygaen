@@ -174,13 +174,16 @@ func (c *Index) Render() app.UI {
 													linkClasses += " pf-m-current"
 												}
 
+												u := c.getActiveTitle(title)
+
 												return app.Li().
 													Class("pf-c-nav__item").
 													Body(
 														app.A().
 															Class(linkClasses).
+															Href(u).
 															OnClick(func(ctx app.Context, e app.Event) {
-																c.setActiveTitle(title, ctx)
+																c.setActiveTitle(title, u, ctx)
 
 																c.closeSidebarOnMobile()
 															}).
@@ -210,25 +213,30 @@ func (c *Index) Render() app.UI {
 												Body(
 													app.Text(c.activeTitle),
 												),
-											app.A().
-												Class("pf-c-button pf-m-plain pf-u-ml-sm").
-												Aria("label", "Fullscreen").
-												OnClick(func(ctx app.Context, e app.Event) {
-													u := app.Window().URL()
+											func() app.UI {
+												u := app.Window().URL()
 
-													q := u.Query()
+												q := u.Query()
 
-													q.Set(standaloneKey, "true")
+												q.Set(standaloneKey, "true")
 
-													u.RawQuery = q.Encode()
+												u.RawQuery = q.Encode()
 
-													app.Window().Call("open", u.String(), "_blank")
-												}).
-												Body(
-													app.I().
-														Class("fas fa-expand-arrows-alt").
-														Aria("hidden", true),
-												),
+												return app.A().
+													Class("pf-c-button pf-m-plain pf-u-ml-sm").
+													Aria("label", "Fullscreen").
+													Target("_blank").
+													Href(u.String()).
+													OnClick(func(ctx app.Context, e app.Event) {
+														// Prevent go-app from taking over this link
+														e.Call("stopImmediatePropagation")
+													}).
+													Body(
+														app.I().
+															Class("fas fa-expand-arrows-alt").
+															Aria("hidden", true),
+													)
+											}(),
 										),
 								),
 						),
@@ -323,16 +331,20 @@ func (c *Index) updateCodeQueries() {
 	}
 }
 
-func (c *Index) setActiveTitle(title string, ctx app.Context) {
-	c.activeTitle = title
-
+func (c *Index) getActiveTitle(title string) string {
 	u := app.Window().URL()
 
 	q := u.Query()
-	q.Set(activeTitleKey, url.QueryEscape(c.activeTitle))
+	q.Set(activeTitleKey, url.QueryEscape(title))
 
 	u.RawQuery = q.Encode()
-	ctx.NavigateTo(u)
+
+	return u.String()
+}
+
+func (c *Index) setActiveTitle(title string, url string, ctx app.Context) {
+	c.activeTitle = title
+	ctx.Navigate(url)
 }
 
 func (c *Index) closeSidebarOnMobile() {
