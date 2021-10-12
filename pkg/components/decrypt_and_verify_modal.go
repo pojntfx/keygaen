@@ -12,8 +12,8 @@ const (
 type DecryptAndVerifyModal struct {
 	app.Compo
 
-	PrivateKeys []EncryptionKey
-	PublicKeys  []EncryptionKey
+	PrivateKeys []GPGKey
+	PublicKeys  []GPGKey
 
 	OnSubmit func(
 		file []byte,

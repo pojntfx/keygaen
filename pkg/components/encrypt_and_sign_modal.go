@@ -8,17 +8,19 @@ const (
 	selectEncryptionFileInput = "select-encryption-file-input"
 )
 
-type EncryptionKey struct {
+type GPGKey struct {
 	ID       string
 	FullName string
 	Email    string
+	Private  bool
+	Public   bool
 }
 
 type EncryptAndSignModal struct {
 	app.Compo
 
-	PrivateKeys []EncryptionKey
-	PublicKeys  []EncryptionKey
+	PrivateKeys []GPGKey
+	PublicKeys  []GPGKey
 
 	OnSubmit func(
 		file []byte,
@@ -309,6 +311,6 @@ func (c *EncryptAndSignModal) clear() {
 	c.createDetachedSignature = false
 }
 
-func getKeySummary(key EncryptionKey) string {
+func getKeySummary(key GPGKey) string {
 	return key.ID + " " + key.FullName + " <" + key.Email + ">"
 }

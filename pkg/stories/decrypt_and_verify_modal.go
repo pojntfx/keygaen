@@ -26,7 +26,7 @@ func (c *DecryptAndVerifyModalStory) Render() app.UI {
 			c.modalOpen,
 			c.WithRoot(
 				&components.DecryptAndVerifyModal{
-					PrivateKeys: []components.EncryptionKey{
+					PrivateKeys: []components.GPGKey{
 						{
 							ID:       "123456",
 							FullName: "Alice Example",
@@ -38,7 +38,7 @@ func (c *DecryptAndVerifyModalStory) Render() app.UI {
 							Email:    "bob@example.com",
 						},
 					},
-					PublicKeys: []components.EncryptionKey{
+					PublicKeys: []components.GPGKey{
 						{
 							ID:       "039292",
 							FullName: "Isegard Example",
