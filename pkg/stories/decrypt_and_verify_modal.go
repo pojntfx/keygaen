@@ -26,30 +26,7 @@ func (c *DecryptAndVerifyModalStory) Render() app.UI {
 			c.modalOpen,
 			c.WithRoot(
 				&components.DecryptAndVerifyModal{
-					PrivateKeys: []components.GPGKey{
-						{
-							ID:       "123456",
-							FullName: "Alice Example",
-							Email:    "alice@example.com",
-						},
-						{
-							ID:       "319312",
-							FullName: "Bob Example",
-							Email:    "bob@example.com",
-						},
-					},
-					PublicKeys: []components.GPGKey{
-						{
-							ID:       "039292",
-							FullName: "Isegard Example",
-							Email:    "isegard@example.com",
-						},
-						{
-							ID:       "838431",
-							FullName: "Fred Example",
-							Email:    "fred@example.com",
-						},
-					},
+					Keys: demoKeys,
 
 					OnSubmit: func(file []byte, publicKeyID, privateKeyID, detachedSignature string) {
 						app.Window().Call("alert", fmt.Sprintf("Decrypted and verified file %v, using public key ID %v, private key ID %v and detached signature %v", file, publicKeyID, privateKeyID, detachedSignature))

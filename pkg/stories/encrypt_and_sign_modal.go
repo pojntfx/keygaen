@@ -26,30 +26,7 @@ func (c *EncryptAndSignModalStory) Render() app.UI {
 			c.modalOpen,
 			c.WithRoot(
 				&components.EncryptAndSignModal{
-					PrivateKeys: []components.GPGKey{
-						{
-							ID:       "039292",
-							FullName: "Isegard Example",
-							Email:    "isegard@example.com",
-						},
-						{
-							ID:       "838431",
-							FullName: "Fred Example",
-							Email:    "fred@example.com",
-						},
-					},
-					PublicKeys: []components.GPGKey{
-						{
-							ID:       "123456",
-							FullName: "Alice Example",
-							Email:    "alice@example.com",
-						},
-						{
-							ID:       "319312",
-							FullName: "Bob Example",
-							Email:    "bob@example.com",
-						},
-					},
+					Keys: demoKeys,
 
 					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature bool) {
 						app.Window().Call("alert", fmt.Sprintf("Encrypted and signed file %v, using public key ID %v and private key ID %v and createDetachedSignature set to %v", file, publicKeyID, privateKeyID, createDetachedSignature))

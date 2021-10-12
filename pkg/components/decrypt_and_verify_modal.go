@@ -12,8 +12,7 @@ const (
 type DecryptAndVerifyModal struct {
 	app.Compo
 
-	PrivateKeys []GPGKey
-	PublicKeys  []GPGKey
+	Keys []GPGKey
 
 	OnSubmit func(
 		file []byte,
@@ -36,6 +35,18 @@ type DecryptAndVerifyModal struct {
 }
 
 func (c *DecryptAndVerifyModal) Render() app.UI {
+	privateKeys := []GPGKey{}
+	publicKeys := []GPGKey{}
+	for _, key := range c.Keys {
+		if key.Private {
+			privateKeys = append(privateKeys, key)
+		}
+
+		if key.Public {
+			publicKeys = append(publicKeys, key)
+		}
+	}
+
 	return &Modal{
 		ID:    "decrypt-and-verify-modal",
 		Title: "Decrypt/Verify",
@@ -131,8 +142,8 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																	Value("").
 																	Text("Select one").
 																	Selected(c.privateKeyID == ""),
-																app.Range(c.PrivateKeys).Slice(func(i int) app.UI {
-																	key := c.PrivateKeys[i]
+																app.Range(privateKeys).Slice(func(i int) app.UI {
+																	key := privateKeys[i]
 
 																	return app.Option().
 																		Value(key.ID).
@@ -201,8 +212,8 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																	Value("").
 																	Text("Select one").
 																	Selected(c.publicKeyID == ""),
-																app.Range(c.PublicKeys).Slice(func(i int) app.UI {
-																	key := c.PublicKeys[i]
+																app.Range(publicKeys).Slice(func(i int) app.UI {
+																	key := publicKeys[i]
 
 																	return app.Option().
 																		Value(key.ID).
