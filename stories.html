@@ -8,7 +8,7 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:40735/stories">
+<meta property="og:url" content="http://127.0.0.1:36067/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -18,12 +18,12 @@ gridge
 </title>
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
-<link rel="manifest" href="/gridge/manifest.webmanifest">
+<link href="/gridge/manifest.webmanifest" rel="manifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
-<script defer="true" src="/gridge/wasm_exec.js"></script>
+<script src="/gridge/wasm_exec.js" defer="true"></script>
 <script defer="true" src="/gridge/app.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css">
-<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
+<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -33,7 +33,7 @@ gridge
 <div>
 <aside class="goapp-app-info" id="app-wasm-loader">
 <img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
-<p id="app-wasm-loader-label" class="goapp-label">
+<p class="goapp-label" id="app-wasm-loader-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
 </aside>
@@ -50,7 +50,7 @@ Skip to content
 </button>
 </span>
 <div class="pf-c-masthead__main">
-<a href="/" class="pf-c-masthead__brand">
+<a class="pf-c-masthead__brand" href="/">
 <img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
@@ -64,72 +64,72 @@ Stories
 <nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Confirmation%2BModal">
 Confirmation Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Create%2BKey%2BModal">
 Create Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Decrypt%252FVerify%2BModal">
 Decrypt/Verify Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Download%2Bor%2BView%2BModal">
 Download or View Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Encrypt%252FSign%2BModal">
 Encrypt/Sign Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Error%2BModal">
 Error Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Export%2BKey">
 Export Key
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a href="?activeTitle=File%2BUpload" class="pf-c-nav__link">
 File Upload
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link pf-m-current">
+<a class="pf-c-nav__link pf-m-current" href="?activeTitle=Home">
 Home
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Import%2BKey%2BModal">
 Import Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Modal">
 Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Password%2BModal">
 Password Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a href="?activeTitle=Success%2BModal" class="pf-c-nav__link">
 Success Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Text%2BOutput%2BModal">
 Text Output Modal
 </a>
 </li>
@@ -144,7 +144,7 @@ Text Output Modal
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen">
+<a target="_blank" href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen">
 <i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
