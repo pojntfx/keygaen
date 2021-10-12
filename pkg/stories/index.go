@@ -100,6 +100,7 @@ func (c *Index) Render() app.UI {
 			"Download or View Modal": &DownloadOrViewModalStory{},
 			"Text Output Modal":      &TextOutputModalStory{},
 			"Error Modal":            &ErrorModalStory{},
+			"Empty State":            &EmptyStateStory{},
 		}
 
 		c.updateCodeQueries()
