@@ -26,7 +26,7 @@ func (c *EncryptAndSignModalStory) Render() app.UI {
 			c.modalOpen,
 			c.WithRoot(
 				&components.EncryptAndSignModal{
-					PrivateKeys: []components.EncryptionKey{
+					PrivateKeys: []components.GPGKey{
 						{
 							ID:       "039292",
 							FullName: "Isegard Example",
@@ -38,7 +38,7 @@ func (c *EncryptAndSignModalStory) Render() app.UI {
 							Email:    "fred@example.com",
 						},
 					},
-					PublicKeys: []components.EncryptionKey{
+					PublicKeys: []components.GPGKey{
 						{
 							ID:       "123456",
 							FullName: "Alice Example",

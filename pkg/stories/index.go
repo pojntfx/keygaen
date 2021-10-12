@@ -101,6 +101,7 @@ func (c *Index) Render() app.UI {
 			"Text Output Modal":      &TextOutputModalStory{},
 			"Error Modal":            &ErrorModalStory{},
 			"Empty State":            &EmptyStateStory{},
+			"Key List":               &KeyListStory{},
 		}
 
 		c.updateCodeQueries()
