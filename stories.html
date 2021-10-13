@@ -8,9 +8,9 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:40301/stories">
+<meta content="http://127.0.0.1:43499/stories" property="og:url">
 <meta property="og:title" content="gridge">
-<meta content="Sign, verify, encrypt and decrypt data with GPG." property="og:description">
+<meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
 <meta property="og:image" content>
 <title>
@@ -22,8 +22,8 @@ gridge
 <link href="/gridge/app.css" type="text/css" rel="stylesheet">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css" rel="stylesheet">
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -45,13 +45,13 @@ Skip to content
 </a>
 <header class="pf-c-masthead">
 <span class="pf-c-masthead__toggle">
-<button aria-label="Global navigation" class="pf-c-button pf-m-plain" type="button">
+<button class="pf-c-button pf-m-plain" type="button" aria-label="Global navigation">
 <i class="fas fa-bars" aria-hidden="true"></i>
 </button>
 </span>
 <div class="pf-c-masthead__main">
 <a class="pf-c-masthead__brand" href="/">
-<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo.png">
+<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -129,6 +129,11 @@ Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
+<a class="pf-c-nav__link" href="?activeTitle=Navbar">
+Navbar
+</a>
+</li>
+<li class="pf-c-nav__item">
 <a class="pf-c-nav__link" href="?activeTitle=Password%2BModal">
 Password Modal
 </a>
@@ -154,7 +159,7 @@ Text Output Modal
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank">
+<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
 <i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
