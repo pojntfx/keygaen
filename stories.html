@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta httpequiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="author" content="Felicitas Pojtinger">
-<meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
-<meta content="gpg, pgp, gopenpgp, encryption, signatures" name="keywords">
+<meta content="Sign, verify, encrypt and decrypt data with GPG." name="description">
+<meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:43527/stories">
+<meta property="og:url" content="http://127.0.0.1:46841/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -46,13 +46,13 @@ Skip to content
 </a>
 <header class="pf-c-masthead">
 <span class="pf-c-masthead__toggle">
-<button type="button" aria-label="Global navigation" class="pf-c-button pf-m-plain">
+<button class="pf-c-button pf-m-plain" type="button" aria-label="Global navigation">
 <i aria-hidden="true" class="fas fa-bars"></i>
 </button>
 </span>
 <div class="pf-c-masthead__main">
-<a href="/" class="pf-c-masthead__brand">
-<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo.png">
+<a class="pf-c-masthead__brand" href="/">
+<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -60,7 +60,7 @@ Stories
 </div>
 </header>
 </header>
-<div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
+<div aria-hidden="true" class="pf-c-page__sidebar pf-m-collapsed">
 <div class="pf-c-page__sidebar-body">
 <nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
@@ -95,7 +95,7 @@ Encrypt/Sign Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Error%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Error%2BModal">
 Error Modal
 </a>
 </li>
@@ -125,7 +125,7 @@ Key List
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Modal">
+<a href="?activeTitle=Modal" class="pf-c-nav__link">
 Modal
 </a>
 </li>
@@ -158,7 +158,7 @@ Toolbar
 </nav>
 </div>
 </div>
-<main class="pf-c-page__main" tabindex="-1" id="main">
+<main id="main" class="pf-c-page__main" tabindex="-1">
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-light pf-m-shadow-bottom">
 <div class="pf-c-page__main-body">
 <div class="pf-c-content pf-u-display-flex pf-u-justify-content-space-between">
@@ -184,12 +184,24 @@ Hello, world!
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button class="pf-c-button pf-m-plain" type="button" aria-label="Reset props">
+<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reset props">
+<div class="pf-c-tooltip pf-m-top pf-x-c-tooltip" aria-role="tooltip">
+<div class="pf-c-tooltip__arrow"></div>
+<div class="pf-c-tooltip__content">
+Reset props
+</div>
+</div>
 <i class="fas fa-eraser" aria-hidden="true"></i>
 </button>
 </div>
 <div class="pf-c-code-block__actions-item">
-<button class="pf-c-button pf-m-plain" type="button" aria-label="Reload props">
+<button aria-label="Reload props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
+<div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
+<div class="pf-c-tooltip__arrow"></div>
+<div class="pf-c-tooltip__content">
+Reload props
+</div>
+</div>
 <i class="fas fa-sync" aria-hidden="true"></i>
 </button>
 </div>

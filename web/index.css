@@ -7,15 +7,22 @@
   visibility: hidden;
   position: absolute;
   z-index: 1;
-  top: 0;
 }
 
 .pf-x-c-tooltip.pf-m-left {
+  top: 0;
   right: calc(100% + (var(--pf-c-tooltip__arrow--Width) / 2));
 }
 
 .pf-x-c-tooltip.pf-m-right {
+  top: 0;
   left: calc(100% + (var(--pf-c-tooltip__arrow--Width) / 2));
+}
+
+.pf-x-c-tooltip.pf-m-top {
+  bottom: calc(100% + (var(--pf-c-tooltip__arrow--Height) / 2));
+  transform: translateX(-50%);
+  left: 50%;
 }
 
 .pf-x-c-backdrop--nested {
