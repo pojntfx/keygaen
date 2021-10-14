@@ -1,7 +1,7 @@
-const cacheName = "app-" + "7f42fdc045bd6460346cce230738d20e3e26c6b4";
+const cacheName = "app-" + "a5ee898e2996697f4da1f38d25fb0d97697ff060";
 
 self.addEventListener("install", event => {
-  console.log("installing app worker 7f42fdc045bd6460346cce230738d20e3e26c6b4");
+  console.log("installing app worker a5ee898e2996697f4da1f38d25fb0d97697ff060");
 
   event.waitUntil(
     caches.open(cacheName).
@@ -14,6 +14,7 @@ self.addEventListener("install", event => {
           "/gridge/wasm_exec.js",
           "/gridge/web/app.wasm",
           "/gridge/web/default.png",
+          "/gridge/web/index.css",
           "/gridge/web/large.png",
           "https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css",
           "https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css",
@@ -38,7 +39,7 @@ self.addEventListener("activate", event => {
       );
     })
   );
-  console.log("app worker 7f42fdc045bd6460346cce230738d20e3e26c6b4 is activated");
+  console.log("app worker a5ee898e2996697f4da1f38d25fb0d97697ff060 is activated");
 });
 
 self.addEventListener("fetch", event => {
