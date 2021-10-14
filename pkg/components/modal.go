@@ -26,7 +26,7 @@ func (c *Modal) Render() app.UI {
 	}
 
 	return app.Div().
-		Class("pf-c-backdrop").
+		Class("pf-c-backdrop pf-x-c-backdrop--nested").
 		Body(
 			app.Div().
 				Class("pf-l-bullseye").
