@@ -20,7 +20,83 @@ func (c *Toolbar) Render() app.UI {
 				Class("pf-c-toolbar__content").
 				Body(
 					app.Div().
-						Class("pf-c-toolbar__content-section pf-m-nowrap").
+						Class("pf-c-toolbar__content-section pf-m-nowrap pf-u-display-none-on-md").
+						Body(
+							app.Div().
+								Class("pf-c-toolbar__group").
+								Body(
+									app.Button().
+										Type("button").
+										Class("pf-c-button pf-m-plain").
+										OnClick(func(ctx app.Context, e app.Event) {
+											c.OnCreateKey()
+										}).
+										Body(
+											app.Span().
+												Class("pf-c-button__icon").
+												Body(
+													app.I().
+														Class("fas fa-plus").
+														Aria("hidden", true),
+												),
+										),
+									app.Button().
+										Class("pf-c-button pf-m-plain").
+										Type("button").
+										OnClick(func(ctx app.Context, e app.Event) {
+											c.OnImportKey()
+										}).
+										Body(
+											app.Span().
+												Class("pf-c-button__icon").
+												Body(
+													app.I().
+														Aria("hidden", true).
+														Class("fas fa-file-import"),
+												),
+										),
+								),
+							app.Div().
+								Class("pf-c-toolbar__item pf-m-pagination").
+								Body(
+									app.Div().
+										Class("pf-c-toolbar__group").
+										Body(
+											app.Button().
+												Class("pf-c-button pf-m-plain").
+												Type("button").
+												OnClick(func(ctx app.Context, e app.Event) {
+													c.OnEncryptAndSign()
+												}).
+												Body(
+													app.Span().
+														Class("pf-c-button__icon").
+														Body(
+															app.I().
+																Class("fas fa-lock").
+																Aria("hidden", true),
+														),
+												),
+											app.Button().
+												Class("pf-c-button pf-m-plain").
+												Type("button").
+												OnClick(func(ctx app.Context, e app.Event) {
+													c.OnDecryptAndVerify()
+												}).
+												Body(
+													app.Span().
+														Class("pf-c-button__icon").
+														Body(
+															app.I().
+																Class("fas fa-lock-open").
+																Aria("hidden", true),
+														),
+												),
+										),
+								),
+						),
+					app.Div().
+						Class("pf-c-toolbar__content-section pf-m-nowrap pf-u-display-none pf-u-display-flex-on-md").
 						Body(
 							app.Div().
 								Class("pf-c-toolbar__group").
@@ -42,7 +118,7 @@ func (c *Toolbar) Render() app.UI {
 																Class("fas fa-plus").
 																Aria("hidden", true),
 														),
-													app.Text("Create Key"),
+													app.Text(" Create Key"),
 												),
 										),
 									app.Div().
@@ -62,7 +138,7 @@ func (c *Toolbar) Render() app.UI {
 																Class("fas fa-file-import").
 																Aria("hidden", true),
 														),
-													app.Text("Import Key"),
+													app.Text(" Import Key"),
 												),
 										),
 								),
@@ -89,7 +165,7 @@ func (c *Toolbar) Render() app.UI {
 																		Class("fas fa-lock").
 																		Aria("hidden", true),
 																),
-															app.Text("Encrypt/Sign"),
+															app.Text(" Encrypt/Sign"),
 														),
 												),
 											app.Div().
@@ -109,7 +185,7 @@ func (c *Toolbar) Render() app.UI {
 																		Class("fas fa-lock-open").
 																		Aria("hidden", true),
 																),
-															app.Text("Decrypt/Verify"),
+															app.Text(" Decrypt/Verify"),
 														),
 												),
 										),
