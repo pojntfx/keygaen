@@ -103,6 +103,7 @@ func (c *Index) Render() app.UI {
 			"Empty State":            &EmptyStateStory{},
 			"Key List":               &KeyListStory{},
 			"Navbar":                 &NavbarStory{},
+			"Toolbar":                &ToolbarStory{},
 		}
 
 		c.updateCodeQueries()
