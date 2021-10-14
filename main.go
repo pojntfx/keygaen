@@ -39,8 +39,8 @@ func main() {
 		ThemeColor:      "#151515",
 		BackgroundColor: "#151515",
 		Icon: app.Icon{
-			Default: "/web/default.png",
-			Large:   "/web/large.png",
+			Default: `/web/default.png`,
+			Large:   `/web/large.png`,
 		},
 		Keywords: []string{
 			"gpg",
@@ -56,8 +56,9 @@ func main() {
 			`<meta property="og:image" content="https://pojntfx.github.io/gridge/web/default.png">`,
 		},
 		Styles: []string{
-			"https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css",
-			"https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css",
+			`https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css`,
+			`https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css`,
+			`/web/index.css`,
 		},
 	}
 

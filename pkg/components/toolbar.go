@@ -27,11 +27,23 @@ func (c *Toolbar) Render() app.UI {
 								Body(
 									app.Button().
 										Type("button").
-										Class("pf-c-button pf-m-plain").
+										Class("pf-c-button pf-m-plain pf-x-c-tooltip-parent").
 										OnClick(func(ctx app.Context, e app.Event) {
 											c.OnCreateKey()
 										}).
 										Body(
+											app.Div().
+												Class("pf-c-tooltip pf-m-right pf-x-c-tooltip").
+												Aria("role", "tooltip").
+												Body(
+													app.Div().
+														Class("pf-c-tooltip__arrow"),
+													app.Div().
+														Class("pf-c-tooltip__content").
+														Body(
+															app.Text("Create key"),
+														),
+												),
 											app.Span().
 												Class("pf-c-button__icon").
 												Body(
@@ -41,12 +53,24 @@ func (c *Toolbar) Render() app.UI {
 												),
 										),
 									app.Button().
-										Class("pf-c-button pf-m-plain").
+										Class("pf-c-button pf-m-plain pf-x-c-tooltip-parent").
 										Type("button").
 										OnClick(func(ctx app.Context, e app.Event) {
 											c.OnImportKey()
 										}).
 										Body(
+											app.Div().
+												Class("pf-c-tooltip pf-m-right pf-x-c-tooltip").
+												Aria("role", "tooltip").
+												Body(
+													app.Div().
+														Class("pf-c-tooltip__arrow"),
+													app.Div().
+														Class("pf-c-tooltip__content").
+														Body(
+															app.Text("Import key"),
+														),
+												),
 											app.Span().
 												Class("pf-c-button__icon").
 												Body(
@@ -63,12 +87,24 @@ func (c *Toolbar) Render() app.UI {
 										Class("pf-c-toolbar__group").
 										Body(
 											app.Button().
-												Class("pf-c-button pf-m-plain").
+												Class("pf-c-button pf-m-plain pf-x-c-tooltip-parent").
 												Type("button").
 												OnClick(func(ctx app.Context, e app.Event) {
 													c.OnEncryptAndSign()
 												}).
 												Body(
+													app.Div().
+														Class("pf-c-tooltip pf-m-left pf-x-c-tooltip").
+														Aria("role", "tooltip").
+														Body(
+															app.Div().
+																Class("pf-c-tooltip__arrow"),
+															app.Div().
+																Class("pf-c-tooltip__content").
+																Body(
+																	app.Text("Encrypt/sign"),
+																),
+														),
 													app.Span().
 														Class("pf-c-button__icon").
 														Body(
@@ -78,12 +114,24 @@ func (c *Toolbar) Render() app.UI {
 														),
 												),
 											app.Button().
-												Class("pf-c-button pf-m-plain").
+												Class("pf-c-button pf-m-plain pf-x-c-tooltip-parent").
 												Type("button").
 												OnClick(func(ctx app.Context, e app.Event) {
 													c.OnDecryptAndVerify()
 												}).
 												Body(
+													app.Div().
+														Class("pf-c-tooltip pf-m-left pf-x-c-tooltip").
+														Aria("role", "tooltip").
+														Body(
+															app.Div().
+																Class("pf-c-tooltip__arrow"),
+															app.Div().
+																Class("pf-c-tooltip__content").
+																Body(
+																	app.Text("Decrypt/verify"),
+																),
+														),
 													app.Span().
 														Class("pf-c-button__icon").
 														Body(
@@ -118,7 +166,7 @@ func (c *Toolbar) Render() app.UI {
 																Class("fas fa-plus").
 																Aria("hidden", true),
 														),
-													app.Text(" Create Key"),
+													app.Text(" Create key"),
 												),
 										),
 									app.Div().
@@ -138,7 +186,7 @@ func (c *Toolbar) Render() app.UI {
 																Class("fas fa-file-import").
 																Aria("hidden", true),
 														),
-													app.Text(" Import Key"),
+													app.Text(" Import key"),
 												),
 										),
 								),
@@ -165,7 +213,7 @@ func (c *Toolbar) Render() app.UI {
 																		Class("fas fa-lock").
 																		Aria("hidden", true),
 																),
-															app.Text(" Encrypt/Sign"),
+															app.Text(" Encrypt/sign"),
 														),
 												),
 											app.Div().
@@ -185,7 +233,7 @@ func (c *Toolbar) Render() app.UI {
 																		Class("fas fa-lock-open").
 																		Aria("hidden", true),
 																),
-															app.Text(" Decrypt/Verify"),
+															app.Text(" Decrypt/verify"),
 														),
 												),
 										),
