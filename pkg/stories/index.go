@@ -202,6 +202,9 @@ func (c *Index) Render() app.UI {
 				ID("main").
 				Class("pf-c-page__main").
 				TabIndex(-1).
+				OnClick(func(ctx app.Context, e app.Event) {
+					c.closeSidebarOnMobile()
+				}).
 				Body(
 					app.Section().
 						Class("pf-c-page__main-section pf-u-p-0 pf-m-light pf-m-shadow-bottom").
