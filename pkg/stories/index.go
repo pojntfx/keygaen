@@ -273,13 +273,25 @@ func (c *Index) Render() app.UI {
 																Class("pf-c-code-block__actions-item").
 																Body(
 																	app.Button().
-																		Class("pf-c-button pf-m-plain").
+																		Class("pf-c-button pf-m-plain pf-x-c-tooltip-parent").
 																		Type("button").
 																		Aria("label", "Reset props").
 																		OnClick(func(ctx app.Context, e app.Event) {
 																			ctx.Reload()
 																		}).
 																		Body(
+																			app.Div().
+																				Class("pf-c-tooltip pf-m-top pf-x-c-tooltip").
+																				Aria("role", "tooltip").
+																				Body(
+																					app.Div().
+																						Class("pf-c-tooltip__arrow"),
+																					app.Div().
+																						Class("pf-c-tooltip__content").
+																						Body(
+																							app.Text("Reset props"),
+																						),
+																				),
 																			app.I().
 																				Class("fas fa-eraser").
 																				Aria("hidden", true),
@@ -289,13 +301,25 @@ func (c *Index) Render() app.UI {
 																Class("pf-c-code-block__actions-item").
 																Body(
 																	app.Button().
-																		Class("pf-c-button pf-m-plain").
+																		Class("pf-c-button pf-m-plain pf-x-c-tooltip-parent").
 																		Type("button").
 																		Aria("label", "Reload props").
 																		OnClick(func(ctx app.Context, e app.Event) {
 																			c.Update()
 																		}).
 																		Body(
+																			app.Div().
+																				Class("pf-c-tooltip pf-m-left pf-x-c-tooltip").
+																				Aria("role", "tooltip").
+																				Body(
+																					app.Div().
+																						Class("pf-c-tooltip__arrow"),
+																					app.Div().
+																						Class("pf-c-tooltip__content").
+																						Body(
+																							app.Text("Reload props"),
+																						),
+																				),
 																			app.I().
 																				Class("fas fa-sync").
 																				Aria("hidden", true),
