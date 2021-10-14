@@ -275,6 +275,22 @@ func (c *Index) Render() app.UI {
 																	app.Button().
 																		Class("pf-c-button pf-m-plain").
 																		Type("button").
+																		Aria("label", "Reset props").
+																		OnClick(func(ctx app.Context, e app.Event) {
+																			ctx.Reload()
+																		}).
+																		Body(
+																			app.I().
+																				Class("fas fa-eraser").
+																				Aria("hidden", true),
+																		),
+																),
+															app.Div().
+																Class("pf-c-code-block__actions-item").
+																Body(
+																	app.Button().
+																		Class("pf-c-button pf-m-plain").
+																		Type("button").
 																		Aria("label", "Reload props").
 																		OnClick(func(ctx app.Context, e app.Event) {
 																			c.Update()
