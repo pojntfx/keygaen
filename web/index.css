@@ -1,4 +1,5 @@
-.pf-x-c-tooltip-parent:hover .pf-x-c-tooltip {
+.pf-x-c-tooltip-parent:hover .pf-x-c-tooltip,
+.pf-x-c-tooltip-parent:focus .pf-x-c-tooltip {
   visibility: visible;
 }
 
