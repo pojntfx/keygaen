@@ -24,9 +24,3 @@
   transform: translateX(-50%);
   left: 50%;
 }
-
-.pf-x-c-backdrop--nested {
-  padding-top: var(
-    --pf-c-page__header--MinHeight
-  ); /* TODO: This does depend on the navbar being no higher than the min value; in the future, object queries might be used. */
-}
