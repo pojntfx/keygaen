@@ -7,6 +7,7 @@ import (
 type Autofocused struct {
 	app.Compo
 
+	Disable   bool
 	Component app.UI
 }
 
@@ -15,7 +16,9 @@ func (c *Autofocused) Render() app.UI {
 }
 
 func (c *Autofocused) OnMount(ctx app.Context) {
-	ctx.Defer(func(_ app.Context) {
-		c.JSValue().Call("focus")
-	})
+	if !c.Disable {
+		ctx.Defer(func(_ app.Context) {
+			c.JSValue().Call("focus")
+		})
+	}
 }
