@@ -72,16 +72,7 @@ func (c *Index) Render() app.UI {
 	}
 
 	if c.activeTitle == "" {
-		t, err := url.QueryUnescape(app.Window().URL().Query().Get(activeTitleKey))
-		if err != nil {
-			panic(err)
-		}
-
-		if t == "" {
-			c.activeTitle = "Home"
-		} else {
-			c.activeTitle = t
-		}
+		c.syncActiveTitleWithURL()
 	}
 
 	if c.stories == nil {
@@ -365,6 +356,7 @@ func (c *Index) OnNav(ctx app.Context) {
 		return
 	}
 
+	c.syncActiveTitleWithURL()
 	c.updateCodeQueries()
 }
 
@@ -392,6 +384,19 @@ func (c *Index) getActiveTitle(title string) string {
 func (c *Index) setActiveTitle(title string, url string, ctx app.Context) {
 	c.activeTitle = title
 	ctx.Navigate(url)
+}
+
+func (c *Index) syncActiveTitleWithURL() {
+	t, err := url.QueryUnescape(app.Window().URL().Query().Get(activeTitleKey))
+	if err != nil {
+		panic(err)
+	}
+
+	if t == "" {
+		c.activeTitle = "Home"
+	} else {
+		c.activeTitle = t
+	}
 }
 
 func (c *Index) closeSidebarOnMobile() {
