@@ -24,8 +24,9 @@ type CreateKeyModal struct {
 
 func (c *CreateKeyModal) Render() app.UI {
 	return &Modal{
-		ID:    "create-key-modal",
-		Title: "Create Key",
+		ID:           "create-key-modal",
+		Title:        "Create Key",
+		DisableFocus: true,
 		Body: []app.UI{
 			app.Form().
 				Class("pf-c-form").

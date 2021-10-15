@@ -15,8 +15,9 @@ type PasswordModal struct {
 
 func (c *PasswordModal) Render() app.UI {
 	return &Modal{
-		ID:    "password-modal",
-		Title: "Enter Password",
+		ID:           "password-modal",
+		Title:        "Enter Password",
+		DisableFocus: true,
 		Body: []app.UI{
 			app.Form().
 				Class("pf-c-form").

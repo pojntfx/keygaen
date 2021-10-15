@@ -17,8 +17,7 @@ func (c *KeyList) Render() app.UI {
 				key := c.Keys[i]
 
 				return app.Li().
-					Class("pf-c-data-list__item pf-m-selectable").
-					TabIndex(0).
+					Class("pf-c-data-list__item").
 					Body(
 						app.Div().
 							Class("pf-c-data-list__item-row").
