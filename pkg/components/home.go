@@ -1,6 +1,10 @@
 package components
 
-import "github.com/maxence-charriere/go-app/v9/pkg/app"
+import (
+	"fmt"
+
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
+)
 
 var demoKeys = []GPGKey{
 	{
@@ -32,6 +36,11 @@ var demoKeys = []GPGKey{
 
 type Home struct {
 	app.Compo
+
+	createKeyModalOpen        bool
+	importKeyModal            bool
+	encryptAndSignModalOpen   bool
+	decryptAndVerifyModalOpen bool
 }
 
 func (c *Home) Render() app.UI {
@@ -55,17 +64,17 @@ func (c *Home) Render() app.UI {
 						Body(
 							&Toolbar{
 								OnCreateKey: func() {
-									app.Window().Call("alert", "Created key")
+									c.createKeyModalOpen = !c.createKeyModalOpen
 								},
 								OnImportKey: func() {
-									app.Window().Call("alert", "Imported key")
+									c.importKeyModal = !c.importKeyModal
 								},
 
 								OnEncryptAndSign: func() {
-									app.Window().Call("alert", "Encrypted and signed")
+									c.encryptAndSignModalOpen = !c.encryptAndSignModalOpen
 								},
 								OnDecryptAndVerify: func() {
-									app.Window().Call("alert", "Decrypted and verified")
+									c.decryptAndVerifyModalOpen = !c.decryptAndVerifyModalOpen
 								},
 							},
 						),
@@ -77,6 +86,70 @@ func (c *Home) Render() app.UI {
 							},
 						),
 				),
+			app.If(
+				c.createKeyModalOpen,
+				&CreateKeyModal{
+					OnSubmit: func(fullName, email, _ string) {
+						app.Window().Call("alert", fmt.Sprintf("Created key with full name %v, email %v and a password", fullName, email))
+
+						c.createKeyModalOpen = false
+					},
+					OnCancel: func() {
+						c.createKeyModalOpen = false
+
+						c.Update()
+					},
+				},
+			),
+			app.If(
+				c.importKeyModal,
+				&ImportKeyModal{
+					OnSubmit: func(key string) {
+						app.Window().Call("alert", fmt.Sprintf("Imported key with contents %v", key))
+
+						c.importKeyModal = false
+					},
+					OnCancel: func() {
+						c.importKeyModal = false
+
+						c.Update()
+					},
+				},
+			),
+			app.If(
+				c.encryptAndSignModalOpen,
+				&EncryptAndSignModal{
+					Keys: demoKeys,
+
+					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature bool) {
+						app.Window().Call("alert", fmt.Sprintf("Encrypted and signed file %v, using public key ID %v and private key ID %v and createDetachedSignature set to %v", file, publicKeyID, privateKeyID, createDetachedSignature))
+
+						c.encryptAndSignModalOpen = false
+					},
+					OnCancel: func() {
+						c.encryptAndSignModalOpen = false
+
+						c.Update()
+					},
+				},
+			),
+			app.If(
+				c.decryptAndVerifyModalOpen,
+				&DecryptAndVerifyModal{
+					Keys: demoKeys,
+
+					OnSubmit: func(file []byte, publicKeyID, privateKeyID, detachedSignature string) {
+						app.Window().Call("alert", fmt.Sprintf("Decrypted and verified file %v, using public key ID %v, private key ID %v and detached signature %v", file, publicKeyID, privateKeyID, detachedSignature))
+
+						c.decryptAndVerifyModalOpen = false
+					},
+					OnCancel: func() {
+						c.decryptAndVerifyModalOpen = false
+
+						c.Update()
+					},
+				},
+			),
 		)
 }
 
