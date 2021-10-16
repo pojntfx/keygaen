@@ -26,7 +26,7 @@ func (c *SuccessModalStory) Render() app.UI {
 				&components.SuccessModal{
 					ID:          "success-modal-story",
 					Icon:        "fas fa-check",
-					Title:       "Key successfully generated!",
+					Title:       "Key Successfully Generated!",
 					Class:       "pf-m-success",
 					Body:        "It has been added to the key list.",
 					ActionLabel: "Continue to key list",
