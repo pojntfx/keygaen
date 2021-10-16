@@ -37,10 +37,11 @@ var demoKeys = []GPGKey{
 type Home struct {
 	app.Compo
 
-	createKeyModalOpen        bool
-	importKeyModal            bool
-	encryptAndSignModalOpen   bool
-	decryptAndVerifyModalOpen bool
+	createKeyModalOpen                bool
+	importKeyModal                    bool
+	encryptAndSignModalOpen           bool
+	decryptAndVerifyModalOpen         bool
+	keySuccessfullyGeneratedModalOpen bool
 }
 
 func (c *Home) Render() app.UI {
@@ -54,6 +55,28 @@ func (c *Home) Render() app.UI {
 					app.Text("Skip to content"),
 				),
 			&Navbar{},
+			app.If(
+				c.keySuccessfullyGeneratedModalOpen,
+				&SuccessModal{
+					ID:          "key-successfully-generated-modal",
+					Icon:        "fas fa-check",
+					Title:       "Key successfully generated!",
+					Class:       "pf-m-success",
+					Body:        "It has been added to the key list.",
+					ActionLabel: "Continue to key list",
+
+					OnClose: func() {
+						c.keySuccessfullyGeneratedModalOpen = false
+
+						c.Update()
+					},
+					OnAction: func() {
+						c.keySuccessfullyGeneratedModalOpen = false
+
+						c.Update()
+					},
+				},
+			),
 			app.Main().
 				Class("pf-c-page__main").
 				ID("gridge-main").
@@ -90,9 +113,8 @@ func (c *Home) Render() app.UI {
 				c.createKeyModalOpen,
 				&CreateKeyModal{
 					OnSubmit: func(fullName, email, _ string) {
-						app.Window().Call("alert", fmt.Sprintf("Created key with full name %v, email %v and a password", fullName, email))
-
 						c.createKeyModalOpen = false
+						c.keySuccessfullyGeneratedModalOpen = true
 					},
 					OnCancel: func() {
 						c.createKeyModalOpen = false

@@ -20,22 +20,25 @@ type SuccessModal struct {
 
 func (c *SuccessModal) Render() app.UI {
 	return &Modal{
-		ID:    c.ID,
-		Icon:  c.Icon,
-		Title: c.Title,
-		Class: c.Class,
+		ID:           c.ID,
+		Icon:         c.Icon,
+		Title:        c.Title,
+		Class:        c.Class,
+		DisableFocus: true,
 		Body: []app.UI{
 			app.Text(c.Body),
 		},
 		Footer: []app.UI{
-			app.Button().
-				Aria("disabled", "false").
-				Class("pf-c-button pf-m-primary").
-				Type("button").
-				Text(c.ActionLabel).
-				OnClick(func(ctx app.Context, e app.Event) {
-					c.OnAction()
-				}),
+			&Autofocused{
+				Component: app.Button().
+					Aria("disabled", "false").
+					Class("pf-c-button pf-m-primary").
+					Type("button").
+					Text(c.ActionLabel).
+					OnClick(func(ctx app.Context, e app.Event) {
+						c.OnAction()
+					}),
+			},
 		},
 
 		OnClose: func() {
