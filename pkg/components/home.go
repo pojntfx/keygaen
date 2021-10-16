@@ -42,6 +42,7 @@ type Home struct {
 	encryptAndSignModalOpen           bool
 	decryptAndVerifyModalOpen         bool
 	keySuccessfullyGeneratedModalOpen bool
+	keySuccessfullyImportedModalOpen  bool
 }
 
 func (c *Home) Render() app.UI {
@@ -72,6 +73,28 @@ func (c *Home) Render() app.UI {
 					},
 					OnAction: func() {
 						c.keySuccessfullyGeneratedModalOpen = false
+
+						c.Update()
+					},
+				},
+			),
+			app.If(
+				c.keySuccessfullyImportedModalOpen,
+				&SuccessModal{
+					ID:          "key-successfully-imported-modal",
+					Icon:        "fas fa-check",
+					Title:       "Key successfully imported!",
+					Class:       "pf-m-success",
+					Body:        "It has been added to the key list.",
+					ActionLabel: "Continue to key list",
+
+					OnClose: func() {
+						c.keySuccessfullyImportedModalOpen = false
+
+						c.Update()
+					},
+					OnAction: func() {
+						c.keySuccessfullyImportedModalOpen = false
 
 						c.Update()
 					},
@@ -127,9 +150,8 @@ func (c *Home) Render() app.UI {
 				c.importKeyModal,
 				&ImportKeyModal{
 					OnSubmit: func(key string) {
-						app.Window().Call("alert", fmt.Sprintf("Imported key with contents %v", key))
-
 						c.importKeyModal = false
+						c.keySuccessfullyImportedModalOpen = true
 					},
 					OnCancel: func() {
 						c.importKeyModal = false
