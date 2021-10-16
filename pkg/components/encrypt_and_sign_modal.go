@@ -112,6 +112,10 @@ func (c *EncryptAndSignModal) Render() app.UI {
 														if !(c.skipSigning && !c.skipEncryption) {
 															c.skipEncryption = !c.skipEncryption
 														}
+
+														if c.skipEncryption {
+															c.publicKeyID = ""
+														}
 													}),
 												Properties: map[string]interface{}{
 													"checked": !c.skipEncryption,
@@ -181,6 +185,10 @@ func (c *EncryptAndSignModal) Render() app.UI {
 													OnInput(func(ctx app.Context, e app.Event) {
 														if !(!c.skipSigning && c.skipEncryption) {
 															c.skipSigning = !c.skipSigning
+														}
+
+														if c.skipSigning {
+															c.privateKeyID = ""
 														}
 													}),
 												Properties: map[string]interface{}{

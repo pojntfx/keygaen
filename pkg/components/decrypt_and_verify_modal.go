@@ -105,6 +105,10 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 														if !(c.skipVerification && !c.skipDecryption) {
 															c.skipDecryption = !c.skipDecryption
 														}
+
+														if c.skipDecryption {
+															c.privateKeyID = ""
+														}
 													}),
 												Properties: map[string]interface{}{
 													"checked": !c.skipDecryption,
@@ -174,6 +178,10 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 													OnInput(func(ctx app.Context, e app.Event) {
 														if !(!c.skipVerification && c.skipDecryption) {
 															c.skipVerification = !c.skipVerification
+														}
+
+														if c.skipVerification {
+															c.publicKeyID = ""
 														}
 													}),
 												Properties: map[string]interface{}{

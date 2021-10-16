@@ -45,6 +45,12 @@ type Home struct {
 
 	keyImportPasswordModalOpen       bool
 	keySuccessfullyImportedModalOpen bool
+
+	publicKeyID  string
+	privateKeyID string
+
+	encryptAndSignPasswordModalOpen bool
+	encryptAndSignDownloadModalOpen bool
 }
 
 func (c *Home) Render() app.UI {
@@ -110,6 +116,51 @@ func (c *Home) Render() app.UI {
 					},
 					OnAction: func() {
 						c.keySuccessfullyImportedModalOpen = false
+					},
+				},
+			),
+			app.If(
+				c.encryptAndSignPasswordModalOpen,
+				&PasswordModal{
+					Title: "Enter Key Password",
+					OnSubmit: func(password string) {
+						c.encryptAndSignPasswordModalOpen = false
+						c.encryptAndSignDownloadModalOpen = true
+					},
+					OnCancel: func() {
+						c.encryptAndSignPasswordModalOpen = false
+
+						c.privateKeyID = ""
+						c.publicKeyID = ""
+
+						c.Update()
+					},
+				},
+			),
+			app.If(
+				c.encryptAndSignDownloadModalOpen,
+				&DownloadOrViewModal{
+					SubjectA:     c.privateKeyID != "",
+					SubjectANoun: "signature",
+					SubjectAVerb: "signed",
+
+					SubjectB:     c.publicKeyID != "",
+					SubjectBNoun: "cypher",
+					SubjectBVerb: "encrypted",
+
+					OnClose: func() {
+						c.encryptAndSignDownloadModalOpen = false
+
+						c.privateKeyID = ""
+						c.publicKeyID = ""
+
+						c.Update()
+					},
+					OnDownload: func() {
+						app.Window().Call("alert", "Successfully downloaded")
+					},
+					OnView: func() {
+						app.Window().Call("alert", "Successfully viewed")
 					},
 				},
 			),
@@ -179,9 +230,11 @@ func (c *Home) Render() app.UI {
 					Keys: demoKeys,
 
 					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature bool) {
-						app.Window().Call("alert", fmt.Sprintf("Encrypted and signed file %v, using public key ID %v and private key ID %v and createDetachedSignature set to %v", file, publicKeyID, privateKeyID, createDetachedSignature))
+						c.publicKeyID = publicKeyID
+						c.privateKeyID = privateKeyID
 
 						c.encryptAndSignModalOpen = false
+						c.encryptAndSignPasswordModalOpen = true
 					},
 					OnCancel: func() {
 						c.encryptAndSignModalOpen = false
