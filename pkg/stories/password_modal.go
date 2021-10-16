@@ -24,6 +24,7 @@ func (c *PasswordModalStory) Render() app.UI {
 			c.modalOpen,
 			c.WithRoot(
 				&components.PasswordModal{
+					Title: "Enter Password",
 					OnSubmit: func(password string) {
 						app.Window().Call("alert", "Successfully entered a password")
 

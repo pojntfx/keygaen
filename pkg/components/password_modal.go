@@ -7,6 +7,7 @@ import (
 type PasswordModal struct {
 	app.Compo
 
+	Title    string
 	OnSubmit func(password string)
 	OnCancel func()
 
@@ -16,7 +17,7 @@ type PasswordModal struct {
 func (c *PasswordModal) Render() app.UI {
 	return &Modal{
 		ID:           "password-modal",
-		Title:        "Enter Password",
+		Title:        c.Title,
 		DisableFocus: true,
 		Body: []app.UI{
 			app.Form().
