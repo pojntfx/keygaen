@@ -1,7 +1,7 @@
 package components
 
 import (
-	app "github.com/maxence-charriere/go-app/v9/pkg/app"
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
 const (
@@ -84,4 +84,5 @@ func (c *ImportKeyModal) clear() {
 
 	// Clear key
 	c.key = ""
+	c.dirty = false
 }
