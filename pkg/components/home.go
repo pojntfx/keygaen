@@ -46,8 +46,9 @@ type Home struct {
 	keyImportPasswordModalOpen       bool
 	keySuccessfullyImportedModalOpen bool
 
-	publicKeyID  string
-	privateKeyID string
+	publicKeyID             string
+	privateKeyID            string
+	createDetachedSignature bool
 
 	encryptAndSignPasswordModalOpen bool
 	encryptAndSignDownloadModalOpen bool
@@ -130,9 +131,6 @@ func (c *Home) Render() app.UI {
 					OnCancel: func() {
 						c.encryptAndSignPasswordModalOpen = false
 
-						c.privateKeyID = ""
-						c.publicKeyID = ""
-
 						c.Update()
 					},
 				},
@@ -151,13 +149,14 @@ func (c *Home) Render() app.UI {
 					OnClose: func() {
 						c.encryptAndSignDownloadModalOpen = false
 
-						c.privateKeyID = ""
-						c.publicKeyID = ""
-
 						c.Update()
 					},
 					OnDownload: func() {
-						app.Window().Call("alert", "Successfully downloaded")
+						c.download([]byte("Hello, world"), "cypher.txt", "text/plain")
+
+						if c.createDetachedSignature {
+							c.download([]byte("asdf"), "signature.asc", "text/plain")
+						}
 					},
 					OnView: func() {
 						app.Window().Call("alert", "Successfully viewed")
@@ -232,6 +231,7 @@ func (c *Home) Render() app.UI {
 					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature bool) {
 						c.publicKeyID = publicKeyID
 						c.privateKeyID = privateKeyID
+						c.createDetachedSignature = true
 
 						c.encryptAndSignModalOpen = false
 						c.encryptAndSignPasswordModalOpen = true
@@ -261,6 +261,20 @@ func (c *Home) Render() app.UI {
 				},
 			),
 		)
+}
+
+func (c *Home) download(content []byte, name string, mimetype string) {
+	buf := app.Window().JSValue().Get("Uint8Array").New(len(content))
+	app.CopyBytesToJS(buf, content)
+
+	blob := app.Window().JSValue().Get("Blob").New(app.Window().JSValue().Get("Array").New(buf), map[string]interface{}{
+		"type": mimetype,
+	})
+
+	link := app.Window().Get("document").Call("createElement", "a")
+	link.Set("href", app.Window().Get("URL").Call("createObjectURL", blob))
+	link.Set("download", name)
+	link.Call("click")
 }
 
 func (c *Home) OnAppUpdate(ctx app.Context) {
