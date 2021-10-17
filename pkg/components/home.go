@@ -55,6 +55,8 @@ type Home struct {
 
 	confirmCloseModalOpen bool
 	confirmModalClose     func()
+
+	viewCypherAndSignatureModalOpen bool
 }
 
 func (c *Home) Render() app.UI {
@@ -179,7 +181,8 @@ func (c *Home) Render() app.UI {
 						}
 					},
 					OnView: func() {
-						app.Window().Call("alert", "Successfully viewed")
+						c.encryptAndSignDownloadModalOpen = false
+						c.viewCypherAndSignatureModalOpen = true
 					},
 				},
 			),
@@ -251,7 +254,7 @@ func (c *Home) Render() app.UI {
 					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature bool) {
 						c.publicKeyID = publicKeyID
 						c.privateKeyID = privateKeyID
-						c.createDetachedSignature = true
+						c.createDetachedSignature = createDetachedSignature
 
 						c.encryptAndSignModalOpen = false
 						c.encryptAndSignPasswordModalOpen = true
@@ -279,6 +282,42 @@ func (c *Home) Render() app.UI {
 						})
 					},
 				},
+			),
+			app.If(
+				c.viewCypherAndSignatureModalOpen,
+				func() app.UI {
+					tabs := []TextOutputModalTab{
+						{
+							Language: "text/plain",
+							Title:    "cypher.txt",
+							Body:     "Hello, world",
+						},
+					}
+					title := "View Cypher"
+
+					if c.createDetachedSignature {
+						tabs = append(
+							tabs,
+							TextOutputModalTab{
+								Language: "text/plain",
+								Title:    "signature.asc",
+								Body:     "uas-02rioj23jd",
+							},
+						)
+						title += " and Signature"
+					}
+
+					return &TextOutputModal{
+						Title: title,
+						Tabs:  tabs,
+						OnClose: func() {
+							c.viewCypherAndSignatureModalOpen = false
+							c.encryptAndSignDownloadModalOpen = true
+
+							c.Update()
+						},
+					}
+				}(),
 			),
 			app.If(
 				c.confirmCloseModalOpen,
