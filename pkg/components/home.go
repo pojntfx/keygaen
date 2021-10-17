@@ -259,11 +259,10 @@ func (c *Home) Render() app.UI {
 
 						c.decryptAndVerifyModalOpen = false
 					},
-					OnCancel: func() {
-						c.confirmModalClose = func() {
+					OnCancel: func(dirty bool, clear chan struct{}) {
+						c.handleCancel(dirty, clear, func() {
 							c.decryptAndVerifyModalOpen = false
-						}
-						c.confirmCloseModalOpen = true
+						})
 					},
 				},
 			),

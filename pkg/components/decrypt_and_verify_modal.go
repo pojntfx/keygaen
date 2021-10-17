@@ -20,7 +20,7 @@ type DecryptAndVerifyModal struct {
 		privateKeyID string,
 		detachedSignature string,
 	)
-	OnCancel func()
+	OnCancel func(dirty bool, clear chan struct{})
 
 	fileContents []byte
 
@@ -32,6 +32,8 @@ type DecryptAndVerifyModal struct {
 
 	useDetachedSignature bool
 	detachedSignature    string
+
+	dirty bool
 }
 
 func (c *DecryptAndVerifyModal) Render() app.UI {
@@ -80,6 +82,8 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 
 								OnChange: func(fileContents []byte) {
 									c.fileContents = fileContents
+
+									c.dirty = true
 								},
 								OnClear: func() {
 									c.fileContents = []byte{}
@@ -109,6 +113,8 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 														if c.skipDecryption {
 															c.privateKeyID = ""
 														}
+
+														c.dirty = true
 													}),
 												Properties: map[string]interface{}{
 													"checked": !c.skipDecryption,
@@ -140,6 +146,8 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 															Required(true).
 															OnInput(func(ctx app.Context, e app.Event) {
 																c.privateKeyID = ctx.JSSrc().Get("value").String()
+
+																c.dirty = true
 															}).
 															Body(
 																app.Option().
@@ -183,6 +191,8 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 														if c.skipVerification {
 															c.publicKeyID = ""
 														}
+
+														c.dirty = true
 													}),
 												Properties: map[string]interface{}{
 													"checked": !c.skipVerification,
@@ -214,6 +224,8 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 															Required(true).
 															OnInput(func(ctx app.Context, e app.Event) {
 																c.publicKeyID = ctx.JSSrc().Get("value").String()
+
+																c.dirty = true
 															}).
 															Body(
 																app.Option().
@@ -246,6 +258,8 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																						ID("detached-signature-checkbox").
 																						OnInput(func(ctx app.Context, e app.Event) {
 																							c.useDetachedSignature = !c.useDetachedSignature
+
+																							c.dirty = true
 																						}),
 																					Properties: map[string]interface{}{
 																						"checked": c.useDetachedSignature,
@@ -281,6 +295,8 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 
 																								OnChange: func(fileContents []byte) {
 																									c.detachedSignature = string(fileContents)
+
+																									c.dirty = true
 																								},
 																								OnClear: func() {
 																									c.detachedSignature = ""
@@ -321,13 +337,11 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 				Type("button").
 				Text("Cancel").
 				OnClick(func(ctx app.Context, e app.Event) {
-					c.clear()
-					c.OnCancel()
+					handleCancel(c.clear, c.dirty, c.OnCancel)
 				}),
 		},
 		OnClose: func() {
-			c.clear()
-			c.OnCancel()
+			handleCancel(c.clear, c.dirty, c.OnCancel)
 		},
 	}
 }
@@ -350,4 +364,6 @@ func (c *DecryptAndVerifyModal) clear() {
 
 	c.useDetachedSignature = false
 	c.detachedSignature = ""
+
+	c.dirty = false
 }
