@@ -1,7 +1,7 @@
 package components
 
 import (
-	app "github.com/maxence-charriere/go-app/v9/pkg/app"
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
 type CreateKeyModal struct {
@@ -267,4 +267,5 @@ func (c *CreateKeyModal) clear() {
 	c.email = ""
 	c.password = ""
 	c.passwordConfirmation = ""
+	c.dirty = false
 }

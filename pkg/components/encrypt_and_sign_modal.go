@@ -1,7 +1,7 @@
 package components
 
 import (
-	app "github.com/maxence-charriere/go-app/v9/pkg/app"
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
 const (
@@ -27,7 +27,7 @@ type EncryptAndSignModal struct {
 		privateKeyID string,
 		createDetachedSignature bool,
 	)
-	OnCancel func()
+	OnCancel func(dirty bool, clear chan struct{})
 
 	fileIsBinary bool
 	fileContents []byte
@@ -39,6 +39,8 @@ type EncryptAndSignModal struct {
 	privateKeyID string
 
 	createDetachedSignature bool
+
+	dirty bool
 }
 
 func (c *EncryptAndSignModal) Render() app.UI {
@@ -87,6 +89,8 @@ func (c *EncryptAndSignModal) Render() app.UI {
 
 								OnChange: func(fileContents []byte) {
 									c.fileContents = fileContents
+
+									c.dirty = true
 								},
 								OnClear: func() {
 									c.fileContents = []byte{}
@@ -116,6 +120,8 @@ func (c *EncryptAndSignModal) Render() app.UI {
 														if c.skipEncryption {
 															c.publicKeyID = ""
 														}
+
+														c.dirty = true
 													}),
 												Properties: map[string]interface{}{
 													"checked": !c.skipEncryption,
@@ -147,6 +153,8 @@ func (c *EncryptAndSignModal) Render() app.UI {
 															Required(true).
 															OnInput(func(ctx app.Context, e app.Event) {
 																c.publicKeyID = ctx.JSSrc().Get("value").String()
+
+																c.dirty = true
 															}).
 															Body(
 																app.Option().
@@ -190,6 +198,8 @@ func (c *EncryptAndSignModal) Render() app.UI {
 														if c.skipSigning {
 															c.privateKeyID = ""
 														}
+
+														c.dirty = true
 													}),
 												Properties: map[string]interface{}{
 													"checked": !c.skipSigning,
@@ -221,6 +231,8 @@ func (c *EncryptAndSignModal) Render() app.UI {
 															Required(true).
 															OnInput(func(ctx app.Context, e app.Event) {
 																c.privateKeyID = ctx.JSSrc().Get("value").String()
+
+																c.dirty = true
 															}).
 															Body(
 																app.Option().
@@ -253,6 +265,8 @@ func (c *EncryptAndSignModal) Render() app.UI {
 																						ID("detached-signature-checkbox").
 																						OnInput(func(ctx app.Context, e app.Event) {
 																							c.createDetachedSignature = !c.createDetachedSignature
+
+																							c.dirty = true
 																						}),
 																					Properties: map[string]interface{}{
 																						"checked": c.createDetachedSignature,
@@ -302,13 +316,11 @@ func (c *EncryptAndSignModal) Render() app.UI {
 				Type("button").
 				Text("Cancel").
 				OnClick(func(ctx app.Context, e app.Event) {
-					c.clear()
-					c.OnCancel()
+					handleCancel(c.clear, c.dirty, c.OnCancel)
 				}),
 		},
 		OnClose: func() {
-			c.clear()
-			c.OnCancel()
+			handleCancel(c.clear, c.dirty, c.OnCancel)
 		},
 	}
 }
@@ -328,6 +340,8 @@ func (c *EncryptAndSignModal) clear() {
 	c.privateKeyID = ""
 
 	c.createDetachedSignature = false
+
+	c.dirty = false
 }
 
 func getKeySummary(key GPGKey) string {

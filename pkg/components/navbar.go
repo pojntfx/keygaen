@@ -1,6 +1,6 @@
 package components
 
-import app "github.com/maxence-charriere/go-app/v9/pkg/app"
+import "github.com/maxence-charriere/go-app/v9/pkg/app"
 
 type Navbar struct {
 	app.Compo
