@@ -133,7 +133,7 @@ func (c *DownloadOrViewModalStory) Render() app.UI {
 					SubjectBNoun: c.subjectBNoun,
 					SubjectBVerb: c.subjectBVerb,
 
-					OnClose: func() {
+					OnClose: func(_ bool) {
 						c.modalOpen = false
 
 						c.Update()

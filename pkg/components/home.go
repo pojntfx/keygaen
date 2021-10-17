@@ -101,6 +101,8 @@ func (c *Home) Render() app.UI {
 							c.keyImportPasswordModalOpen = false
 						}
 						c.confirmCloseModalOpen = true
+
+						c.Update()
 					},
 				},
 			),
@@ -137,6 +139,8 @@ func (c *Home) Render() app.UI {
 							c.encryptAndSignPasswordModalOpen = false
 						}
 						c.confirmCloseModalOpen = true
+
+						c.Update()
 					},
 				},
 			),
@@ -151,11 +155,21 @@ func (c *Home) Render() app.UI {
 					SubjectBNoun: "cypher",
 					SubjectBVerb: "encrypted",
 
-					OnClose: func() {
+					OnClose: func(used bool) {
+						if used {
+							c.encryptAndSignDownloadModalOpen = false
+
+							c.Update()
+
+							return
+						}
+
 						c.confirmModalClose = func() {
 							c.encryptAndSignDownloadModalOpen = false
 						}
 						c.confirmCloseModalOpen = true
+
+						c.Update()
 					},
 					OnDownload: func() {
 						c.download([]byte("Hello, world"), "cypher.txt", "text/plain")

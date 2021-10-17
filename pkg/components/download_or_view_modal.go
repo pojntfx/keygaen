@@ -15,9 +15,11 @@ type DownloadOrViewModal struct {
 	SubjectBNoun string
 	SubjectBVerb string
 
-	OnClose    func()
+	OnClose    func(used bool)
 	OnDownload func()
 	OnView     func()
+
+	used bool
 }
 
 func (c *DownloadOrViewModal) Render() app.UI {
@@ -70,6 +72,8 @@ func (c *DownloadOrViewModal) Render() app.UI {
 				Type("button").
 				Text(downloadLabel).
 				OnClick(func(ctx app.Context, e app.Event) {
+					c.used = true
+
 					c.OnDownload()
 				}),
 			app.Button().
@@ -77,12 +81,14 @@ func (c *DownloadOrViewModal) Render() app.UI {
 				Type("button").
 				Text(viewLabel).
 				OnClick(func(ctx app.Context, e app.Event) {
+					c.used = true
+
 					c.OnView()
 				}),
 		},
 
 		OnClose: func() {
-			c.OnClose()
+			c.OnClose(c.used)
 		},
 	}
 }
