@@ -241,31 +241,25 @@ func (c *CreateKeyModal) Render() app.UI {
 				Type("button").
 				Text("Cancel").
 				OnClick(func(ctx app.Context, e app.Event) {
-					clear := make(chan struct{})
-
-					go c.OnCancel(c.dirty, clear)
-
-					go func() {
-						<-clear
-
-						c.clear()
-					}()
+					handleCancel(c.clear, c.dirty, c.OnCancel)
 				}),
 		},
-
 		OnClose: func() {
-			clear := make(chan struct{})
-
-			go c.OnCancel(c.dirty, clear)
-
-			go func() {
-				<-clear
-
-				c.clear()
-			}()
+			handleCancel(c.clear, c.dirty, c.OnCancel)
 		},
 	}
 
+}
+
+func handleCancel(clear func(), dirty bool, cancel func(bool, chan struct{})) {
+	done := make(chan struct{})
+
+	go func() {
+		<-done
+
+		clear()
+	}()
+	cancel(dirty, done)
 }
 
 func (c *CreateKeyModal) clear() {

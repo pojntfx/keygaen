@@ -12,9 +12,11 @@ type ImportKeyModal struct {
 	app.Compo
 
 	OnSubmit func(key string)
-	OnCancel func()
+	OnCancel func(dirty bool, clear chan struct{})
 
 	key string
+
+	dirty bool
 }
 
 func (c *ImportKeyModal) Render() app.UI {
@@ -46,6 +48,8 @@ func (c *ImportKeyModal) Render() app.UI {
 
 								OnChange: func(fileContents []byte) {
 									c.key = string(fileContents)
+
+									c.dirty = true
 								},
 								OnClear: func() {
 									c.key = ""
@@ -65,13 +69,11 @@ func (c *ImportKeyModal) Render() app.UI {
 				Type("button").
 				Text("Cancel").
 				OnClick(func(ctx app.Context, e app.Event) {
-					c.clear()
-					c.OnCancel()
+					handleCancel(c.clear, c.dirty, c.OnCancel)
 				}),
 		},
 		OnClose: func() {
-			c.clear()
-			c.OnCancel()
+			handleCancel(c.clear, c.dirty, c.OnCancel)
 		},
 	}
 }
