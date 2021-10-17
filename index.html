@@ -8,21 +8,21 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:38441/">
+<meta property="og:url" content="http://127.0.0.1:36231/">
 <meta property="og:title" content="gridge">
-<meta content="Sign, verify, encrypt and decrypt data with GPG." property="og:description">
-<meta property="og:type" content="website">
+<meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
+<meta content="website" property="og:type">
 <meta property="og:image" content>
 <title>
 gridge
 </title>
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
-<link rel="apple-touch-icon" href="/gridge/web/default.png">
+<link href="/gridge/web/default.png" rel="apple-touch-icon">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
 <link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
@@ -32,8 +32,8 @@ gridge
 </head>
 <body>
 <div>
-<aside class="goapp-app-info" id="app-wasm-loader">
-<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
+<aside id="app-wasm-loader" class="goapp-app-info">
+<img class="goapp-logo goapp-spin" src="/gridge/web/default.png" id="app-wasm-loader-icon">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
@@ -53,7 +53,7 @@ Skip to content
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
 <a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
-<i aria-hidden="true" class="pf-icon pf-icon-help"></i>
+<i class="pf-icon pf-icon-help" aria-hidden="true"></i>
 </a>
 </div>
 </div>
@@ -84,7 +84,7 @@ Import key
 </div>
 </div>
 <span class="pf-c-button__icon">
-<i aria-hidden="true" class="fas fa-file-import"></i>
+<i class="fas fa-file-import" aria-hidden="true"></i>
 </span>
 </button>
 </div>
@@ -137,15 +137,15 @@ Decrypt/verify
 <div class="pf-c-toolbar__item pf-m-pagination">
 <div class="pf-c-toolbar__group">
 <div class="pf-c-toolbar__item ">
-<button class="pf-c-button pf-m-control" type="button">
+<button type="button" class="pf-c-button pf-m-control">
 <span class="pf-c-button__icon pf-m-start">
-<i aria-hidden="true" class="fas fa-lock"></i>
+<i class="fas fa-lock" aria-hidden="true"></i>
 </span>
  Encrypt/sign
 </button>
 </div>
 <div class="pf-c-toolbar__item">
-<button type="button" class="pf-c-button pf-m-control">
+<button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
 <i class="fas fa-lock-open" aria-hidden="true"></i>
 </span>
@@ -183,7 +183,7 @@ isegard@example.com
 <span class="pf-c-label pf-m-blue">
 <span class="pf-c-label__content">
 <span class="pf-c-label__icon">
-<i aria-hidden="true" class="fa-fw fas fa-user-lock"></i>
+<i class="fa-fw fas fa-user-lock" aria-hidden="true"></i>
 </span>
 Private
 </span>
@@ -229,7 +229,7 @@ fred@example.com
 <span class="pf-c-label pf-m-green">
 <span class="pf-c-label__content">
 <span class="pf-c-label__icon">
-<i aria-hidden="true" class="fa-fw fas fa-globe"></i>
+<i class="fa-fw fas fa-globe" aria-hidden="true"></i>
 </span>
 Public
 </span>
@@ -253,7 +253,7 @@ Private
 <div class="pf-c-data-list__item-action">
 <div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md">
 <div class="pf-l-stack__item">
-<button aria-expanded="false" type="button" aria-label="Actions" class="pf-c-dropdown__toggle pf-m-plain">
+<button class="pf-c-dropdown__toggle pf-m-plain" aria-expanded="false" type="button" aria-label="Actions">
 <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
 </button>
 </div>
@@ -299,7 +299,7 @@ Public
 <div class="pf-c-data-list__item-action">
 <div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md">
 <div class="pf-l-stack__item">
-<button type="button" aria-label="Actions" class="pf-c-dropdown__toggle pf-m-plain" aria-expanded="false">
+<button aria-label="Actions" class="pf-c-dropdown__toggle pf-m-plain" aria-expanded="false" type="button">
 <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
 </button>
 </div>
@@ -326,7 +326,7 @@ bob@example.com
 </div>
 <div class="pf-c-label-group">
 <div class="pf-c-label-group__main">
-<ul class="pf-c-label-group__list" aria-role="list" aria-label="Key attributes">
+<ul aria-role="list" aria-label="Key attributes" class="pf-c-label-group__list">
 <li class="pf-c-label-group__list-item">
 <span class="pf-c-label pf-m-green">
 <span class="pf-c-label__content">
@@ -345,7 +345,7 @@ Public
 <div class="pf-c-data-list__item-action">
 <div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md">
 <div class="pf-l-stack__item">
-<button class="pf-c-dropdown__toggle pf-m-plain" aria-expanded="false" type="button" aria-label="Actions">
+<button type="button" aria-label="Actions" class="pf-c-dropdown__toggle pf-m-plain" aria-expanded="false">
 <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
 </button>
 </div>
