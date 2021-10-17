@@ -12,7 +12,7 @@ type CreateKeyModal struct {
 		email string,
 		password string,
 	)
-	OnCancel func()
+	OnCancel func(dirty bool, clear chan struct{})
 
 	fullName             string
 	email                string
@@ -20,6 +20,8 @@ type CreateKeyModal struct {
 	passwordConfirmation string
 
 	passwordInvalid bool
+
+	dirty bool
 }
 
 func (c *CreateKeyModal) Render() app.UI {
@@ -85,6 +87,8 @@ func (c *CreateKeyModal) Render() app.UI {
 											Aria("describedby", "form-demo-basic-name-helper").
 											OnInput(func(ctx app.Context, e app.Event) {
 												c.fullName = ctx.JSSrc().Get("value").String()
+
+												c.dirty = true
 											}).
 											Value(c.fullName),
 									},
@@ -123,6 +127,8 @@ func (c *CreateKeyModal) Render() app.UI {
 												Required(true).
 												OnInput(func(ctx app.Context, e app.Event) {
 													c.email = ctx.JSSrc().Get("value").String()
+
+													c.dirty = true
 												}).
 												Value(c.email),
 										),
@@ -160,6 +166,8 @@ func (c *CreateKeyModal) Render() app.UI {
 												Required(true).
 												OnInput(func(ctx app.Context, e app.Event) {
 													c.password = ctx.JSSrc().Get("value").String()
+
+													c.dirty = true
 												}).
 												Value(c.password),
 										),
@@ -205,6 +213,8 @@ func (c *CreateKeyModal) Render() app.UI {
 												Required(true).
 												OnInput(func(ctx app.Context, e app.Event) {
 													c.passwordConfirmation = ctx.JSSrc().Get("value").String()
+
+													c.dirty = true
 												}).
 												Value(c.passwordConfirmation),
 											app.If(
@@ -231,14 +241,28 @@ func (c *CreateKeyModal) Render() app.UI {
 				Type("button").
 				Text("Cancel").
 				OnClick(func(ctx app.Context, e app.Event) {
-					c.clear()
-					c.OnCancel()
+					clear := make(chan struct{})
+
+					go c.OnCancel(c.dirty, clear)
+
+					go func() {
+						<-clear
+
+						c.clear()
+					}()
 				}),
 		},
 
 		OnClose: func() {
-			c.clear()
-			c.OnCancel()
+			clear := make(chan struct{})
+
+			go c.OnCancel(c.dirty, clear)
+
+			go func() {
+				<-clear
+
+				c.clear()
+			}()
 		},
 	}
 
