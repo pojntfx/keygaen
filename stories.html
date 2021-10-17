@@ -7,8 +7,8 @@
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
-<meta property="og:url" content="http://127.0.0.1:35409/stories">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+<meta property="og:url" content="http://127.0.0.1:40485/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -16,7 +16,7 @@
 <title>
 gridge
 </title>
-<link href="/gridge/web/default.png" rel="icon" type="image/png">
+<link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link rel="stylesheet" href="/gridge/app.css" type="text/css">
@@ -46,13 +46,13 @@ Skip to content
 </a>
 <header class="pf-c-masthead">
 <span class="pf-c-masthead__toggle">
-<button aria-label="Global navigation" class="pf-c-button pf-m-plain" type="button">
+<button class="pf-c-button pf-m-plain" type="button" aria-label="Global navigation">
 <i class="fas fa-bars" aria-hidden="true"></i>
 </button>
 </span>
 <div class="pf-c-masthead__main">
 <a class="pf-c-masthead__brand" href="/">
-<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
+<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -60,7 +60,7 @@ Stories
 </div>
 </header>
 </header>
-<div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
+<div aria-hidden="true" class="pf-c-page__sidebar pf-m-collapsed">
 <div class="pf-c-page__sidebar-body">
 <nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
@@ -115,12 +115,12 @@ Home
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Import%2BKey%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Import%2BKey%2BModal">
 Import Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Key%2BList" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Key%2BList">
 Key List
 </a>
 </li>
@@ -135,7 +135,7 @@ Navbar
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Password%2BModal">
+<a href="?activeTitle=Password%2BModal" class="pf-c-nav__link">
 Password Modal
 </a>
 </li>
@@ -145,7 +145,7 @@ Success Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Text%2BOutput%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Text%2BOutput%2BModal">
 Text Output Modal
 </a>
 </li>
@@ -158,14 +158,14 @@ Toolbar
 </nav>
 </div>
 </div>
-<main class="pf-c-page__main" tabindex="-1" id="main">
+<main id="main" class="pf-c-page__main" tabindex="-1">
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-light pf-m-shadow-bottom">
 <div class="pf-c-page__main-body">
 <div class="pf-c-content pf-u-display-flex pf-u-justify-content-space-between">
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a target="_blank" href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen">
+<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
 <i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
@@ -174,20 +174,20 @@ Home
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-overflow-scroll">
 <div class="pf-c-page__main-body">
 <div class="pf-c-page">
-<a href="#gridge-main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
+<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#gridge-main">
 Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
-<a href="#" class="pf-c-page__header-brand-link">
+<a class="pf-c-page__header-brand-link" href="#">
 <img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
-<i aria-hidden="true" class="pf-icon pf-icon-help"></i>
+<a target="_blank" class="pf-c-button pf-m-plain" aria-label="Help" href="https://github.com/pojntfx/gridge">
+<i class="pf-icon pf-icon-help" aria-hidden="true"></i>
 </a>
 </div>
 </div>
@@ -199,7 +199,7 @@ Skip to content
 <div class="pf-c-toolbar__content">
 <div class="pf-c-toolbar__content-section pf-m-nowrap pf-u-display-none-on-md">
 <div class="pf-c-toolbar__group">
-<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
+<button type="button" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
 <div class="pf-c-tooltip pf-m-right pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
@@ -236,7 +236,7 @@ Encrypt/sign
 </span>
 </button>
 <button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
-<div aria-role="tooltip" class="pf-c-tooltip pf-m-left pf-x-c-tooltip">
+<div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Decrypt/verify
@@ -252,7 +252,7 @@ Decrypt/verify
 <div class="pf-c-toolbar__content-section pf-m-nowrap pf-u-display-none pf-u-display-flex-on-md">
 <div class="pf-c-toolbar__group">
 <div class="pf-c-toolbar__item ">
-<button type="button" class="pf-c-button pf-m-control">
+<button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
 <i class="fas fa-plus" aria-hidden="true"></i>
 </span>
@@ -260,7 +260,7 @@ Decrypt/verify
 </button>
 </div>
 <div class="pf-c-toolbar__item">
-<button type="button" class="pf-c-button pf-m-control">
+<button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
 <i class="fas fa-file-import" aria-hidden="true"></i>
 </span>
@@ -281,7 +281,7 @@ Decrypt/verify
 <div class="pf-c-toolbar__item">
 <button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
-<i aria-hidden="true" class="fas fa-lock-open"></i>
+<i class="fas fa-lock-open" aria-hidden="true"></i>
 </span>
  Decrypt/verify
 </button>
@@ -331,7 +331,7 @@ Private
 <div class="pf-c-data-list__item-action">
 <div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md">
 <div class="pf-l-stack__item">
-<button type="button" aria-label="Actions" class="pf-c-dropdown__toggle pf-m-plain" aria-expanded="false">
+<button class="pf-c-dropdown__toggle pf-m-plain" aria-expanded="false" type="button" aria-label="Actions">
 <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
 </button>
 </div>
@@ -363,7 +363,7 @@ fred@example.com
 <span class="pf-c-label pf-m-green">
 <span class="pf-c-label__content">
 <span class="pf-c-label__icon">
-<i aria-hidden="true" class="fa-fw fas fa-globe"></i>
+<i class="fa-fw fas fa-globe" aria-hidden="true"></i>
 </span>
 Public
 </span>
@@ -387,7 +387,7 @@ Private
 <div class="pf-c-data-list__item-action">
 <div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md">
 <div class="pf-l-stack__item">
-<button class="pf-c-dropdown__toggle pf-m-plain" aria-expanded="false" type="button" aria-label="Actions">
+<button aria-label="Actions" class="pf-c-dropdown__toggle pf-m-plain" aria-expanded="false" type="button">
 <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
 </button>
 </div>
@@ -414,7 +414,7 @@ alice@example.com
 </div>
 <div class="pf-c-label-group">
 <div class="pf-c-label-group__main">
-<ul aria-label="Key attributes" class="pf-c-label-group__list" aria-role="list">
+<ul aria-role="list" aria-label="Key attributes" class="pf-c-label-group__list">
 <li class="pf-c-label-group__list-item">
 <span class="pf-c-label pf-m-green">
 <span class="pf-c-label__content">
@@ -460,7 +460,7 @@ bob@example.com
 </div>
 <div class="pf-c-label-group">
 <div class="pf-c-label-group__main">
-<ul class="pf-c-label-group__list" aria-role="list" aria-label="Key attributes">
+<ul aria-role="list" aria-label="Key attributes" class="pf-c-label-group__list">
 <li class="pf-c-label-group__list-item">
 <span class="pf-c-label pf-m-green">
 <span class="pf-c-label__content">
@@ -500,8 +500,8 @@ Public
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button type="button" aria-label="Reset props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
-<div class="pf-c-tooltip pf-m-top pf-x-c-tooltip" aria-role="tooltip">
+<button aria-label="Reset props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
+<div aria-role="tooltip" class="pf-c-tooltip pf-m-top pf-x-c-tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Reset props
@@ -518,7 +518,7 @@ Reset props
 Reload props
 </div>
 </div>
-<i aria-hidden="true" class="fas fa-sync"></i>
+<i class="fas fa-sync" aria-hidden="true"></i>
 </button>
 </div>
 </div>
