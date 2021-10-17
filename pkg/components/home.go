@@ -52,6 +52,9 @@ type Home struct {
 
 	encryptAndSignPasswordModalOpen bool
 	encryptAndSignDownloadModalOpen bool
+
+	confirmCloseModalOpen bool
+	confirmModalClose     func()
 }
 
 func (c *Home) Render() app.UI {
@@ -94,9 +97,10 @@ func (c *Home) Render() app.UI {
 						c.keySuccessfullyImportedModalOpen = true
 					},
 					OnCancel: func() {
-						c.keyImportPasswordModalOpen = false
-
-						c.Update()
+						c.confirmModalClose = func() {
+							c.keyImportPasswordModalOpen = false
+						}
+						c.confirmCloseModalOpen = true
 					},
 				},
 			),
@@ -129,9 +133,10 @@ func (c *Home) Render() app.UI {
 						c.encryptAndSignDownloadModalOpen = true
 					},
 					OnCancel: func() {
-						c.encryptAndSignPasswordModalOpen = false
-
-						c.Update()
+						c.confirmModalClose = func() {
+							c.encryptAndSignPasswordModalOpen = false
+						}
+						c.confirmCloseModalOpen = true
 					},
 				},
 			),
@@ -147,9 +152,10 @@ func (c *Home) Render() app.UI {
 					SubjectBVerb: "encrypted",
 
 					OnClose: func() {
-						c.encryptAndSignDownloadModalOpen = false
-
-						c.Update()
+						c.confirmModalClose = func() {
+							c.encryptAndSignDownloadModalOpen = false
+						}
+						c.confirmCloseModalOpen = true
 					},
 					OnDownload: func() {
 						c.download([]byte("Hello, world"), "cypher.txt", "text/plain")
@@ -202,10 +208,10 @@ func (c *Home) Render() app.UI {
 						c.createKeyModalOpen = false
 						c.keySuccessfullyGeneratedModalOpen = true
 					},
-					OnCancel: func() {
-						c.createKeyModalOpen = false
-
-						c.Update()
+					OnCancel: func(dirty bool, clear chan struct{}) {
+						c.handleCancel(dirty, clear, func() {
+							c.createKeyModalOpen = false
+						})
 					},
 				},
 			),
@@ -217,9 +223,10 @@ func (c *Home) Render() app.UI {
 						c.keyImportPasswordModalOpen = true
 					},
 					OnCancel: func() {
-						c.importKeyModal = false
-
-						c.Update()
+						c.confirmModalClose = func() {
+							c.importKeyModal = false
+						}
+						c.confirmCloseModalOpen = true
 					},
 				},
 			),
@@ -237,9 +244,10 @@ func (c *Home) Render() app.UI {
 						c.encryptAndSignPasswordModalOpen = true
 					},
 					OnCancel: func() {
-						c.encryptAndSignModalOpen = false
-
-						c.Update()
+						c.confirmModalClose = func() {
+							c.encryptAndSignModalOpen = false
+						}
+						c.confirmCloseModalOpen = true
 					},
 				},
 			),
@@ -254,7 +262,36 @@ func (c *Home) Render() app.UI {
 						c.decryptAndVerifyModalOpen = false
 					},
 					OnCancel: func() {
-						c.decryptAndVerifyModalOpen = false
+						c.confirmModalClose = func() {
+							c.decryptAndVerifyModalOpen = false
+						}
+						c.confirmCloseModalOpen = true
+					},
+				},
+			),
+			app.If(
+				c.confirmCloseModalOpen,
+				&ConfirmationModal{
+					ID:    "confirmation-modal",
+					Icon:  "fas fa-exclamation-triangle",
+					Title: "Are you sure?",
+					Class: "pf-m-danger",
+					Body:  "Unsaved changes might be lost.",
+
+					ActionLabel: "Yes, delete unsaved changes",
+					ActionClass: "pf-m-danger",
+
+					CancelLabel: "Cancel",
+
+					OnClose: func() {
+						c.confirmCloseModalOpen = false
+
+						c.Update()
+					},
+					OnAction: func() {
+						c.confirmCloseModalOpen = false
+
+						c.confirmModalClose()
 
 						c.Update()
 					},
@@ -275,6 +312,25 @@ func (c *Home) download(content []byte, name string, mimetype string) {
 	link.Set("href", app.Window().Get("URL").Call("createObjectURL", blob))
 	link.Set("download", name)
 	link.Call("click")
+}
+
+func (c *Home) handleCancel(dirty bool, clear chan struct{}, confirm func()) {
+	if !dirty {
+		c.createKeyModalOpen = false
+
+		clear <- struct{}{}
+
+		c.Update()
+
+		return
+	}
+
+	c.confirmModalClose = func() {
+		confirm()
+
+		clear <- struct{}{}
+	}
+	c.confirmCloseModalOpen = true
 }
 
 func (c *Home) OnAppUpdate(ctx app.Context) {
