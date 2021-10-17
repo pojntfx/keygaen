@@ -222,11 +222,10 @@ func (c *Home) Render() app.UI {
 						c.importKeyModal = false
 						c.keyImportPasswordModalOpen = true
 					},
-					OnCancel: func() {
-						c.confirmModalClose = func() {
+					OnCancel: func(dirty bool, clear chan struct{}) {
+						c.handleCancel(dirty, clear, func() {
 							c.importKeyModal = false
-						}
-						c.confirmCloseModalOpen = true
+						})
 					},
 				},
 			),
@@ -316,7 +315,7 @@ func (c *Home) download(content []byte, name string, mimetype string) {
 
 func (c *Home) handleCancel(dirty bool, clear chan struct{}, confirm func()) {
 	if !dirty {
-		c.createKeyModalOpen = false
+		confirm()
 
 		clear <- struct{}{}
 
@@ -331,6 +330,8 @@ func (c *Home) handleCancel(dirty bool, clear chan struct{}, confirm func()) {
 		clear <- struct{}{}
 	}
 	c.confirmCloseModalOpen = true
+
+	c.Update()
 }
 
 func (c *Home) OnAppUpdate(ctx app.Context) {

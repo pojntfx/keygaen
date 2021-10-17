@@ -31,10 +31,12 @@ func (c *ImportKeyModalStory) Render() app.UI {
 
 						c.modalOpen = false
 					},
-					OnCancel: func() {
+					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.modalOpen = false
 
 						c.Update()
+
+						clear <- struct{}{}
 					},
 				},
 			),
