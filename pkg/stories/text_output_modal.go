@@ -27,12 +27,12 @@ func (c *TextOutputModalStory) Render() app.UI {
 					Title: "Example Text Output Modal",
 					Tabs: []components.TextOutputModalTab{
 						{
-							Language: "Plaintext",
+							Language: "text/plain",
 							Title:    "Cypher",
 							Body:     "asdfasdfasdfadsfasdf",
 						},
 						{
-							Language: "Plaintext",
+							Language: "text/plain",
 							Title:    "Signature",
 							Body:     "uas-02rioj23jd",
 						},
