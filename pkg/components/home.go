@@ -1,8 +1,6 @@
 package components
 
 import (
-	"fmt"
-
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
@@ -57,6 +55,11 @@ type Home struct {
 	confirmModalClose     func()
 
 	viewCypherAndSignatureModalOpen bool
+
+	decryptAndVerifyPasswordModalOpen bool
+	decryptAndVerifyDownloadModalOpen bool
+
+	viewPlaintextModalOpen bool
 }
 
 func (c *Home) Render() app.UI {
@@ -147,6 +150,24 @@ func (c *Home) Render() app.UI {
 				},
 			),
 			app.If(
+				c.decryptAndVerifyPasswordModalOpen,
+				&PasswordModal{
+					Title: "Enter Key Password",
+					OnSubmit: func(password string) {
+						c.decryptAndVerifyPasswordModalOpen = false
+						c.decryptAndVerifyDownloadModalOpen = true
+					},
+					OnCancel: func() {
+						c.confirmModalClose = func() {
+							c.decryptAndVerifyPasswordModalOpen = false
+						}
+						c.confirmCloseModalOpen = true
+
+						c.Update()
+					},
+				},
+			),
+			app.If(
 				c.encryptAndSignDownloadModalOpen,
 				&DownloadOrViewModal{
 					SubjectA:     c.privateKeyID != "",
@@ -183,6 +204,42 @@ func (c *Home) Render() app.UI {
 					OnView: func() {
 						c.encryptAndSignDownloadModalOpen = false
 						c.viewCypherAndSignatureModalOpen = true
+					},
+				},
+			),
+			app.If(
+				c.decryptAndVerifyDownloadModalOpen,
+				&DownloadOrViewModal{
+					SubjectA:     c.privateKeyID != "",
+					SubjectANoun: "file",
+					SubjectAVerb: "decrypted",
+
+					SubjectB:     c.publicKeyID != "",
+					SubjectBNoun: "",
+					SubjectBVerb: "verified",
+
+					OnClose: func(used bool) {
+						if used {
+							c.decryptAndVerifyDownloadModalOpen = false
+
+							c.Update()
+
+							return
+						}
+
+						c.confirmModalClose = func() {
+							c.decryptAndVerifyDownloadModalOpen = false
+						}
+						c.confirmCloseModalOpen = true
+
+						c.Update()
+					},
+					OnDownload: func() {
+						c.download([]byte("Hello, world"), "plaintext.txt", "text/plain")
+					},
+					OnView: func() {
+						c.decryptAndVerifyDownloadModalOpen = false
+						c.viewPlaintextModalOpen = true
 					},
 				},
 			),
@@ -272,9 +329,11 @@ func (c *Home) Render() app.UI {
 					Keys: demoKeys,
 
 					OnSubmit: func(file []byte, publicKeyID, privateKeyID, detachedSignature string) {
-						app.Window().Call("alert", fmt.Sprintf("Decrypted and verified file %v, using public key ID %v, private key ID %v and detached signature %v", file, publicKeyID, privateKeyID, detachedSignature))
+						c.publicKeyID = publicKeyID
+						c.privateKeyID = privateKeyID
 
 						c.decryptAndVerifyModalOpen = false
+						c.decryptAndVerifyPasswordModalOpen = true
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
@@ -313,6 +372,27 @@ func (c *Home) Render() app.UI {
 						OnClose: func() {
 							c.viewCypherAndSignatureModalOpen = false
 							c.encryptAndSignDownloadModalOpen = true
+
+							c.Update()
+						},
+					}
+				}(),
+			),
+			app.If(
+				c.viewPlaintextModalOpen,
+				func() app.UI {
+					return &TextOutputModal{
+						Title: "View File",
+						Tabs: []TextOutputModalTab{
+							{
+								Language: "text/plain",
+								Title:    "plaintext.txt",
+								Body:     "Hello, world",
+							},
+						},
+						OnClose: func() {
+							c.viewPlaintextModalOpen = false
+							c.decryptAndVerifyDownloadModalOpen = true
 
 							c.Update()
 						},
