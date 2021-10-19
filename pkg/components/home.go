@@ -60,6 +60,8 @@ type Home struct {
 	decryptAndVerifyDownloadModalOpen bool
 
 	viewPlaintextModalOpen bool
+
+	deleteKeyConfirmModalOpen bool
 }
 
 func (c *Home) Render() app.UI {
@@ -277,7 +279,7 @@ func (c *Home) Render() app.UI {
 									app.Window().Call("alert", "Exported key "+keyID)
 								},
 								OnDelete: func(keyID string) {
-									app.Window().Call("alert", "Deleted key "+keyID)
+									c.deleteKeyConfirmModalOpen = !c.deleteKeyConfirmModalOpen
 								},
 							},
 						),
@@ -429,6 +431,32 @@ func (c *Home) Render() app.UI {
 						c.confirmCloseModalOpen = false
 
 						c.confirmModalClose()
+
+						c.Update()
+					},
+				},
+			),
+			app.If(
+				c.deleteKeyConfirmModalOpen,
+				&ConfirmationModal{
+					ID:    "delete-key-confirmation-modal",
+					Icon:  "fas fa-exclamation-triangle",
+					Title: "Are you sure?",
+					Class: "pf-m-danger",
+					Body:  "After deletion, you will not be able to restore the key.",
+
+					ActionLabel: "Yes, delete the key",
+					ActionClass: "pf-m-danger",
+
+					CancelLabel: "Cancel",
+
+					OnClose: func() {
+						c.deleteKeyConfirmModalOpen = false
+
+						c.Update()
+					},
+					OnAction: func() {
+						c.deleteKeyConfirmModalOpen = false
 
 						c.Update()
 					},
