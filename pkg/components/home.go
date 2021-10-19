@@ -1,8 +1,6 @@
 package components
 
 import (
-	"fmt"
-
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
@@ -441,7 +439,11 @@ func (c *Home) Render() app.UI {
 				&ExportKeyModal{
 					PublicKey: c.publicKeyID != "",
 					OnDownloadPublicKey: func(armor bool) {
-						app.Window().Call("alert", fmt.Sprintf("Downloaded public key with armor set to %v", armor))
+						if armor {
+							c.download([]byte("asdfirj230sd"), c.publicKeyID+".pub", "application/octet-stream")
+						} else {
+							c.download([]byte("asdfirj230sd"), c.publicKeyID+".pub", "text/plain")
+						}
 					},
 					OnViewPublicKey: func() {
 						c.exportKeyModalOpen = false
@@ -451,7 +453,11 @@ func (c *Home) Render() app.UI {
 
 					PrivateKey: c.privateKeyID != "",
 					OnDownloadPrivateKey: func(armor bool) {
-						app.Window().Call("alert", fmt.Sprintf("Downloaded private key with armor set to %v", armor))
+						if armor {
+							c.download([]byte("i34jisdhjs"), c.privateKeyID, "application/octet-stream")
+						} else {
+							c.download([]byte("i34jisdhjs"), c.privateKeyID, "text/plain")
+						}
 					},
 					OnViewPrivateKey: func() {
 						c.exportKeyModalOpen = false
