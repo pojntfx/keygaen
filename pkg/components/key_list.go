@@ -35,7 +35,7 @@ func (c *KeyList) Render() app.UI {
 									Class("pf-c-data-list__item-content").
 									Body(
 										app.Div().
-											Class("pf-c-data-list__cell").
+											Class("pf-c-data-list__cell pf-u-pb-0").
 											Body(
 												app.Div().
 													Class("pf-l-flex pf-m-column").
@@ -121,7 +121,7 @@ func (c *KeyList) Render() app.UI {
 											Class("pf-c-data-list__item-action").
 											Body(
 												app.Div().
-													Class("pf-l-stack pf-u-justify-content-center pf-u-mt-md").
+													Class("pf-l-stack pf-u-justify-content-center pf-u-mt-md-on-md").
 													Body(
 														app.Div().
 															Class("pf-l-stack__item").
@@ -138,7 +138,7 @@ func (c *KeyList) Render() app.UI {
 																	Body(
 																		app.Button().
 																			Class("pf-c-dropdown__toggle pf-m-plain").
-																			ID("export-key-button-"+key.ID).
+																			ID("expand-key-actions-button-"+key.ID).
 																			Aria("expanded", true).
 																			Type("button").
 																			Aria("label", "Actions").
@@ -159,8 +159,8 @@ func (c *KeyList) Render() app.UI {
 																		app.If(
 																			c.expandedKeyID == key.ID,
 																			app.Ul().
-																				Class("pf-c-dropdown__menu pf-m-align-right").
-																				Aria("labelledby", "export-key-button-"+key.ID).
+																				Class("pf-c-dropdown__menu pf-m-align-right-on-md").
+																				Aria("labelledby", "expand-key-actions-button-"+key.ID).
 																				Body(
 																					app.Li().
 																						Body(
