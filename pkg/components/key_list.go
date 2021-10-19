@@ -53,8 +53,12 @@ func (c *KeyList) Render() app.UI {
 																	Body(
 																		app.A().
 																			Href("mailto:"+key.Email).
+																			OnClick(func(ctx app.Context, e app.Event) {
+																				// Prevent go-app from taking over this link
+																				e.Call("stopImmediatePropagation")
+																			}).
 																			Text(key.Email),
-																		app.Code().Text("- "+key.ID),
+																		app.Code().Text(" - "+key.ID),
 																	),
 															),
 														app.If(
