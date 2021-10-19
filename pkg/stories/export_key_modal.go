@@ -26,6 +26,7 @@ func (c *ExportKeyModalStory) Render() app.UI {
 			c.modalOpen,
 			c.WithRoot(
 				&components.ExportKeyModal{
+					PublicKey: true,
 					OnDownloadPublicKey: func(armor bool) {
 						app.Window().Call("alert", fmt.Sprintf("Downloaded public key with armor set to %v", armor))
 					},
@@ -33,6 +34,7 @@ func (c *ExportKeyModalStory) Render() app.UI {
 						app.Window().Call("alert", "Viewed public key")
 					},
 
+					PrivateKey: true,
 					OnDownloadPrivateKey: func(armor bool) {
 						app.Window().Call("alert", fmt.Sprintf("Downloaded private key with armor set to %v", armor))
 					},
