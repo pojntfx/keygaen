@@ -272,6 +272,13 @@ func (c *Home) Render() app.UI {
 						Body(
 							&KeyList{
 								Keys: demoKeys,
+
+								OnExport: func(keyID string) {
+									app.Window().Call("alert", "Exported key "+keyID)
+								},
+								OnDelete: func(keyID string) {
+									app.Window().Call("alert", "Deleted key "+keyID)
+								},
 							},
 						),
 				),

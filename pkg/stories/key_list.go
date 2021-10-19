@@ -41,6 +41,13 @@ func (c *KeyListStory) Render() app.UI {
 	return c.WithRoot(
 		&components.KeyList{
 			Keys: demoKeys,
+
+			OnExport: func(keyID string) {
+				app.Window().Call("alert", "Exported key "+keyID)
+			},
+			OnDelete: func(keyID string) {
+				app.Window().Call("alert", "Deleted key "+keyID)
+			},
 		},
 	)
 }
