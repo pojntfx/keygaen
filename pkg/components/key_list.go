@@ -4,6 +4,10 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
+const (
+	keyListID = "key-list"
+)
+
 type KeyList struct {
 	app.Compo
 
@@ -14,13 +18,14 @@ type KeyList struct {
 
 	expandedKeyID string
 
-	removeEventListener func()
+	removeEventListeners []func()
 }
 
 func (c *KeyList) Render() app.UI {
 	return app.Ul().
 		Class("pf-c-data-list pf-m-grid-md").
 		Aria("label", "Key list").
+		ID(keyListID).
 		Body(
 			app.Range(c.Keys).Slice(func(i int) app.UI {
 				key := c.Keys[i]
@@ -49,7 +54,7 @@ func (c *KeyList) Render() app.UI {
 																		app.A().
 																			Href("mailto:"+key.Email).
 																			Text(key.Email),
-																		app.Text("- "+key.ID),
+																		app.Code().Text("- "+key.ID),
 																	),
 															),
 														app.If(
@@ -222,17 +227,31 @@ func (c *KeyList) closeKeyActions() {
 }
 
 func (c *KeyList) OnMount(ctx app.Context) {
-	c.removeEventListener = app.Window().AddEventListener("keyup", func(ctx app.Context, e app.Event) {
-		if e.Get("key").String() == "Escape" {
-			c.closeKeyActions()
+	c.removeEventListeners = []func(){
+		app.Window().AddEventListener("keyup", func(ctx app.Context, e app.Event) {
+			if e.Get("key").String() == "Escape" {
+				c.closeKeyActions()
 
-			c.Update()
-		}
-	})
+				c.Update()
+			}
+		}),
+		app.Window().AddEventListener("click", func(ctx app.Context, e app.Event) {
+			// Close if we clicked outside the dropdown menu
+			if c.expandedKeyID != "" {
+				if dropdown := app.Window().Get("document").Call("querySelector", "#"+keyListID+" .pf-c-dropdown__menu"); !dropdown.IsNull() && !dropdown.Call("contains", e.Get("target")).Bool() {
+					c.closeKeyActions()
+
+					c.Update()
+				}
+			}
+		}),
+	}
 }
 
 func (c *KeyList) OnDismount() {
-	if c.removeEventListener != nil {
-		c.removeEventListener()
+	if c.removeEventListeners != nil {
+		for _, listener := range c.removeEventListeners {
+			listener()
+		}
 	}
 }
