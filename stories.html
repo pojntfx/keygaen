@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta httpequiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="author" content="Felicitas Pojtinger">
-<meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
+<meta content="Sign, verify, encrypt and decrypt data with GPG." name="description">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta content="http://127.0.0.1:44775/stories" property="og:url">
+<meta property="og:url" content="http://127.0.0.1:33853/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -16,15 +16,15 @@
 <title>
 gridge
 </title>
-<link rel="icon" type="image/png" href="/gridge/web/default.png">
-<link rel="apple-touch-icon" href="/gridge/web/default.png">
-<link rel="manifest" href="/gridge/manifest.webmanifest">
-<link href="/gridge/app.css" type="text/css" rel="stylesheet">
+<link type="image/png" href="/gridge/web/default.png" rel="icon">
+<link href="/gridge/web/default.png" rel="apple-touch-icon">
+<link href="/gridge/manifest.webmanifest" rel="manifest">
+<link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
-<link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
+<link href="/gridge/web/index.css" type="text/css" rel="stylesheet">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -33,7 +33,7 @@ gridge
 <body>
 <div>
 <aside id="app-wasm-loader" class="goapp-app-info">
-<img class="goapp-logo goapp-spin" src="/gridge/web/default.png" id="app-wasm-loader-icon">
+<img src="/gridge/web/default.png" id="app-wasm-loader-icon" class="goapp-logo goapp-spin">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
@@ -52,7 +52,7 @@ Skip to content
 </span>
 <div class="pf-c-masthead__main">
 <a class="pf-c-masthead__brand" href="/">
-<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
+<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -60,7 +60,7 @@ Stories
 </div>
 </header>
 </header>
-<div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
+<div aria-hidden="true" class="pf-c-page__sidebar pf-m-collapsed">
 <div class="pf-c-page__sidebar-body">
 <nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
@@ -85,17 +85,17 @@ Download or View Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Empty%2BState" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Empty%2BState">
 Empty State
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Encrypt%252FSign%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Encrypt%252FSign%2BModal">
 Encrypt/Sign Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Error%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Error%2BModal">
 Error Modal
 </a>
 </li>
@@ -105,7 +105,7 @@ Export Key
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=File%2BUpload">
+<a href="?activeTitle=File%2BUpload" class="pf-c-nav__link">
 File Upload
 </a>
 </li>
@@ -145,12 +145,12 @@ Success Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Text%2BOutput%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Text%2BOutput%2BModal">
 Text Output Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Toolbar" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Toolbar">
 Toolbar
 </a>
 </li>
@@ -165,8 +165,8 @@ Toolbar
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
-<i aria-hidden="true" class="fas fa-expand-arrows-alt"></i>
+<a aria-label="Fullscreen" target="_blank" href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm">
+<i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
 </div>
@@ -180,20 +180,20 @@ Skip to content
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
 <a class="pf-c-page__header-brand-link" href="#">
-<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
+<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a target="_blank" class="pf-c-button pf-m-plain" aria-label="Help" href="https://github.com/pojntfx/gridge">
-<i class="pf-icon pf-icon-help" aria-hidden="true"></i>
+<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
+<i aria-hidden="true" class="pf-icon pf-icon-help"></i>
 </a>
 </div>
 </div>
 </div>
 </header>
-<main tabindex="-1" class="pf-c-page__main" id="gridge-main">
+<main id="gridge-main" tabindex="-1" class="pf-c-page__main">
 <section class="pf-c-page__main-section pf-m-light pf-m-no-padding pf-u-px-sm-on-xl">
 <div class="pf-c-toolbar">
 <div class="pf-c-toolbar__content">
@@ -232,7 +232,7 @@ Encrypt/sign
 </div>
 </div>
 <span class="pf-c-button__icon">
-<i aria-hidden="true" class="fas fa-lock"></i>
+<i class="fas fa-lock" aria-hidden="true"></i>
 </span>
 </button>
 <button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
@@ -252,7 +252,7 @@ Decrypt/verify
 <div class="pf-c-toolbar__content-section pf-m-nowrap pf-u-display-none pf-u-display-flex-on-md">
 <div class="pf-c-toolbar__group">
 <div class="pf-c-toolbar__item ">
-<button type="button" class="pf-c-button pf-m-control">
+<button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
 <i class="fas fa-plus" aria-hidden="true"></i>
 </span>
@@ -271,9 +271,9 @@ Decrypt/verify
 <div class="pf-c-toolbar__item pf-m-pagination">
 <div class="pf-c-toolbar__group">
 <div class="pf-c-toolbar__item ">
-<button type="button" class="pf-c-button pf-m-control">
+<button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
-<i class="fas fa-lock" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-lock"></i>
 </span>
  Encrypt/sign
 </button>
@@ -293,7 +293,7 @@ Decrypt/verify
 </div>
 </section>
 <section class="pf-c-page__main-section pf-m-fill">
-<ul class="pf-c-data-list pf-m-grid-md" aria-label="Key list" id="key-list">
+<ul aria-label="Key list" id="key-list" class="pf-c-data-list pf-m-grid-md">
 <li class="pf-c-data-list__item">
 <div class="pf-c-data-list__item-row">
 <div class="pf-c-data-list__item-content">
@@ -314,7 +314,7 @@ isegard@example.com
 </div>
 <div class="pf-c-label-group">
 <div class="pf-c-label-group__main">
-<ul class="pf-c-label-group__list" aria-role="list" aria-label="Key attributes">
+<ul aria-label="Key attributes" class="pf-c-label-group__list" aria-role="list">
 <li class="pf-c-label-group__list-item">
 <span class="pf-c-label pf-m-blue">
 <span class="pf-c-label__content">
@@ -364,7 +364,7 @@ fred@example.com
 </div>
 <div class="pf-c-label-group">
 <div class="pf-c-label-group__main">
-<ul class="pf-c-label-group__list" aria-role="list" aria-label="Key attributes">
+<ul aria-role="list" aria-label="Key attributes" class="pf-c-label-group__list">
 <li class="pf-c-label-group__list-item">
 <span class="pf-c-label pf-m-green">
 <span class="pf-c-label__content">
@@ -379,7 +379,7 @@ Public
 <span class="pf-c-label pf-m-blue">
 <span class="pf-c-label__content">
 <span class="pf-c-label__icon">
-<i aria-hidden="true" class="fa-fw fas fa-user-lock"></i>
+<i class="fa-fw fas fa-user-lock" aria-hidden="true"></i>
 </span>
 Private
 </span>
@@ -394,7 +394,7 @@ Private
 <div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md-on-md">
 <div class="pf-l-stack__item">
 <div class="pf-c-dropdown">
-<button aria-expanded="true" type="button" aria-label="Actions" class="pf-c-dropdown__toggle pf-m-plain" id="expand-key-actions-button-838431">
+<button class="pf-c-dropdown__toggle pf-m-plain" id="expand-key-actions-button-838431" aria-expanded="true" type="button" aria-label="Actions">
 <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
 </button>
 </div>
@@ -424,12 +424,12 @@ alice@example.com
 </div>
 <div class="pf-c-label-group">
 <div class="pf-c-label-group__main">
-<ul aria-label="Key attributes" class="pf-c-label-group__list" aria-role="list">
+<ul class="pf-c-label-group__list" aria-role="list" aria-label="Key attributes">
 <li class="pf-c-label-group__list-item">
 <span class="pf-c-label pf-m-green">
 <span class="pf-c-label__content">
 <span class="pf-c-label__icon">
-<i class="fa-fw fas fa-globe" aria-hidden="true"></i>
+<i aria-hidden="true" class="fa-fw fas fa-globe"></i>
 </span>
 Public
 </span>
@@ -444,7 +444,7 @@ Public
 <div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md-on-md">
 <div class="pf-l-stack__item">
 <div class="pf-c-dropdown">
-<button aria-expanded="true" type="button" aria-label="Actions" class="pf-c-dropdown__toggle pf-m-plain" id="expand-key-actions-button-123456">
+<button class="pf-c-dropdown__toggle pf-m-plain" id="expand-key-actions-button-123456" aria-expanded="true" type="button" aria-label="Actions">
 <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
 </button>
 </div>
@@ -523,11 +523,11 @@ Public
 Reset props
 </div>
 </div>
-<i aria-hidden="true" class="fas fa-eraser"></i>
+<i class="fas fa-eraser" aria-hidden="true"></i>
 </button>
 </div>
 <div class="pf-c-code-block__actions-item">
-<button type="button" aria-label="Reload props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
+<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reload props">
 <div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
