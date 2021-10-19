@@ -61,6 +61,7 @@ type Home struct {
 
 	viewPlaintextModalOpen bool
 
+	selectedKeyID             string
 	deleteKeyConfirmModalOpen bool
 }
 
@@ -136,7 +137,7 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.encryptAndSignPasswordModalOpen,
 				&PasswordModal{
-					Title: "Enter Key Password",
+					Title: `Enter password for key "` + c.privateKeyID + `"`,
 					OnSubmit: func(password string) {
 						c.encryptAndSignPasswordModalOpen = false
 						c.encryptAndSignDownloadModalOpen = true
@@ -154,7 +155,7 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.decryptAndVerifyPasswordModalOpen,
 				&PasswordModal{
-					Title: "Enter Key Password",
+					Title: `Enter password for key "` + c.privateKeyID + `"`,
 					OnSubmit: func(password string) {
 						c.decryptAndVerifyPasswordModalOpen = false
 						c.decryptAndVerifyDownloadModalOpen = true
@@ -279,6 +280,7 @@ func (c *Home) Render() app.UI {
 									app.Window().Call("alert", "Exported key "+keyID)
 								},
 								OnDelete: func(keyID string) {
+									c.selectedKeyID = keyID
 									c.deleteKeyConfirmModalOpen = !c.deleteKeyConfirmModalOpen
 								},
 							},
@@ -445,7 +447,7 @@ func (c *Home) Render() app.UI {
 					Class: "pf-m-danger",
 					Body:  "After deletion, you will not be able to restore the key.",
 
-					ActionLabel: "Yes, delete the key",
+					ActionLabel: `Yes, delete key "` + c.selectedKeyID + `"`,
 					ActionClass: "pf-m-danger",
 
 					CancelLabel: "Cancel",
