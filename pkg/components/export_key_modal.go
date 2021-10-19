@@ -96,7 +96,14 @@ func (c *ExportKeyModal) Render() app.UI {
 							Class("pf-c-card__footer").
 							Body(
 								app.Button().
-									Class("pf-c-button pf-m-control pf-u-mr-sm").
+									Class(func() string {
+										classes := "pf-c-button pf-m-control pf-u-mr-sm pf-u-display-block pf-u-display-inline-block-on-md pf-u-w-100 pf-u-w-initial-on-md"
+										if !c.skipPublicKeyArmor {
+											classes += " pf-u-mb-md pf-u-mb-0-on-md"
+										}
+
+										return classes
+									}()).
 									Type("submit").
 									Form(exportPublicKeyForm).
 									OnClick(func(ctx app.Context, e app.Event) {
@@ -115,7 +122,7 @@ func (c *ExportKeyModal) Render() app.UI {
 								app.If(
 									!c.skipPublicKeyArmor,
 									app.Button().
-										Class("pf-c-button pf-m-control").
+										Class("pf-c-button pf-m-control pf-u-mr-sm pf-u-display-block pf-u-display-inline-block-on-md pf-u-w-100 pf-u-w-initial-on-md").
 										Type("submit").
 										Form(exportPublicKeyForm).
 										OnClick(func(ctx app.Context, e app.Event) {
@@ -200,7 +207,14 @@ func (c *ExportKeyModal) Render() app.UI {
 							Class("pf-c-card__footer").
 							Body(
 								app.Button().
-									Class("pf-c-button pf-m-control pf-u-mr-sm").
+									Class(func() string {
+										classes := "pf-c-button pf-m-control pf-u-mr-sm pf-u-display-block pf-u-display-inline-block-on-md pf-u-w-100 pf-u-w-initial-on-md"
+										if !c.skipPrivateKeyArmor {
+											classes += " pf-u-mb-md pf-u-mb-0-on-md"
+										}
+
+										return classes
+									}()).
 									Type("submit").
 									Form(exportPrivateKeyForm).
 									OnClick(func(ctx app.Context, e app.Event) {
@@ -219,7 +233,7 @@ func (c *ExportKeyModal) Render() app.UI {
 								app.If(
 									!c.skipPrivateKeyArmor,
 									app.Button().
-										Class("pf-c-button pf-m-control").
+										Class("pf-c-button pf-m-control pf-u-mr-sm pf-u-display-block pf-u-display-inline-block-on-md pf-u-w-100 pf-u-w-initial-on-md").
 										Type("submit").
 										Form(exportPrivateKeyForm).
 										OnClick(func(ctx app.Context, e app.Event) {
