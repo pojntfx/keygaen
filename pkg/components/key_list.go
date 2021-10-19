@@ -1,11 +1,20 @@
 package components
 
-import "github.com/maxence-charriere/go-app/v9/pkg/app"
+import (
+	"github.com/maxence-charriere/go-app/v9/pkg/app"
+)
 
 type KeyList struct {
 	app.Compo
 
 	Keys []GPGKey
+
+	OnExport func(keyID string)
+	OnDelete func(keyID string)
+
+	expandedKeyID string
+
+	removeEventListener func()
 }
 
 func (c *KeyList) Render() app.UI {
@@ -117,16 +126,86 @@ func (c *KeyList) Render() app.UI {
 														app.Div().
 															Class("pf-l-stack__item").
 															Body(
-																// TODO: Add dropdown items
-																app.Button().
-																	Class("pf-c-dropdown__toggle pf-m-plain").
-																	Aria("expanded", "false").
-																	Type("button").
-																	Aria("label", "Actions").
+																app.Div().
+																	Class(func() string {
+																		dropdownClasses := "pf-c-dropdown"
+																		if c.expandedKeyID == key.ID {
+																			dropdownClasses += " pf-m-expanded"
+																		}
+
+																		return dropdownClasses
+																	}()).
 																	Body(
-																		app.I().
-																			Class("fas fa-ellipsis-v").
-																			Aria("hidden", true),
+																		app.Button().
+																			Class("pf-c-dropdown__toggle pf-m-plain").
+																			ID("export-key-button-"+key.ID).
+																			Aria("expanded", true).
+																			Type("button").
+																			Aria("label", "Actions").
+																			OnClick(func(ctx app.Context, e app.Event) {
+																				if c.expandedKeyID == key.ID {
+																					c.closeKeyActions()
+
+																					return
+																				}
+
+																				c.expandedKeyID = key.ID
+																			}).
+																			Body(
+																				app.I().
+																					Class("fas fa-ellipsis-v").
+																					Aria("hidden", true),
+																			),
+																		app.If(
+																			c.expandedKeyID == key.ID,
+																			app.Ul().
+																				Class("pf-c-dropdown__menu pf-m-align-right").
+																				Aria("labelledby", "export-key-button-"+key.ID).
+																				Body(
+																					app.Li().
+																						Body(
+																							app.Button().
+																								Class("pf-c-dropdown__menu-item pf-m-icon").
+																								Type("button").
+																								OnClick(func(ctx app.Context, e app.Event) {
+																									c.closeKeyActions()
+
+																									c.OnExport(key.ID)
+																								}).
+																								Body(
+																									app.Span().
+																										Class("pf-c-dropdown__menu-item-icon").
+																										Body(
+																											app.I().
+																												Class("fas fa-file-export").
+																												Aria("hidden", true),
+																										),
+																									app.Text("Export"),
+																								),
+																						),
+																					app.Li().
+																						Body(
+																							app.Button().
+																								Class("pf-c-dropdown__menu-item pf-m-icon").
+																								Type("button").
+																								OnClick(func(ctx app.Context, e app.Event) {
+																									c.closeKeyActions()
+
+																									c.OnDelete(key.ID)
+																								}).
+																								Body(
+																									app.Span().
+																										Class("pf-c-dropdown__menu-item-icon").
+																										Body(
+																											app.I().
+																												Class("fas fa-trash").
+																												Aria("hidden", true),
+																										),
+																									app.Text("Delete"),
+																								),
+																						),
+																				),
+																		),
 																	),
 															),
 													),
@@ -136,4 +215,24 @@ func (c *KeyList) Render() app.UI {
 					)
 			}),
 		)
+}
+
+func (c *KeyList) closeKeyActions() {
+	c.expandedKeyID = ""
+}
+
+func (c *KeyList) OnMount(ctx app.Context) {
+	c.removeEventListener = app.Window().AddEventListener("keyup", func(ctx app.Context, e app.Event) {
+		if e.Get("key").String() == "Escape" {
+			c.closeKeyActions()
+
+			c.Update()
+		}
+	})
+}
+
+func (c *KeyList) OnDismount() {
+	if c.removeEventListener != nil {
+		c.removeEventListener()
+	}
 }
