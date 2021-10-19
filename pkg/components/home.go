@@ -1,6 +1,8 @@
 package components
 
 import (
+	"fmt"
+
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
@@ -63,6 +65,11 @@ type Home struct {
 
 	selectedKeyID             string
 	deleteKeyConfirmModalOpen bool
+
+	exportKeyModalOpen bool
+	viewKeyModalOpen   bool
+
+	viewPrivateKey bool
 }
 
 func (c *Home) Render() app.UI {
@@ -277,7 +284,26 @@ func (c *Home) Render() app.UI {
 								Keys: demoKeys,
 
 								OnExport: func(keyID string) {
-									app.Window().Call("alert", "Exported key "+keyID)
+									c.selectedKeyID = keyID
+									c.exportKeyModalOpen = !c.exportKeyModalOpen
+
+									for _, key := range demoKeys {
+										if key.ID == keyID {
+											if key.Public {
+												c.publicKeyID = key.ID
+											} else {
+												c.publicKeyID = ""
+											}
+
+											if key.Private {
+												c.privateKeyID = key.ID
+											} else {
+												c.privateKeyID = ""
+											}
+
+											break
+										}
+									}
 								},
 								OnDelete: func(keyID string) {
 									c.selectedKeyID = keyID
@@ -404,6 +430,71 @@ func (c *Home) Render() app.UI {
 						OnClose: func() {
 							c.viewPlaintextModalOpen = false
 							c.decryptAndVerifyDownloadModalOpen = true
+
+							c.Update()
+						},
+					}
+				}(),
+			),
+			app.If(
+				c.exportKeyModalOpen,
+				&ExportKeyModal{
+					PublicKey: c.publicKeyID != "",
+					OnDownloadPublicKey: func(armor bool) {
+						app.Window().Call("alert", fmt.Sprintf("Downloaded public key with armor set to %v", armor))
+					},
+					OnViewPublicKey: func() {
+						c.exportKeyModalOpen = false
+						c.viewPrivateKey = false
+						c.viewKeyModalOpen = true
+					},
+
+					PrivateKey: c.privateKeyID != "",
+					OnDownloadPrivateKey: func(armor bool) {
+						app.Window().Call("alert", fmt.Sprintf("Downloaded private key with armor set to %v", armor))
+					},
+					OnViewPrivateKey: func() {
+						c.exportKeyModalOpen = false
+						c.viewPrivateKey = true
+						c.viewKeyModalOpen = true
+					},
+
+					OnOK: func() {
+						c.exportKeyModalOpen = false
+
+						c.Update()
+					},
+				},
+			),
+			app.If(
+				c.viewKeyModalOpen,
+				func() app.UI {
+					tabs := []TextOutputModalTab{
+						{
+							Language: "text/plain",
+							Title:    c.publicKeyID + ".pub",
+							Body:     "asdfirj230sd",
+						},
+					}
+					title := `View Public Key "` + c.publicKeyID + `"`
+
+					if c.viewPrivateKey {
+						tabs = []TextOutputModalTab{
+							{
+								Language: "text/plain",
+								Title:    c.privateKeyID,
+								Body:     "i34jisdhjs",
+							},
+						}
+						title = `View Private Key "` + c.privateKeyID + `"`
+					}
+
+					return &TextOutputModal{
+						Title: title,
+						Tabs:  tabs,
+						OnClose: func() {
+							c.viewKeyModalOpen = false
+							c.exportKeyModalOpen = true
 
 							c.Update()
 						},
