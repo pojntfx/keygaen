@@ -8,28 +8,36 @@ import (
 var demoKeys = []components.GPGKey{
 	{
 		ID:       "039292",
+		Label:    "039292",
 		FullName: "Isegard Example",
 		Email:    "isegard@example.com",
 		Private:  true,
+		Content:  "",
 	},
 	{
 		ID:       "838431",
+		Label:    "838431",
 		FullName: "Fred Example",
 		Email:    "fred@example.com",
 		Private:  true,
 		Public:   true,
+		Content:  "",
 	},
 	{
 		ID:       "123456",
+		Label:    "123456",
 		FullName: "Alice Example",
 		Email:    "alice@example.com",
 		Public:   true,
+		Content:  "",
 	},
 	{
 		ID:       "319312",
+		Label:    "319312",
 		FullName: "Bob Example",
 		Email:    "bob@example.com",
 		Public:   true,
+		Content:  "",
 	},
 }
 

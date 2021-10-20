@@ -55,6 +55,24 @@ func (c *Home) Render() app.UI {
 		c.keys = []GPGKey{}
 	}
 
+	privateKeyLabel := ""
+	for _, candidate := range c.keys {
+		if candidate.ID == c.privateKeyID {
+			privateKeyLabel = candidate.Label
+
+			break
+		}
+	}
+
+	publicKeyLabel := ""
+	for _, candidate := range c.keys {
+		if candidate.ID == c.publicKeyID {
+			publicKeyLabel = candidate.Label
+
+			break
+		}
+	}
+
 	return app.Div().
 		Class("pf-c-page").
 		Body(
@@ -311,8 +329,19 @@ func (c *Home) Render() app.UI {
 						c.createKeyModalOpen = false
 						c.keySuccessfullyGeneratedModalOpen = true
 
+						fingerprints, err := helper.GetSHA256Fingerprints(key)
+						if err != nil {
+							c.createKeyModalOpen = false
+							c.panic(err, func() {
+								c.createKeyModalOpen = true
+							})
+
+							return
+						}
+
 						c.keys = append(c.keys, GPGKey{
-							ID:       "319312", // TODO: Use SHA256 fingerprint instead
+							ID:       fingerprints[0],       // Since we don't generate subkeys, we'll only have one fingerprint
+							Label:    fingerprints[0][0:10], // We can safely assume that the fingerprint is at least 10 chars long
 							FullName: fullName,
 							Email:    email,
 							Private:  true,
@@ -443,9 +472,9 @@ func (c *Home) Render() app.UI {
 					PublicKey: c.publicKeyID != "",
 					OnDownloadPublicKey: func(armor bool) {
 						if armor {
-							c.download([]byte("asdfirj230sd"), c.publicKeyID+".pub", "application/octet-stream")
+							c.download([]byte("asdfirj230sd"), publicKeyLabel+".pub", "application/octet-stream")
 						} else {
-							c.download([]byte("asdfirj230sd"), c.publicKeyID+".pub", "text/plain")
+							c.download([]byte("asdfirj230sd"), publicKeyLabel+".pub", "text/plain")
 						}
 					},
 					OnViewPublicKey: func() {
@@ -457,9 +486,9 @@ func (c *Home) Render() app.UI {
 					PrivateKey: c.privateKeyID != "",
 					OnDownloadPrivateKey: func(armor bool) {
 						if armor {
-							c.download([]byte("i34jisdhjs"), c.privateKeyID, "application/octet-stream")
+							c.download([]byte("i34jisdhjs"), privateKeyLabel, "application/octet-stream")
 						} else {
-							c.download([]byte("i34jisdhjs"), c.privateKeyID, "text/plain")
+							c.download([]byte("i34jisdhjs"), privateKeyLabel, "text/plain")
 						}
 					},
 					OnViewPrivateKey: func() {
@@ -481,21 +510,21 @@ func (c *Home) Render() app.UI {
 					tabs := []TextOutputModalTab{
 						{
 							Language: "text/plain",
-							Title:    c.publicKeyID + ".pub",
+							Title:    publicKeyLabel + ".pub",
 							Body:     "asdfirj230sd",
 						},
 					}
-					title := `View Public Key "` + c.publicKeyID + `"`
+					title := `View Public Key "` + publicKeyLabel + `"`
 
 					if c.viewPrivateKey {
 						tabs = []TextOutputModalTab{
 							{
 								Language: "text/plain",
-								Title:    c.privateKeyID,
+								Title:    privateKeyLabel,
 								Body:     "i34jisdhjs",
 							},
 						}
-						title = `View Private Key "` + c.privateKeyID + `"`
+						title = `View Private Key "` + privateKeyLabel + `"`
 					}
 
 					return &TextOutputModal{
