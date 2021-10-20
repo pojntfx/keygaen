@@ -1,6 +1,9 @@
 package components
 
 import (
+	"log"
+
+	"github.com/ProtonMail/gopenpgp/v2/helper"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
@@ -68,6 +71,9 @@ type Home struct {
 	viewKeyModalOpen   bool
 
 	viewPrivateKey bool
+
+	err       error
+	onRecover func()
 }
 
 func (c *Home) Render() app.UI {
@@ -313,9 +319,22 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.createKeyModalOpen,
 				&CreateKeyModal{
-					OnSubmit: func(fullName, email, _ string) {
+					OnSubmit: func(fullName, email, password string) {
+						newKey, err := helper.GenerateKey(fullName, email, []byte(password), "x25519", 0)
+						if err != nil {
+							c.createKeyModalOpen = false
+							c.panic(err, func() {
+								c.createKeyModalOpen = true
+							})
+
+							return
+						}
+
 						c.createKeyModalOpen = false
 						c.keySuccessfullyGeneratedModalOpen = true
+
+						// TODO: Add key to key list
+						log.Println(newKey)
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
@@ -561,6 +580,25 @@ func (c *Home) Render() app.UI {
 					},
 				},
 			),
+			app.If(
+				c.err != nil,
+				&ErrorModal{
+					ID:          "error-modal",
+					Icon:        "fas fa-times",
+					Title:       "An Error Occurred",
+					Class:       "pf-m-danger",
+					Body:        "The following details may be of help:",
+					Error:       c.err,
+					ActionLabel: "Close",
+
+					OnClose: func() {
+						c.recover()
+					},
+					OnAction: func() {
+						c.recover()
+					},
+				},
+			),
 		)
 }
 
@@ -597,6 +635,18 @@ func (c *Home) handleCancel(dirty bool, clear chan struct{}, confirm func()) {
 	c.confirmCloseModalOpen = true
 
 	c.Update()
+}
+
+func (c *Home) panic(err error, onRecover func()) {
+	log.Println(err)
+
+	c.onRecover = onRecover
+	c.err = err
+}
+
+func (c *Home) recover() {
+	c.err = nil
+	c.onRecover()
 }
 
 func (c *Home) OnAppUpdate(ctx app.Context) {
