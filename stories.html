@@ -8,16 +8,16 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:36937/stories">
+<meta property="og:url" content="http://127.0.0.1:46367/stories">
 <meta property="og:title" content="gridge">
-<meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
-<meta content="website" property="og:type">
-<meta content property="og:image">
+<meta content="Sign, verify, encrypt and decrypt data with GPG." property="og:description">
+<meta property="og:type" content="website">
+<meta property="og:image" content>
 <title>
 gridge
 </title>
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
-<link href="/gridge/web/default.png" rel="apple-touch-icon">
+<link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
@@ -33,7 +33,7 @@ gridge
 <body>
 <div>
 <aside id="app-wasm-loader" class="goapp-app-info">
-<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
+<img src="/gridge/web/default.png" id="app-wasm-loader-icon" class="goapp-logo goapp-spin">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
@@ -51,7 +51,7 @@ Skip to content
 </button>
 </span>
 <div class="pf-c-masthead__main">
-<a href="/" class="pf-c-masthead__brand">
+<a class="pf-c-masthead__brand" href="/">
 <img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
@@ -65,7 +65,7 @@ Stories
 <nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Confirmation%2BModal">
+<a href="?activeTitle=Confirmation%2BModal" class="pf-c-nav__link">
 Confirmation Modal
 </a>
 </li>
@@ -85,7 +85,7 @@ Download or View Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Empty%2BState">
+<a href="?activeTitle=Empty%2BState" class="pf-c-nav__link">
 Empty State
 </a>
 </li>
@@ -100,7 +100,7 @@ Error Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Export%2BKey">
+<a href="?activeTitle=Export%2BKey" class="pf-c-nav__link">
 Export Key
 </a>
 </li>
@@ -120,7 +120,7 @@ Import Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Key%2BList">
+<a href="?activeTitle=Key%2BList" class="pf-c-nav__link">
 Key List
 </a>
 </li>
@@ -179,7 +179,7 @@ Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
-<a class="pf-c-page__header-brand-link" href="#">
+<a href="#" class="pf-c-page__header-brand-link">
 <img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 </div>
@@ -193,7 +193,7 @@ Skip to content
 </div>
 </div>
 </header>
-<main tabindex="-1" class="pf-c-page__main" id="gridge-main">
+<main class="pf-c-page__main" id="gridge-main" tabindex="-1">
 <section class="pf-c-page__main-section pf-m-light pf-m-no-padding pf-u-px-sm-on-xl">
 <div class="pf-c-toolbar">
 <div class="pf-c-toolbar__content">
@@ -225,14 +225,14 @@ Import key
 <div class="pf-c-toolbar__item pf-m-pagination">
 <div class="pf-c-toolbar__group">
 <button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
-<div aria-role="tooltip" class="pf-c-tooltip pf-m-left pf-x-c-tooltip">
+<div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Encrypt/sign
 </div>
 </div>
 <span class="pf-c-button__icon">
-<i class="fas fa-lock" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-lock"></i>
 </span>
 </button>
 <button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
@@ -262,7 +262,7 @@ Decrypt/verify
 <div class="pf-c-toolbar__item">
 <button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
-<i class="fas fa-file-import" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-file-import"></i>
 </span>
  Import key
 </button>
@@ -293,218 +293,7 @@ Decrypt/verify
 </div>
 </section>
 <section class="pf-c-page__main-section pf-m-fill">
-<ul aria-label="Key list" id="key-list" class="pf-c-data-list pf-m-grid-md">
-<li class="pf-c-data-list__item">
-<div class="pf-c-data-list__item-row">
-<div class="pf-c-data-list__item-content">
-<div class="pf-c-data-list__cell pf-u-pb-0">
-<div class="pf-l-flex pf-m-column">
-<div>
-<p>
-Isegard Example
-</p>
-<small>
-<a href="mailto:isegard@example.com">
-isegard@example.com
-</a>
-<code>
- - 039292
-</code>
-</small>
-</div>
-<div class="pf-c-label-group">
-<div class="pf-c-label-group__main">
-<ul aria-label="Key attributes" class="pf-c-label-group__list" aria-role="list">
-<li class="pf-c-label-group__list-item">
-<span class="pf-c-label pf-m-blue">
-<span class="pf-c-label__content">
-<span class="pf-c-label__icon">
-<i aria-hidden="true" class="fa-fw fas fa-user-lock"></i>
-</span>
-Private
-</span>
-</span>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="pf-c-data-list__item-action">
-<div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md-on-md">
-<div class="pf-l-stack__item">
-<div class="pf-c-dropdown">
-<button class="pf-c-dropdown__toggle pf-m-plain" id="expand-key-actions-button-039292" aria-expanded="true" type="button" aria-label="Actions">
-<i class="fas fa-ellipsis-v" aria-hidden="true"></i>
-</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</li>
-<li class="pf-c-data-list__item">
-<div class="pf-c-data-list__item-row">
-<div class="pf-c-data-list__item-content">
-<div class="pf-c-data-list__cell pf-u-pb-0">
-<div class="pf-l-flex pf-m-column">
-<div>
-<p>
-Fred Example
-</p>
-<small>
-<a href="mailto:fred@example.com">
-fred@example.com
-</a>
-<code>
- - 838431
-</code>
-</small>
-</div>
-<div class="pf-c-label-group">
-<div class="pf-c-label-group__main">
-<ul aria-label="Key attributes" class="pf-c-label-group__list" aria-role="list">
-<li class="pf-c-label-group__list-item">
-<span class="pf-c-label pf-m-green">
-<span class="pf-c-label__content">
-<span class="pf-c-label__icon">
-<i class="fa-fw fas fa-globe" aria-hidden="true"></i>
-</span>
-Public
-</span>
-</span>
-</li>
-<li class="pf-c-label-group__list-item">
-<span class="pf-c-label pf-m-blue">
-<span class="pf-c-label__content">
-<span class="pf-c-label__icon">
-<i class="fa-fw fas fa-user-lock" aria-hidden="true"></i>
-</span>
-Private
-</span>
-</span>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="pf-c-data-list__item-action">
-<div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md-on-md">
-<div class="pf-l-stack__item">
-<div class="pf-c-dropdown">
-<button class="pf-c-dropdown__toggle pf-m-plain" id="expand-key-actions-button-838431" aria-expanded="true" type="button" aria-label="Actions">
-<i class="fas fa-ellipsis-v" aria-hidden="true"></i>
-</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</li>
-<li class="pf-c-data-list__item">
-<div class="pf-c-data-list__item-row">
-<div class="pf-c-data-list__item-content">
-<div class="pf-c-data-list__cell pf-u-pb-0">
-<div class="pf-l-flex pf-m-column">
-<div>
-<p>
-Alice Example
-</p>
-<small>
-<a href="mailto:alice@example.com">
-alice@example.com
-</a>
-<code>
- - 123456
-</code>
-</small>
-</div>
-<div class="pf-c-label-group">
-<div class="pf-c-label-group__main">
-<ul aria-role="list" aria-label="Key attributes" class="pf-c-label-group__list">
-<li class="pf-c-label-group__list-item">
-<span class="pf-c-label pf-m-green">
-<span class="pf-c-label__content">
-<span class="pf-c-label__icon">
-<i class="fa-fw fas fa-globe" aria-hidden="true"></i>
-</span>
-Public
-</span>
-</span>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="pf-c-data-list__item-action">
-<div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md-on-md">
-<div class="pf-l-stack__item">
-<div class="pf-c-dropdown">
-<button aria-label="Actions" class="pf-c-dropdown__toggle pf-m-plain" id="expand-key-actions-button-123456" aria-expanded="true" type="button">
-<i class="fas fa-ellipsis-v" aria-hidden="true"></i>
-</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</li>
-<li class="pf-c-data-list__item">
-<div class="pf-c-data-list__item-row">
-<div class="pf-c-data-list__item-content">
-<div class="pf-c-data-list__cell pf-u-pb-0">
-<div class="pf-l-flex pf-m-column">
-<div>
-<p>
-Bob Example
-</p>
-<small>
-<a href="mailto:bob@example.com">
-bob@example.com
-</a>
-<code>
- - 319312
-</code>
-</small>
-</div>
-<div class="pf-c-label-group">
-<div class="pf-c-label-group__main">
-<ul class="pf-c-label-group__list" aria-role="list" aria-label="Key attributes">
-<li class="pf-c-label-group__list-item">
-<span class="pf-c-label pf-m-green">
-<span class="pf-c-label__content">
-<span class="pf-c-label__icon">
-<i class="fa-fw fas fa-globe" aria-hidden="true"></i>
-</span>
-Public
-</span>
-</span>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="pf-c-data-list__item-action">
-<div class="pf-l-stack pf-u-justify-content-center pf-u-mt-md-on-md">
-<div class="pf-l-stack__item">
-<div class="pf-c-dropdown">
-<button class="pf-c-dropdown__toggle pf-m-plain" id="expand-key-actions-button-319312" aria-expanded="true" type="button" aria-label="Actions">
-<i class="fas fa-ellipsis-v" aria-hidden="true"></i>
-</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</li>
-</ul>
+<ul aria-label="Key list" id="key-list" class="pf-c-data-list pf-m-grid-md"></ul>
 </section>
 </main>
 </div>
@@ -517,7 +306,7 @@ Public
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
 <button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reset props">
-<div class="pf-c-tooltip pf-m-top pf-x-c-tooltip" aria-role="tooltip">
+<div aria-role="tooltip" class="pf-c-tooltip pf-m-top pf-x-c-tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Reset props
@@ -528,7 +317,7 @@ Reset props
 </div>
 <div class="pf-c-code-block__actions-item">
 <button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reload props">
-<div aria-role="tooltip" class="pf-c-tooltip pf-m-left pf-x-c-tooltip">
+<div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Reload props
