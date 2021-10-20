@@ -10,6 +10,7 @@ const (
 
 type GPGKey struct {
 	ID       string
+	Label    string
 	FullName string
 	Email    string
 	Private  bool
@@ -346,5 +347,5 @@ func (c *EncryptAndSignModal) clear() {
 }
 
 func getKeySummary(key GPGKey) string {
-	return key.ID + " " + key.FullName + " <" + key.Email + ">"
+	return key.Label + " " + key.FullName + " <" + key.Email + ">"
 }

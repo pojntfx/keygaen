@@ -58,7 +58,7 @@ func (c *KeyList) Render() app.UI {
 																				e.Call("stopImmediatePropagation")
 																			}).
 																			Text(key.Email),
-																		app.Code().Text(" - "+key.ID),
+																		app.Code().Text(" - "+key.Label),
 																	),
 															),
 														app.If(
