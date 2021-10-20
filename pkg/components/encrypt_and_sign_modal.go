@@ -14,6 +14,7 @@ type GPGKey struct {
 	Email    string
 	Private  bool
 	Public   bool
+	Content  string
 }
 
 type EncryptAndSignModal struct {
