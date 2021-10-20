@@ -7,34 +7,6 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
-var demoKeys = []GPGKey{
-	{
-		ID:       "039292",
-		FullName: "Isegard Example",
-		Email:    "isegard@example.com",
-		Private:  true,
-	},
-	{
-		ID:       "838431",
-		FullName: "Fred Example",
-		Email:    "fred@example.com",
-		Private:  true,
-		Public:   true,
-	},
-	{
-		ID:       "123456",
-		FullName: "Alice Example",
-		Email:    "alice@example.com",
-		Public:   true,
-	},
-	{
-		ID:       "319312",
-		FullName: "Bob Example",
-		Email:    "bob@example.com",
-		Public:   true,
-	},
-}
-
 type Home struct {
 	app.Compo
 
@@ -74,9 +46,15 @@ type Home struct {
 
 	err       error
 	onRecover func()
+
+	keys []GPGKey
 }
 
 func (c *Home) Render() app.UI {
+	if c.keys == nil {
+		c.keys = []GPGKey{}
+	}
+
 	return app.Div().
 		Class("pf-c-page").
 		Body(
@@ -285,13 +263,13 @@ func (c *Home) Render() app.UI {
 						Class("pf-c-page__main-section pf-m-fill").
 						Body(
 							&KeyList{
-								Keys: demoKeys,
+								Keys: c.keys,
 
 								OnExport: func(keyID string) {
 									c.selectedKeyID = keyID
 									c.exportKeyModalOpen = !c.exportKeyModalOpen
 
-									for _, key := range demoKeys {
+									for _, key := range c.keys {
 										if key.ID == keyID {
 											if key.Public {
 												c.publicKeyID = key.ID
@@ -320,7 +298,7 @@ func (c *Home) Render() app.UI {
 				c.createKeyModalOpen,
 				&CreateKeyModal{
 					OnSubmit: func(fullName, email, password string) {
-						newKey, err := helper.GenerateKey(fullName, email, []byte(password), "x25519", 0)
+						key, err := helper.GenerateKey(fullName, email, []byte(password), "x25519", 0)
 						if err != nil {
 							c.createKeyModalOpen = false
 							c.panic(err, func() {
@@ -333,8 +311,14 @@ func (c *Home) Render() app.UI {
 						c.createKeyModalOpen = false
 						c.keySuccessfullyGeneratedModalOpen = true
 
-						// TODO: Add key to key list
-						log.Println(newKey)
+						c.keys = append(c.keys, GPGKey{
+							ID:       "319312", // TODO: Use SHA256 fingerprint instead
+							FullName: fullName,
+							Email:    email,
+							Private:  true,
+							Public:   true,
+							Content:  key,
+						})
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
@@ -360,7 +344,7 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.encryptAndSignModalOpen,
 				&EncryptAndSignModal{
-					Keys: demoKeys,
+					Keys: c.keys,
 
 					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature bool) {
 						c.publicKeyID = publicKeyID
@@ -380,7 +364,7 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.decryptAndVerifyModalOpen,
 				&DecryptAndVerifyModal{
-					Keys: demoKeys,
+					Keys: c.keys,
 
 					OnSubmit: func(file []byte, publicKeyID, privateKeyID, detachedSignature string) {
 						c.publicKeyID = publicKeyID
