@@ -7,18 +7,18 @@
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:46367/stories">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
+<meta content="http://127.0.0.1:43261/stories" property="og:url">
 <meta property="og:title" content="gridge">
-<meta content="Sign, verify, encrypt and decrypt data with GPG." property="og:description">
-<meta property="og:type" content="website">
+<meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
+<meta content="website" property="og:type">
 <meta property="og:image" content>
 <title>
 gridge
 </title>
-<link rel="icon" type="image/png" href="/gridge/web/default.png">
-<link rel="apple-touch-icon" href="/gridge/web/default.png">
-<link rel="manifest" href="/gridge/manifest.webmanifest">
+<link type="image/png" href="/gridge/web/default.png" rel="icon">
+<link href="/gridge/web/default.png" rel="apple-touch-icon">
+<link href="/gridge/manifest.webmanifest" rel="manifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
@@ -32,8 +32,8 @@ gridge
 </head>
 <body>
 <div>
-<aside id="app-wasm-loader" class="goapp-app-info">
-<img src="/gridge/web/default.png" id="app-wasm-loader-icon" class="goapp-logo goapp-spin">
+<aside class="goapp-app-info" id="app-wasm-loader">
+<img class="goapp-logo goapp-spin" src="/gridge/web/default.png" id="app-wasm-loader-icon">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
@@ -41,7 +41,7 @@ Sign, verify, encrypt and decrypt data with GPG.
 <div id="app-pre-render">
 <div class="pf-c-page">
 <header class="pf-c-page__header">
-<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#main">
+<a href="#main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
 Skip to content
 </a>
 <header class="pf-c-masthead">
@@ -52,7 +52,7 @@ Skip to content
 </span>
 <div class="pf-c-masthead__main">
 <a class="pf-c-masthead__brand" href="/">
-<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
+<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo.png">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -60,12 +60,12 @@ Stories
 </div>
 </header>
 </header>
-<div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
+<div aria-hidden="true" class="pf-c-page__sidebar pf-m-collapsed">
 <div class="pf-c-page__sidebar-body">
-<nav class="pf-c-nav" aria-label="Global">
+<nav aria-label="Global" class="pf-c-nav">
 <ul class="pf-c-nav__list">
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Confirmation%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Confirmation%2BModal">
 Confirmation Modal
 </a>
 </li>
@@ -85,7 +85,7 @@ Download or View Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Empty%2BState" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Empty%2BState">
 Empty State
 </a>
 </li>
@@ -100,12 +100,12 @@ Error Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Export%2BKey" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Export%2BKey">
 Export Key
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=File%2BUpload">
+<a href="?activeTitle=File%2BUpload" class="pf-c-nav__link">
 File Upload
 </a>
 </li>
@@ -115,17 +115,17 @@ Home
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Import%2BKey%2BModal">
+<a href="?activeTitle=Import%2BKey%2BModal" class="pf-c-nav__link">
 Import Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Key%2BList" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Key%2BList">
 Key List
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Modal">
+<a href="?activeTitle=Modal" class="pf-c-nav__link">
 Modal
 </a>
 </li>
@@ -165,7 +165,7 @@ Toolbar
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
+<a href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank">
 <i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
@@ -174,19 +174,19 @@ Home
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-overflow-scroll">
 <div class="pf-c-page__main-body">
 <div class="pf-c-page">
-<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#gridge-main">
+<a href="#gridge-main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
 Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
-<a href="#" class="pf-c-page__header-brand-link">
-<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
+<a class="pf-c-page__header-brand-link" href="#">
+<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo.png">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
+<a aria-label="Help" href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain">
 <i class="pf-icon pf-icon-help" aria-hidden="true"></i>
 </a>
 </div>
@@ -199,7 +199,7 @@ Skip to content
 <div class="pf-c-toolbar__content">
 <div class="pf-c-toolbar__content-section pf-m-nowrap pf-u-display-none-on-md">
 <div class="pf-c-toolbar__group">
-<button type="button" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
+<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
 <div class="pf-c-tooltip pf-m-right pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
@@ -224,7 +224,7 @@ Import key
 </div>
 <div class="pf-c-toolbar__item pf-m-pagination">
 <div class="pf-c-toolbar__group">
-<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
+<button type="button" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
 <div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
@@ -232,7 +232,7 @@ Encrypt/sign
 </div>
 </div>
 <span class="pf-c-button__icon">
-<i aria-hidden="true" class="fas fa-lock"></i>
+<i class="fas fa-lock" aria-hidden="true"></i>
 </span>
 </button>
 <button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
@@ -262,7 +262,7 @@ Decrypt/verify
 <div class="pf-c-toolbar__item">
 <button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
-<i aria-hidden="true" class="fas fa-file-import"></i>
+<i class="fas fa-file-import" aria-hidden="true"></i>
 </span>
  Import key
 </button>
@@ -293,7 +293,7 @@ Decrypt/verify
 </div>
 </section>
 <section class="pf-c-page__main-section pf-m-fill">
-<ul aria-label="Key list" id="key-list" class="pf-c-data-list pf-m-grid-md"></ul>
+<ul class="pf-c-data-list pf-m-grid-md" aria-label="Key list" id="key-list"></ul>
 </section>
 </main>
 </div>
@@ -305,8 +305,8 @@ Decrypt/verify
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reset props">
-<div aria-role="tooltip" class="pf-c-tooltip pf-m-top pf-x-c-tooltip">
+<button type="button" aria-label="Reset props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
+<div class="pf-c-tooltip pf-m-top pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Reset props

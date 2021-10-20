@@ -7,24 +7,24 @@
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
-<meta property="og:url" content="http://127.0.0.1:46367/">
-<meta content="gridge" property="og:title">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+<meta property="og:url" content="http://127.0.0.1:43261/">
+<meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
 <meta property="og:image" content>
 <title>
 gridge
 </title>
-<link rel="icon" type="image/png" href="/gridge/web/default.png">
+<link type="image/png" href="/gridge/web/default.png" rel="icon">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link type="text/css" rel="stylesheet" href="/gridge/app.css">
+<link href="/gridge/app.css" type="text/css" rel="stylesheet">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css" rel="stylesheet">
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css" rel="stylesheet">
-<link href="/gridge/web/index.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
+<link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -32,8 +32,8 @@ gridge
 </head>
 <body>
 <div>
-<aside class="goapp-app-info" id="app-wasm-loader">
-<img class="goapp-logo goapp-spin" src="/gridge/web/default.png" id="app-wasm-loader-icon">
+<aside id="app-wasm-loader" class="goapp-app-info">
+<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
@@ -45,8 +45,8 @@ Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
-<a href="#" class="pf-c-page__header-brand-link">
-<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
+<a class="pf-c-page__header-brand-link" href="#">
+<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
@@ -77,7 +77,7 @@ Create key
 </span>
 </button>
 <button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
-<div aria-role="tooltip" class="pf-c-tooltip pf-m-right pf-x-c-tooltip">
+<div class="pf-c-tooltip pf-m-right pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Import key
@@ -101,8 +101,8 @@ Encrypt/sign
 <i class="fas fa-lock" aria-hidden="true"></i>
 </span>
 </button>
-<button type="button" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
-<div aria-role="tooltip" class="pf-c-tooltip pf-m-left pf-x-c-tooltip">
+<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
+<div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Decrypt/verify
@@ -120,7 +120,7 @@ Decrypt/verify
 <div class="pf-c-toolbar__item ">
 <button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
-<i aria-hidden="true" class="fas fa-plus"></i>
+<i class="fas fa-plus" aria-hidden="true"></i>
 </span>
  Create key
 </button>
@@ -139,7 +139,7 @@ Decrypt/verify
 <div class="pf-c-toolbar__item ">
 <button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
-<i class="fas fa-lock" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-lock"></i>
 </span>
  Encrypt/sign
 </button>
@@ -147,7 +147,7 @@ Decrypt/verify
 <div class="pf-c-toolbar__item">
 <button class="pf-c-button pf-m-control" type="button">
 <span class="pf-c-button__icon pf-m-start">
-<i aria-hidden="true" class="fas fa-lock-open"></i>
+<i class="fas fa-lock-open" aria-hidden="true"></i>
 </span>
  Decrypt/verify
 </button>
@@ -159,7 +159,7 @@ Decrypt/verify
 </div>
 </section>
 <section class="pf-c-page__main-section pf-m-fill">
-<ul class="pf-c-data-list pf-m-grid-md" aria-label="Key list" id="key-list"></ul>
+<ul id="key-list" class="pf-c-data-list pf-m-grid-md" aria-label="Key list"></ul>
 </section>
 </main>
 </div>
