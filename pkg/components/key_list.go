@@ -92,7 +92,7 @@ func (c *KeyList) Render() app.UI {
 																															Class("fa-fw fas fa-globe").
 																															Aria("hidden", true),
 																													),
-																												app.Text("Public"),
+																												app.Text("Public key"),
 																											),
 																									),
 																							),
@@ -115,7 +115,7 @@ func (c *KeyList) Render() app.UI {
 																															Class("fa-fw fas fa-user-lock").
 																															Aria("hidden", true),
 																													),
-																												app.Text("Private"),
+																												app.Text("Private key"),
 																											),
 																									),
 																							),

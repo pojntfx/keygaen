@@ -73,6 +73,15 @@ func (c *Home) Render() app.UI {
 		}
 	}
 
+	selectedKeyLabel := ""
+	for _, candidate := range c.keys {
+		if candidate.ID == c.selectedKeyID {
+			selectedKeyLabel = candidate.Label
+
+			break
+		}
+	}
+
 	return app.Div().
 		Class("pf-c-page").
 		Body(
@@ -258,58 +267,73 @@ func (c *Home) Render() app.UI {
 				ID("gridge-main").
 				TabIndex(-1).
 				Body(
-					app.Section().
-						Class("pf-c-page__main-section pf-m-light pf-m-no-padding pf-u-px-sm-on-xl").
-						Body(
-							&Toolbar{
-								OnCreateKey: func() {
-									c.createKeyModalOpen = !c.createKeyModalOpen
-								},
-								OnImportKey: func() {
-									c.importKeyModal = !c.importKeyModal
-								},
+					app.If(
+						len(c.keys) != 0,
+						app.Section().
+							Class("pf-c-page__main-section pf-m-light pf-m-no-padding pf-u-px-sm-on-xl").
+							Body(
+								&Toolbar{
+									OnCreateKey: func() {
+										c.createKeyModalOpen = !c.createKeyModalOpen
+									},
+									OnImportKey: func() {
+										c.importKeyModal = !c.importKeyModal
+									},
 
-								OnEncryptAndSign: func() {
-									c.encryptAndSignModalOpen = !c.encryptAndSignModalOpen
+									OnEncryptAndSign: func() {
+										c.encryptAndSignModalOpen = !c.encryptAndSignModalOpen
+									},
+									OnDecryptAndVerify: func() {
+										c.decryptAndVerifyModalOpen = !c.decryptAndVerifyModalOpen
+									},
 								},
-								OnDecryptAndVerify: func() {
-									c.decryptAndVerifyModalOpen = !c.decryptAndVerifyModalOpen
-								},
-							},
-						),
+							),
+					),
 					app.Section().
 						Class("pf-c-page__main-section pf-m-fill").
 						Body(
-							&KeyList{
-								Keys: c.keys,
+							app.If(
+								len(c.keys) == 0,
+								&EmptyState{
+									OnCreateKey: func() {
+										c.createKeyModalOpen = !c.createKeyModalOpen
+									},
+									OnImportKey: func() {
+										c.importKeyModal = !c.importKeyModal
+									},
+								},
+							).Else(
+								&KeyList{
+									Keys: c.keys,
 
-								OnExport: func(keyID string) {
-									c.selectedKeyID = keyID
-									c.exportKeyModalOpen = !c.exportKeyModalOpen
+									OnExport: func(keyID string) {
+										c.selectedKeyID = keyID
+										c.exportKeyModalOpen = !c.exportKeyModalOpen
 
-									for _, key := range c.keys {
-										if key.ID == keyID {
-											if key.Public {
-												c.publicKeyID = key.ID
-											} else {
-												c.publicKeyID = ""
+										for _, key := range c.keys {
+											if key.ID == keyID {
+												if key.Public {
+													c.publicKeyID = key.ID
+												} else {
+													c.publicKeyID = ""
+												}
+
+												if key.Private {
+													c.privateKeyID = key.ID
+												} else {
+													c.privateKeyID = ""
+												}
+
+												break
 											}
-
-											if key.Private {
-												c.privateKeyID = key.ID
-											} else {
-												c.privateKeyID = ""
-											}
-
-											break
 										}
-									}
+									},
+									OnDelete: func(keyID string) {
+										c.selectedKeyID = keyID
+										c.deleteKeyConfirmModalOpen = !c.deleteKeyConfirmModalOpen
+									},
 								},
-								OnDelete: func(keyID string) {
-									c.selectedKeyID = keyID
-									c.deleteKeyConfirmModalOpen = !c.deleteKeyConfirmModalOpen
-								},
-							},
+							),
 						),
 				),
 			app.If(
@@ -576,7 +600,7 @@ func (c *Home) Render() app.UI {
 					Class: "pf-m-danger",
 					Body:  "After deletion, you will not be able to restore the key.",
 
-					ActionLabel: `Yes, delete key "` + c.selectedKeyID + `"`,
+					ActionLabel: `Yes, delete key "` + selectedKeyLabel + `"`,
 					ActionClass: "pf-m-danger",
 
 					CancelLabel: "Cancel",
