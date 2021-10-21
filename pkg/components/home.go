@@ -3,6 +3,7 @@ package components
 import (
 	"log"
 
+	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/ProtonMail/gopenpgp/v2/helper"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
@@ -55,28 +56,51 @@ func (c *Home) Render() app.UI {
 		c.keys = []GPGKey{}
 	}
 
-	privateKeyLabel := ""
+	privateKey := GPGKey{}
 	for _, candidate := range c.keys {
 		if candidate.ID == c.privateKeyID {
-			privateKeyLabel = candidate.Label
+			privateKey = candidate
 
 			break
 		}
 	}
 
-	publicKeyLabel := ""
+	publicKey := GPGKey{}
+	publicKeyExport := []byte{}
+	publicKeyExportArmored := ""
 	for _, candidate := range c.keys {
 		if candidate.ID == c.publicKeyID {
-			publicKeyLabel = candidate.Label
+			publicKey = candidate
+
+			parsedKey, err := crypto.NewKeyFromArmored(publicKey.Content)
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
+
+			publicKeyExport, err = parsedKey.GetPublicKey()
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
+
+			publicKeyExportArmored, err = parsedKey.GetArmoredPublicKey()
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
 
 			break
 		}
 	}
 
-	selectedKeyLabel := ""
+	selectedKey := GPGKey{}
 	for _, candidate := range c.keys {
 		if candidate.ID == c.selectedKeyID {
-			selectedKeyLabel = candidate.Label
+			selectedKey = candidate
 
 			break
 		}
@@ -496,9 +520,9 @@ func (c *Home) Render() app.UI {
 					PublicKey: c.publicKeyID != "",
 					OnDownloadPublicKey: func(armor bool) {
 						if armor {
-							c.download([]byte("asdfirj230sd"), publicKeyLabel+".pub", "application/octet-stream")
+							c.download([]byte(publicKeyExportArmored), publicKey.Label+".pub", "text/plain")
 						} else {
-							c.download([]byte("asdfirj230sd"), publicKeyLabel+".pub", "text/plain")
+							c.download(publicKeyExport, publicKey.Label+".pub", "application/octet-stream")
 						}
 					},
 					OnViewPublicKey: func() {
@@ -510,9 +534,9 @@ func (c *Home) Render() app.UI {
 					PrivateKey: c.privateKeyID != "",
 					OnDownloadPrivateKey: func(armor bool) {
 						if armor {
-							c.download([]byte("i34jisdhjs"), privateKeyLabel, "application/octet-stream")
+							c.download([]byte("i34jisdhjs"), privateKey.Label, "text/plain")
 						} else {
-							c.download([]byte("i34jisdhjs"), privateKeyLabel, "text/plain")
+							c.download([]byte("i34jisdhjs"), privateKey.Label, "application/octet-stream")
 						}
 					},
 					OnViewPrivateKey: func() {
@@ -534,21 +558,21 @@ func (c *Home) Render() app.UI {
 					tabs := []TextOutputModalTab{
 						{
 							Language: "text/plain",
-							Title:    publicKeyLabel + ".pub",
-							Body:     "asdfirj230sd",
+							Title:    publicKey.Label + ".pub",
+							Body:     publicKeyExportArmored,
 						},
 					}
-					title := `View Public Key "` + publicKeyLabel + `"`
+					title := `View Public Key "` + publicKey.Label + `"`
 
 					if c.viewPrivateKey {
 						tabs = []TextOutputModalTab{
 							{
 								Language: "text/plain",
-								Title:    privateKeyLabel,
+								Title:    privateKey.Label,
 								Body:     "i34jisdhjs",
 							},
 						}
-						title = `View Private Key "` + privateKeyLabel + `"`
+						title = `View Private Key "` + privateKey.Label + `"`
 					}
 
 					return &TextOutputModal{
@@ -600,7 +624,7 @@ func (c *Home) Render() app.UI {
 					Class: "pf-m-danger",
 					Body:  "After deletion, you will not be able to restore the key.",
 
-					ActionLabel: `Yes, delete key "` + selectedKeyLabel + `"`,
+					ActionLabel: `Yes, delete key "` + selectedKey.Label + `"`,
 					ActionClass: "pf-m-danger",
 
 					CancelLabel: "Cancel",
