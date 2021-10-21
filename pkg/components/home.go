@@ -57,9 +57,32 @@ func (c *Home) Render() app.UI {
 	}
 
 	privateKey := GPGKey{}
+	privateKeyExport := []byte{}
+	privateKeyExportArmored := ""
 	for _, candidate := range c.keys {
 		if candidate.ID == c.privateKeyID {
 			privateKey = candidate
+
+			parsedKey, err := crypto.NewKeyFromArmored(privateKey.Content)
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
+
+			privateKeyExport, err = parsedKey.Serialize()
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
+
+			privateKeyExportArmored, err = parsedKey.Armor()
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
 
 			break
 		}
@@ -534,9 +557,9 @@ func (c *Home) Render() app.UI {
 					PrivateKey: c.privateKeyID != "",
 					OnDownloadPrivateKey: func(armor bool) {
 						if armor {
-							c.download([]byte("i34jisdhjs"), privateKey.Label, "text/plain")
+							c.download([]byte(privateKeyExportArmored), privateKey.Label, "text/plain")
 						} else {
-							c.download([]byte("i34jisdhjs"), privateKey.Label, "application/octet-stream")
+							c.download(privateKeyExport, privateKey.Label, "application/octet-stream")
 						}
 					},
 					OnViewPrivateKey: func() {
@@ -569,7 +592,7 @@ func (c *Home) Render() app.UI {
 							{
 								Language: "text/plain",
 								Title:    privateKey.Label,
-								Body:     "i34jisdhjs",
+								Body:     privateKeyExportArmored,
 							},
 						}
 						title = `View Private Key "` + privateKey.Label + `"`
