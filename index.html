@@ -8,7 +8,7 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:43261/">
+<meta property="og:url" content="http://127.0.0.1:45555/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -16,11 +16,11 @@
 <title>
 gridge
 </title>
-<link type="image/png" href="/gridge/web/default.png" rel="icon">
+<link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link href="/gridge/app.css" type="text/css" rel="stylesheet">
-<script defer="true" src="/gridge/wasm_exec.js"></script>
+<link type="text/css" rel="stylesheet" href="/gridge/app.css">
+<script src="/gridge/wasm_exec.js" defer="true"></script>
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
@@ -45,14 +45,14 @@ Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
-<a class="pf-c-page__header-brand-link" href="#">
-<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
+<a href="#" class="pf-c-page__header-brand-link">
+<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
+<a class="pf-c-button pf-m-plain" aria-label="Help" href="https://github.com/pojntfx/gridge" target="_blank">
 <i class="pf-icon pf-icon-help" aria-hidden="true"></i>
 </a>
 </div>
@@ -60,106 +60,26 @@ Skip to content
 </div>
 </header>
 <main class="pf-c-page__main" id="gridge-main" tabindex="-1">
-<section class="pf-c-page__main-section pf-m-light pf-m-no-padding pf-u-px-sm-on-xl">
-<div class="pf-c-toolbar">
-<div class="pf-c-toolbar__content">
-<div class="pf-c-toolbar__content-section pf-m-nowrap pf-u-display-none-on-md">
-<div class="pf-c-toolbar__group">
-<button type="button" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
-<div class="pf-c-tooltip pf-m-right pf-x-c-tooltip" aria-role="tooltip">
-<div class="pf-c-tooltip__arrow"></div>
-<div class="pf-c-tooltip__content">
-Create key
-</div>
-</div>
-<span class="pf-c-button__icon">
-<i class="fas fa-plus" aria-hidden="true"></i>
-</span>
-</button>
-<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
-<div class="pf-c-tooltip pf-m-right pf-x-c-tooltip" aria-role="tooltip">
-<div class="pf-c-tooltip__arrow"></div>
-<div class="pf-c-tooltip__content">
-Import key
-</div>
-</div>
-<span class="pf-c-button__icon">
-<i aria-hidden="true" class="fas fa-file-import"></i>
-</span>
-</button>
-</div>
-<div class="pf-c-toolbar__item pf-m-pagination">
-<div class="pf-c-toolbar__group">
-<button type="button" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
-<div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
-<div class="pf-c-tooltip__arrow"></div>
-<div class="pf-c-tooltip__content">
-Encrypt/sign
-</div>
-</div>
-<span class="pf-c-button__icon">
-<i class="fas fa-lock" aria-hidden="true"></i>
-</span>
-</button>
-<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
-<div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
-<div class="pf-c-tooltip__arrow"></div>
-<div class="pf-c-tooltip__content">
-Decrypt/verify
-</div>
-</div>
-<span class="pf-c-button__icon">
-<i class="fas fa-lock-open" aria-hidden="true"></i>
-</span>
-</button>
-</div>
-</div>
-</div>
-<div class="pf-c-toolbar__content-section pf-m-nowrap pf-u-display-none pf-u-display-flex-on-md">
-<div class="pf-c-toolbar__group">
-<div class="pf-c-toolbar__item ">
-<button class="pf-c-button pf-m-control" type="button">
-<span class="pf-c-button__icon pf-m-start">
-<i class="fas fa-plus" aria-hidden="true"></i>
-</span>
- Create key
-</button>
-</div>
-<div class="pf-c-toolbar__item">
-<button class="pf-c-button pf-m-control" type="button">
-<span class="pf-c-button__icon pf-m-start">
-<i class="fas fa-file-import" aria-hidden="true"></i>
-</span>
- Import key
-</button>
-</div>
-</div>
-<div class="pf-c-toolbar__item pf-m-pagination">
-<div class="pf-c-toolbar__group">
-<div class="pf-c-toolbar__item ">
-<button class="pf-c-button pf-m-control" type="button">
-<span class="pf-c-button__icon pf-m-start">
-<i aria-hidden="true" class="fas fa-lock"></i>
-</span>
- Encrypt/sign
-</button>
-</div>
-<div class="pf-c-toolbar__item">
-<button class="pf-c-button pf-m-control" type="button">
-<span class="pf-c-button__icon pf-m-start">
-<i class="fas fa-lock-open" aria-hidden="true"></i>
-</span>
- Decrypt/verify
-</button>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
 <section class="pf-c-page__main-section pf-m-fill">
-<ul id="key-list" class="pf-c-data-list pf-m-grid-md" aria-label="Key list"></ul>
+<div class="pf-c-empty-state">
+<div class="pf-c-empty-state__content">
+<i class="fas fa-folder-open pf-c-empty-state__icon" aria-hidden="true"></i>
+<h1 class="pf-c-title pf-m-lg">
+No keys yet
+</h1>
+<div class="pf-c-empty-state__body">
+To get started, please create or import a key.
+</div>
+<button class="pf-c-button pf-m-primary" type="button">
+Create key
+</button>
+<div class="pf-c-empty-state__secondary">
+<button class="pf-c-button pf-m-link" type="button">
+Or import key
+</button>
+</div>
+</div>
+</div>
 </section>
 </main>
 </div>
