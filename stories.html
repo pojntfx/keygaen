@@ -8,7 +8,7 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:42483/stories">
+<meta property="og:url" content="http://127.0.0.1:35449/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -19,11 +19,11 @@ gridge
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link type="text/css" rel="stylesheet" href="/gridge/app.css">
+<link href="/gridge/app.css" type="text/css" rel="stylesheet">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css">
 <link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
@@ -60,12 +60,12 @@ Stories
 </div>
 </header>
 </header>
-<div aria-hidden="true" class="pf-c-page__sidebar pf-m-collapsed">
+<div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
 <div class="pf-c-page__sidebar-body">
-<nav aria-label="Global" class="pf-c-nav">
+<nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Confirmation%2BModal">
+<a href="?activeTitle=Confirmation%2BModal" class="pf-c-nav__link">
 Confirmation Modal
 </a>
 </li>
@@ -90,7 +90,7 @@ Empty State
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Encrypt%252FSign%2BModal">
+<a href="?activeTitle=Encrypt%252FSign%2BModal" class="pf-c-nav__link">
 Encrypt/Sign Modal
 </a>
 </li>
@@ -100,7 +100,7 @@ Error Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Export%2BKey">
+<a href="?activeTitle=Export%2BKey" class="pf-c-nav__link">
 Export Key
 </a>
 </li>
@@ -110,12 +110,12 @@ File Upload
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link pf-m-current" href="?activeTitle=Home">
+<a href="?activeTitle=Home" class="pf-c-nav__link pf-m-current">
 Home
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Import%2BKey%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Import%2BKey%2BModal">
 Import Key Modal
 </a>
 </li>
@@ -165,7 +165,7 @@ Toolbar
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
+<a aria-label="Fullscreen" target="_blank" href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm">
 <i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
@@ -197,7 +197,7 @@ Skip to content
 <section class="pf-c-page__main-section pf-m-fill">
 <div class="pf-c-empty-state">
 <div class="pf-c-empty-state__content">
-<i class="fas fa-folder-open pf-c-empty-state__icon" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-folder-open pf-c-empty-state__icon"></i>
 <h1 class="pf-c-title pf-m-lg">
 No keys yet
 </h1>
@@ -232,18 +232,18 @@ Or import key
 Reset props
 </div>
 </div>
-<i aria-hidden="true" class="fas fa-eraser"></i>
+<i class="fas fa-eraser" aria-hidden="true"></i>
 </button>
 </div>
 <div class="pf-c-code-block__actions-item">
-<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reload props">
+<button type="button" aria-label="Reload props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
 <div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Reload props
 </div>
 </div>
-<i aria-hidden="true" class="fas fa-sync"></i>
+<i class="fas fa-sync" aria-hidden="true"></i>
 </button>
 </div>
 </div>
