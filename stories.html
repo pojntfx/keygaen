@@ -8,22 +8,22 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:45555/stories">
-<meta content="gridge" property="og:title">
+<meta property="og:url" content="http://127.0.0.1:42483/stories">
+<meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
-<meta content="website" property="og:type">
+<meta property="og:type" content="website">
 <meta property="og:image" content>
 <title>
 gridge
 </title>
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
-<link href="/gridge/manifest.webmanifest" rel="manifest">
+<link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
-<script src="/gridge/wasm_exec.js" defer="true"></script>
+<script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
-<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css">
+<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
@@ -32,7 +32,7 @@ gridge
 </head>
 <body>
 <div>
-<aside class="goapp-app-info" id="app-wasm-loader">
+<aside id="app-wasm-loader" class="goapp-app-info">
 <img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
@@ -60,9 +60,9 @@ Stories
 </div>
 </header>
 </header>
-<div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
+<div aria-hidden="true" class="pf-c-page__sidebar pf-m-collapsed">
 <div class="pf-c-page__sidebar-body">
-<nav class="pf-c-nav" aria-label="Global">
+<nav aria-label="Global" class="pf-c-nav">
 <ul class="pf-c-nav__list">
 <li class="pf-c-nav__item">
 <a class="pf-c-nav__link" href="?activeTitle=Confirmation%2BModal">
@@ -95,7 +95,7 @@ Encrypt/Sign Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Error%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Error%2BModal">
 Error Modal
 </a>
 </li>
@@ -115,12 +115,12 @@ Home
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Import%2BKey%2BModal">
+<a href="?activeTitle=Import%2BKey%2BModal" class="pf-c-nav__link">
 Import Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Key%2BList" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Key%2BList">
 Key List
 </a>
 </li>
@@ -140,7 +140,7 @@ Password Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Success%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Success%2BModal">
 Success Modal
 </a>
 </li>
@@ -150,7 +150,7 @@ Text Output Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Toolbar" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Toolbar">
 Toolbar
 </a>
 </li>
@@ -179,7 +179,7 @@ Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
-<a href="#" class="pf-c-page__header-brand-link">
+<a class="pf-c-page__header-brand-link" href="#">
 <img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 </div>
@@ -208,7 +208,7 @@ To get started, please create or import a key.
 Create key
 </button>
 <div class="pf-c-empty-state__secondary">
-<button type="button" class="pf-c-button pf-m-link">
+<button class="pf-c-button pf-m-link" type="button">
 Or import key
 </button>
 </div>
@@ -225,7 +225,7 @@ Or import key
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button type="button" aria-label="Reset props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
+<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reset props">
 <div class="pf-c-tooltip pf-m-top pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
@@ -236,14 +236,14 @@ Reset props
 </button>
 </div>
 <div class="pf-c-code-block__actions-item">
-<button aria-label="Reload props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
+<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reload props">
 <div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Reload props
 </div>
 </div>
-<i class="fas fa-sync" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-sync"></i>
 </button>
 </div>
 </div>
