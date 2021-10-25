@@ -7,8 +7,8 @@
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:35449/stories">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
+<meta property="og:url" content="http://127.0.0.1:39081/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -16,14 +16,14 @@
 <title>
 gridge
 </title>
-<link rel="icon" type="image/png" href="/gridge/web/default.png">
+<link href="/gridge/web/default.png" rel="icon" type="image/png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link href="/gridge/app.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
-<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
 <link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
@@ -33,7 +33,7 @@ gridge
 <body>
 <div>
 <aside id="app-wasm-loader" class="goapp-app-info">
-<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
+<img src="/gridge/web/default.png" id="app-wasm-loader-icon" class="goapp-logo goapp-spin">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
@@ -47,7 +47,7 @@ Skip to content
 <header class="pf-c-masthead">
 <span class="pf-c-masthead__toggle">
 <button class="pf-c-button pf-m-plain" type="button" aria-label="Global navigation">
-<i class="fas fa-bars" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-bars"></i>
 </button>
 </span>
 <div class="pf-c-masthead__main">
@@ -65,7 +65,7 @@ Stories
 <nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Confirmation%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Confirmation%2BModal">
 Confirmation Modal
 </a>
 </li>
@@ -75,7 +75,7 @@ Create Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Decrypt%252FVerify%2BModal">
+<a href="?activeTitle=Decrypt%252FVerify%2BModal" class="pf-c-nav__link">
 Decrypt/Verify Modal
 </a>
 </li>
@@ -90,17 +90,17 @@ Empty State
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Encrypt%252FSign%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Encrypt%252FSign%2BModal">
 Encrypt/Sign Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Error%2BModal">
+<a href="?activeTitle=Error%2BModal" class="pf-c-nav__link">
 Error Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Export%2BKey" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Export%2BKey">
 Export Key
 </a>
 </li>
@@ -110,7 +110,7 @@ File Upload
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Home" class="pf-c-nav__link pf-m-current">
+<a class="pf-c-nav__link pf-m-current" href="?activeTitle=Home">
 Home
 </a>
 </li>
@@ -145,7 +145,7 @@ Success Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Text%2BOutput%2BModal">
+<a href="?activeTitle=Text%2BOutput%2BModal" class="pf-c-nav__link">
 Text Output Modal
 </a>
 </li>
@@ -158,14 +158,14 @@ Toolbar
 </nav>
 </div>
 </div>
-<main id="main" class="pf-c-page__main" tabindex="-1">
+<main tabindex="-1" id="main" class="pf-c-page__main">
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-light pf-m-shadow-bottom">
 <div class="pf-c-page__main-body">
 <div class="pf-c-content pf-u-display-flex pf-u-justify-content-space-between">
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a aria-label="Fullscreen" target="_blank" href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm">
+<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
 <i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
@@ -186,7 +186,7 @@ Skip to content
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
+<a target="_blank" class="pf-c-button pf-m-plain" aria-label="Help" href="https://github.com/pojntfx/gridge">
 <i class="pf-icon pf-icon-help" aria-hidden="true"></i>
 </a>
 </div>
@@ -197,7 +197,7 @@ Skip to content
 <section class="pf-c-page__main-section pf-m-fill">
 <div class="pf-c-empty-state">
 <div class="pf-c-empty-state__content">
-<i aria-hidden="true" class="fas fa-folder-open pf-c-empty-state__icon"></i>
+<i class="fas fa-folder-open pf-c-empty-state__icon" aria-hidden="true"></i>
 <h1 class="pf-c-title pf-m-lg">
 No keys yet
 </h1>
@@ -232,11 +232,11 @@ Or import key
 Reset props
 </div>
 </div>
-<i class="fas fa-eraser" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-eraser"></i>
 </button>
 </div>
 <div class="pf-c-code-block__actions-item">
-<button type="button" aria-label="Reload props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
+<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reload props">
 <div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
