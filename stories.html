@@ -7,10 +7,10 @@
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:41627/stories">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
+<meta property="og:url" content="http://127.0.0.1:44605/stories">
 <meta property="og:title" content="gridge">
-<meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
+<meta content="Sign, verify, encrypt and decrypt data with GPG." property="og:description">
 <meta property="og:type" content="website">
 <meta property="og:image" content>
 <title>
@@ -19,12 +19,12 @@ gridge
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link href="/gridge/app.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
-<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
-<link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
+<link rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css">
+<link href="/gridge/web/index.css" type="text/css" rel="stylesheet">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -33,8 +33,8 @@ gridge
 <body>
 <div>
 <aside id="app-wasm-loader" class="goapp-app-info">
-<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
-<p id="app-wasm-loader-label" class="goapp-label">
+<img class="goapp-logo goapp-spin" src="/gridge/web/default.png" id="app-wasm-loader-icon">
+<p class="goapp-label" id="app-wasm-loader-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
 </aside>
@@ -52,7 +52,7 @@ Skip to content
 </span>
 <div class="pf-c-masthead__main">
 <a class="pf-c-masthead__brand" href="/">
-<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
+<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -75,7 +75,7 @@ Create Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Decrypt%252FVerify%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Decrypt%252FVerify%2BModal">
 Decrypt/Verify Modal
 </a>
 </li>
@@ -130,7 +130,7 @@ Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Navbar">
+<a href="?activeTitle=Navbar" class="pf-c-nav__link">
 Navbar
 </a>
 </li>
@@ -150,7 +150,7 @@ Text Output Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Toolbar">
+<a href="?activeTitle=Toolbar" class="pf-c-nav__link">
 Toolbar
 </a>
 </li>
@@ -165,8 +165,8 @@ Toolbar
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank">
-<i aria-hidden="true" class="fas fa-expand-arrows-alt"></i>
+<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
+<i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
 </div>
@@ -174,26 +174,26 @@ Home
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-overflow-scroll">
 <div class="pf-c-page__main-body">
 <div class="pf-c-page">
-<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#gridge-main">
+<a href="#gridge-main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
 Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
 <a class="pf-c-page__header-brand-link" href="#">
-<img class="pf-c-brand" src="/gridge/web/logo-light.png" alt="Logo">
+<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo-light.png">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a aria-label="Help" href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain">
+<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
 <i class="pf-icon pf-icon-help" aria-hidden="true"></i>
 </a>
 </div>
 </div>
 </div>
 </header>
-<main id="gridge-main" tabindex="-1" class="pf-c-page__main">
+<main class="pf-c-page__main" id="gridge-main" tabindex="-1">
 <section class="pf-c-page__main-section pf-m-fill">
 <div class="pf-c-empty-state">
 <div class="pf-c-empty-state__content">
@@ -225,14 +225,14 @@ Or import key
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reset props">
+<button aria-label="Reset props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
 <div class="pf-c-tooltip pf-m-top pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
 Reset props
 </div>
 </div>
-<i aria-hidden="true" class="fas fa-eraser"></i>
+<i class="fas fa-eraser" aria-hidden="true"></i>
 </button>
 </div>
 <div class="pf-c-code-block__actions-item">
