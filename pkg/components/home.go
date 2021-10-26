@@ -475,43 +475,46 @@ func (c *Home) Render() app.UI {
 							return
 						}
 
-						olocked, err := parsedKey.IsLocked()
-						if err != nil {
-							c.panic(err, func() {})
+						go func() {
+							// We might have to unlock a private key first
+							if parsedKey.IsPrivate() {
+								locked, err := parsedKey.IsLocked()
+								if err != nil {
+									c.panic(err, func() {})
 
-							return
-						}
+									return
+								}
 
-						go func(locked bool) {
-							if locked {
-								c.keyImportPasswordModalOpen = true
-
-								c.Update()
-
-								for {
-									password := <-c.keyPasswordChan
-
-									// Stop import if no password has been entered
-									if password == "" {
-										c.keyImportPasswordModalOpen = false
-
-										return
-									}
-
-									newParsedKey, err := parsedKey.Unlock([]byte(password))
-									if err != nil {
-										c.handleWrongPassword(err)
-
-										continue
-									}
-
-									parsedKey = newParsedKey
-									c.keyImportPasswordModalOpen = false
-									c.clearWrongPassword()
+								if locked {
+									c.keyImportPasswordModalOpen = true
 
 									c.Update()
 
-									break
+									for {
+										password := <-c.keyPasswordChan
+
+										// Stop import if no password has been entered
+										if password == "" {
+											c.keyImportPasswordModalOpen = false
+
+											return
+										}
+
+										newParsedKey, err := parsedKey.Unlock([]byte(password))
+										if err != nil {
+											c.handleWrongPassword(err)
+
+											continue
+										}
+
+										parsedKey = newParsedKey
+										c.keyImportPasswordModalOpen = false
+										c.clearWrongPassword()
+
+										c.Update()
+
+										break
+									}
 								}
 							}
 
@@ -545,17 +548,26 @@ func (c *Home) Render() app.UI {
 								return
 							}
 
+							newKeys := []GPGKey{}
 							for _, candidate := range c.keys {
 								if candidate.ID == fingerprints[0] {
-									c.keyDuplicateModalOpen = true
+									// Replace the key if the existing key is a public key and the imported key is a private key
+									if !candidate.Private && parsedKey.IsPrivate() {
+										continue
+									} else {
+										// Don't add the duplicate key
+										c.keyDuplicateModalOpen = true
 
-									c.Update()
+										c.Update()
 
-									return
+										return
+									}
 								}
+
+								newKeys = append(newKeys, candidate)
 							}
 
-							c.keys = append(c.keys, GPGKey{
+							newKeys = append(newKeys, GPGKey{
 								ID:       fingerprints[0],       // Since we don't generate subkeys, we'll only have one fingerprint
 								Label:    fingerprints[0][0:10], // We can safely assume that the fingerprint is at least 10 chars long
 								FullName: id.Name,
@@ -564,11 +576,12 @@ func (c *Home) Render() app.UI {
 								Public:   true,
 								Content:  key,
 							})
+							c.keys = newKeys
 
 							c.keySuccessfullyImportedModalOpen = true
 
 							c.Update()
-						}(olocked)
+						}()
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
