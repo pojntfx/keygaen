@@ -84,7 +84,7 @@ func (c *Index) Render() app.UI {
 			"Decrypt/Verify Modal":   &DecryptAndVerifyModalStory{},
 			"File Upload":            &FileUploadStory{},
 			"Password Modal":         &PasswordModalStory{},
-			"Success Modal":          &SuccessModalStory{},
+			"Single Action Modal":    &SingleActionModalStory{},
 			"Modal":                  &ModalStory{},
 			"Export Key":             &ExportKeyModalStory{},
 			"Confirmation Modal":     &ConfirmationModalStory{},

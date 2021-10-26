@@ -4,7 +4,7 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
-type SuccessModal struct {
+type SingleActionModal struct {
 	app.Compo
 
 	ID          string
@@ -18,7 +18,7 @@ type SuccessModal struct {
 	OnAction func()
 }
 
-func (c *SuccessModal) Render() app.UI {
+func (c *SingleActionModal) Render() app.UI {
 	return &Modal{
 		ID:           c.ID,
 		Icon:         c.Icon,
