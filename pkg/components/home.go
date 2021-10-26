@@ -1,8 +1,10 @@
 package components
 
 import (
+	"errors"
 	"log"
 
+	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/ProtonMail/gopenpgp/v2/helper"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
@@ -49,11 +51,17 @@ type Home struct {
 	onRecover func()
 
 	keys []GPGKey
+
+	keyPasswordChan chan string
 }
 
 func (c *Home) Render() app.UI {
 	if c.keys == nil {
 		c.keys = []GPGKey{}
+	}
+
+	if c.keyPasswordChan == nil {
+		c.keyPasswordChan = make(chan string)
 	}
 
 	privateKey := GPGKey{}
@@ -165,11 +173,12 @@ func (c *Home) Render() app.UI {
 					Title: "Enter Key Password",
 					OnSubmit: func(password string) {
 						c.keyImportPasswordModalOpen = false
-						c.keySuccessfullyImportedModalOpen = true
+						c.keyPasswordChan <- password
 					},
 					OnCancel: func() {
 						c.confirmModalClose = func() {
 							c.keyImportPasswordModalOpen = false
+							c.keyPasswordChan <- ""
 						}
 						c.confirmCloseModalOpen = true
 
@@ -432,7 +441,94 @@ func (c *Home) Render() app.UI {
 				&ImportKeyModal{
 					OnSubmit: func(key string) {
 						c.importKeyModal = false
-						c.keyImportPasswordModalOpen = true
+
+						parsedKey, err := crypto.NewKeyFromArmored(key)
+						if err != nil {
+							c.panic(err, func() {})
+
+							return
+						}
+
+						olocked, err := parsedKey.IsLocked()
+						if err != nil {
+							c.panic(err, func() {})
+
+							return
+						}
+
+						go func(locked bool) {
+							if locked {
+								c.keyImportPasswordModalOpen = true
+
+								c.Update()
+
+								for {
+									password := <-c.keyPasswordChan
+
+									// Stop import if no password has been entered
+									if password == "" {
+										return
+									}
+
+									newParsedKey, err := parsedKey.Unlock([]byte(password))
+									if err != nil {
+										c.panic(err, func() {
+											c.keyImportPasswordModalOpen = true
+										})
+
+										continue
+									}
+
+									parsedKey = newParsedKey
+
+									break
+								}
+							}
+
+							parsedPublicKey, err := parsedKey.GetArmoredPublicKey()
+							if err != nil {
+								c.panic(err, func() {})
+
+								return
+							}
+
+							fingerprints, err := helper.GetSHA256Fingerprints(parsedPublicKey)
+							if err != nil {
+								c.createKeyModalOpen = false
+								c.panic(err, func() {
+									c.createKeyModalOpen = true
+								})
+
+								return
+							}
+
+							var id *openpgp.Identity
+							for _, candidate := range parsedKey.GetEntity().Identities {
+								id = candidate
+
+								break
+							}
+
+							if id == nil {
+								c.panic(errors.New("no identity found in key"), func() {})
+
+								return
+							}
+
+							c.keys = append(c.keys, GPGKey{
+								ID:       fingerprints[0],       // Since we don't generate subkeys, we'll only have one fingerprint
+								Label:    fingerprints[0][0:10], // We can safely assume that the fingerprint is at least 10 chars long
+								FullName: id.Name,
+								Email:    id.UserId.Email,
+								Private:  parsedKey.IsPrivate(),
+								Public:   true,
+								Content:  key,
+							})
+
+							c.keySuccessfullyImportedModalOpen = true
+
+							c.Update()
+						}(olocked)
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
@@ -726,6 +822,8 @@ func (c *Home) panic(err error, onRecover func()) {
 
 	c.onRecover = onRecover
 	c.err = err
+
+	c.Update()
 }
 
 func (c *Home) recover() {
