@@ -7,9 +7,11 @@ import (
 type PasswordModal struct {
 	app.Compo
 
-	Title    string
-	OnSubmit func(password string)
-	OnCancel func()
+	Title              string
+	WrongPassword      bool
+	ClearWrongPassword func()
+	OnSubmit           func(password string)
+	OnCancel           func()
 
 	password string
 }
@@ -47,11 +49,33 @@ func (c *PasswordModal) Render() app.UI {
 											Type("password").
 											Placeholder("Password").
 											Aria("label", "Password").
+											Aria("invalid", c.WrongPassword).
+											Aria("describedby", func() string {
+												if c.WrongPassword {
+													return "password-helper"
+												}
+
+												return ""
+											}).
 											OnInput(func(ctx app.Context, e app.Event) {
 												c.password = ctx.JSSrc().Get("value").String()
+
+												if c.ClearWrongPassword != nil {
+													c.ClearWrongPassword()
+												}
 											}).
 											Value(c.password),
 									},
+									app.If(
+										c.WrongPassword,
+										app.P().
+											Class("pf-c-form__helper-text pf-m-error").
+											ID("password-helper").
+											Aria("live", "polite").
+											Body(
+												app.Text("The password is incorrect. Please try again."),
+											),
+									),
 								),
 						),
 				),

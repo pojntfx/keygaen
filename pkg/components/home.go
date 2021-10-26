@@ -53,6 +53,8 @@ type Home struct {
 	keys []GPGKey
 
 	keyPasswordChan chan string
+
+	wrongPassword bool
 }
 
 func (c *Home) Render() app.UI {
@@ -170,14 +172,16 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.keyImportPasswordModalOpen,
 				&PasswordModal{
-					Title: "Enter Key Password",
+					Title:         "Enter Key Password",
+					WrongPassword: c.wrongPassword,
+					ClearWrongPassword: func() {
+						c.wrongPassword = false
+					},
 					OnSubmit: func(password string) {
-						c.keyImportPasswordModalOpen = false
 						c.keyPasswordChan <- password
 					},
 					OnCancel: func() {
 						c.confirmModalClose = func() {
-							c.keyImportPasswordModalOpen = false
 							c.keyPasswordChan <- ""
 						}
 						c.confirmCloseModalOpen = true
@@ -467,19 +471,23 @@ func (c *Home) Render() app.UI {
 
 									// Stop import if no password has been entered
 									if password == "" {
+										c.keyImportPasswordModalOpen = false
+
 										return
 									}
 
 									newParsedKey, err := parsedKey.Unlock([]byte(password))
 									if err != nil {
-										c.panic(err, func() {
-											c.keyImportPasswordModalOpen = true
-										})
+										c.handleWrongPassword(err)
 
 										continue
 									}
 
 									parsedKey = newParsedKey
+									c.keyImportPasswordModalOpen = false
+									c.clearWrongPassword()
+
+									c.Update()
 
 									break
 								}
@@ -829,6 +837,18 @@ func (c *Home) panic(err error, onRecover func()) {
 func (c *Home) recover() {
 	c.err = nil
 	c.onRecover()
+}
+
+func (c *Home) handleWrongPassword(err error) {
+	log.Println(err)
+
+	c.wrongPassword = true
+
+	c.Update()
+}
+
+func (c *Home) clearWrongPassword() {
+	c.wrongPassword = false
 }
 
 func (c *Home) OnAppUpdate(ctx app.Context) {
