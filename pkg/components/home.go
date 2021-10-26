@@ -55,6 +55,8 @@ type Home struct {
 	keyPasswordChan chan string
 
 	wrongPassword bool
+
+	keyDuplicateModalOpen bool
 }
 
 func (c *Home) Render() app.UI {
@@ -151,7 +153,7 @@ func (c *Home) Render() app.UI {
 			&Navbar{},
 			app.If(
 				c.keySuccessfullyGeneratedModalOpen,
-				&SuccessModal{
+				&SingleActionModal{
 					ID:          "key-successfully-generated-modal",
 					Icon:        "fas fa-check",
 					Title:       "Key Successfully Generated!",
@@ -192,7 +194,7 @@ func (c *Home) Render() app.UI {
 			),
 			app.If(
 				c.keySuccessfullyImportedModalOpen,
-				&SuccessModal{
+				&SingleActionModal{
 					ID:          "key-successfully-imported-modal",
 					Icon:        "fas fa-check",
 					Title:       "Key Successfully Imported!",
@@ -207,6 +209,26 @@ func (c *Home) Render() app.UI {
 					},
 					OnAction: func() {
 						c.keySuccessfullyImportedModalOpen = false
+					},
+				},
+			),
+			app.If(
+				c.keyDuplicateModalOpen,
+				&SingleActionModal{
+					ID:          "key-successfully-imported-modal",
+					Icon:        "fas fa-info-circle",
+					Title:       "Key Already Exists",
+					Class:       "pf-m-info",
+					Body:        "This key is already in the key list.",
+					ActionLabel: "Continue to key list",
+
+					OnClose: func() {
+						c.keyDuplicateModalOpen = false
+
+						c.Update()
+					},
+					OnAction: func() {
+						c.keyDuplicateModalOpen = false
 					},
 				},
 			),
@@ -521,6 +543,16 @@ func (c *Home) Render() app.UI {
 								c.panic(errors.New("no identity found in key"), func() {})
 
 								return
+							}
+
+							for _, candidate := range c.keys {
+								if candidate.ID == fingerprints[0] {
+									c.keyDuplicateModalOpen = true
+
+									c.Update()
+
+									return
+								}
 							}
 
 							c.keys = append(c.keys, GPGKey{
