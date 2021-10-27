@@ -5,10 +5,10 @@
 <meta httpequiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="author" content="Felicitas Pojtinger">
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
-<meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
+<meta content="gpg, pgp, gopenpgp, encryption, signatures" name="keywords">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:38395/stories">
+<meta property="og:url" content="http://127.0.0.1:39407/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -17,14 +17,14 @@
 gridge
 </title>
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
-<link rel="apple-touch-icon" href="/gridge/web/default.png">
+<link href="/gridge/web/default.png" rel="apple-touch-icon">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css" rel="stylesheet">
-<link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
+<link href="/gridge/web/index.css" type="text/css" rel="stylesheet">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -41,12 +41,12 @@ Sign, verify, encrypt and decrypt data with GPG.
 <div id="app-pre-render">
 <div class="pf-c-page">
 <header class="pf-c-page__header">
-<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#main">
+<a href="#main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
 Skip to content
 </a>
 <header class="pf-c-masthead">
 <span class="pf-c-masthead__toggle">
-<button type="button" aria-label="Global navigation" class="pf-c-button pf-m-plain">
+<button class="pf-c-button pf-m-plain" type="button" aria-label="Global navigation">
 <i aria-hidden="true" class="fas fa-bars"></i>
 </button>
 </span>
@@ -90,7 +90,7 @@ Empty State
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Encrypt%252FSign%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Encrypt%252FSign%2BModal">
 Encrypt/Sign Modal
 </a>
 </li>
@@ -120,7 +120,7 @@ Import Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Key%2BList">
+<a href="?activeTitle=Key%2BList" class="pf-c-nav__link">
 Key List
 </a>
 </li>
@@ -140,7 +140,7 @@ Password Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Single%2BAction%2BModal">
+<a href="?activeTitle=Single%2BAction%2BModal" class="pf-c-nav__link">
 Single Action Modal
 </a>
 </li>
@@ -166,7 +166,7 @@ Toolbar
 Home
 </h1>
 <a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
-<i aria-hidden="true" class="fas fa-expand-arrows-alt"></i>
+<i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
 </div>
@@ -180,7 +180,7 @@ Skip to content
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
 <a class="pf-c-page__header-brand-link" href="#">
-<img class="pf-c-brand" src="/gridge/web/logo-light.png" alt="Logo">
+<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo-light.png">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
