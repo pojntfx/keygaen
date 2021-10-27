@@ -863,8 +863,21 @@ func (c *Home) handleCancel(dirty bool, clear chan struct{}, confirm func()) {
 	c.confirmModalClose = func() {
 		confirm()
 
+		// Remove the native confirmation prompt
+		app.Window().Set("onbeforeunload", app.Undefined())
+
 		clear <- struct{}{}
 	}
+
+	// Add the native confirmation prompt
+	app.Window().Set(
+		"onbeforeunload",
+		app.FuncOf(func(this app.Value, args []app.Value) interface{} {
+			args[0].Set("returnValue", "")
+
+			return nil
+		}),
+	)
 	c.confirmCloseModalOpen = true
 
 	c.Update()
