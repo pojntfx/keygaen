@@ -602,6 +602,24 @@ func (c *Home) Render() app.UI {
 
 						c.encryptAndSignModalOpen = false
 						c.encryptAndSignPasswordModalOpen = true
+
+						// TODO: Only use if c.publicKeyID != ""
+						publicKey, err := c.getPublicKeyByID(c.publicKeyID)
+						if err != nil {
+							c.panic(err, func() {})
+
+							return
+						}
+
+						// TODO: Add encryption based on private key; requires unlocking with modal
+						encrypted, err := helper.EncryptBinaryMessageArmored(publicKey, file)
+						if err != nil {
+							c.panic(err, func() {})
+
+							return
+						}
+
+						log.Println(encrypted)
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
@@ -913,4 +931,27 @@ func (c *Home) OnAppUpdate(ctx app.Context) {
 	if ctx.AppUpdateAvailable() {
 		ctx.Reload()
 	}
+}
+
+func (c *Home) getPublicKeyByID(publicKeyID string) (string, error) {
+	publicKeyExportArmored := ""
+	for _, candidate := range c.keys {
+		if candidate.ID == c.publicKeyID {
+			publicKey := candidate
+
+			parsedKey, err := crypto.NewKeyFromArmored(publicKey.Content)
+			if err != nil {
+				return "", err
+			}
+
+			publicKeyExportArmored, err = parsedKey.GetArmoredPublicKey()
+			if err != nil {
+				return "", err
+			}
+
+			break
+		}
+	}
+
+	return publicKeyExportArmored, nil
 }
