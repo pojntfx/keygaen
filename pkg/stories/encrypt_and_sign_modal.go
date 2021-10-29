@@ -28,8 +28,8 @@ func (c *EncryptAndSignModalStory) Render() app.UI {
 				&components.EncryptAndSignModal{
 					Keys: demoKeys,
 
-					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature bool) {
-						app.Window().Call("alert", fmt.Sprintf("Encrypted and signed file %v, using public key ID %v and private key ID %v and createDetachedSignature set to %v", file, publicKeyID, privateKeyID, createDetachedSignature))
+					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature, armor bool) {
+						app.Window().Call("alert", fmt.Sprintf("Encrypted and signed file %v, using public key ID %v and private key ID %v, createDetachedSignature set to %v and armor set to %v", file, publicKeyID, privateKeyID, createDetachedSignature, armor))
 
 						c.modalOpen = false
 					},

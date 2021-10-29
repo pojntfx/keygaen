@@ -28,6 +28,7 @@ type EncryptAndSignModal struct {
 		publicKeyID string,
 		privateKeyID string,
 		createDetachedSignature bool,
+		armor bool,
 	)
 	OnCancel func(dirty bool, clear chan struct{})
 
@@ -41,6 +42,7 @@ type EncryptAndSignModal struct {
 	privateKeyID string
 
 	createDetachedSignature bool
+	skipArmor               bool
 
 	dirty bool
 }
@@ -73,6 +75,7 @@ func (c *EncryptAndSignModal) Render() app.UI {
 						c.publicKeyID,
 						c.privateKeyID,
 						c.createDetachedSignature,
+						!c.skipArmor,
 					)
 
 					c.clear()
@@ -290,6 +293,44 @@ func (c *EncryptAndSignModal) Render() app.UI {
 															),
 													),
 											),
+										),
+								),
+						),
+					app.Div().
+						Class("pf-c-form__group").
+						Aria("role", "group").
+						Body(
+							app.Div().
+								Class("pf-c-form__group-control").
+								Body(
+									app.Div().
+										Class("pf-c-check").
+										Body(
+											&Controlled{
+												Component: app.Input().
+													Class("pf-c-check__input").
+													Type("checkbox").
+													ID("armor-checkbox").
+													OnInput(func(ctx app.Context, e app.Event) {
+														c.skipArmor = !c.skipArmor
+
+														c.dirty = true
+													}),
+												Properties: map[string]interface{}{
+													"checked": !c.skipArmor,
+												},
+											},
+											app.Label().
+												Class("pf-c-check__label").
+												For("armor-checkbox").
+												Body(
+													app.I().
+														Class("fas fa-shield-alt pf-u-mr-sm"),
+													app.Text("Armor"),
+												),
+											app.Span().
+												Class("pf-c-check__description").
+												Text("To increase portability, ASCII armor the cyphertext."),
 										),
 								),
 						),

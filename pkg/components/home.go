@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/ProtonMail/go-crypto/openpgp"
+	"github.com/ProtonMail/gopenpgp/armor"
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/ProtonMail/gopenpgp/v2/helper"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
@@ -595,7 +596,7 @@ func (c *Home) Render() app.UI {
 				&EncryptAndSignModal{
 					Keys: c.keys,
 
-					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature bool) {
+					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, createDetachedSignature, enableArmor bool) {
 						c.publicKeyID = publicKeyID
 						c.privateKeyID = privateKeyID
 						c.createDetachedSignature = createDetachedSignature
@@ -611,15 +612,29 @@ func (c *Home) Render() app.UI {
 							return
 						}
 
-						// TODO: Add encryption based on private key; requires unlocking with modal
-						encrypted, err := helper.EncryptBinaryMessageArmored(publicKey, file)
+						armoredCyphertext, err := helper.EncryptBinaryMessageArmored(publicKey, file)
 						if err != nil {
 							c.panic(err, func() {})
 
 							return
 						}
 
-						log.Println(encrypted)
+						if enableArmor {
+							log.Println(armoredCyphertext)
+
+							return
+						}
+
+						rawCyphertext, err := armor.Unarmor(armoredCyphertext)
+						if err != nil {
+							c.panic(err, func() {})
+
+							return
+						}
+
+						log.Println(rawCyphertext)
+
+						// TODO: Add signing based on private key; requires unlocking with modal
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
