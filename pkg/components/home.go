@@ -15,12 +15,12 @@ type Home struct {
 	app.Compo
 
 	createKeyModalOpen                bool
-	importKeyModal                    bool
+	importKeyModalOpen                bool
 	encryptAndSignModalOpen           bool
 	decryptAndVerifyModalOpen         bool
 	keySuccessfullyGeneratedModalOpen bool
 
-	keyImportPasswordModalOpen       bool
+	keyPasswordModalOpen             bool
 	keySuccessfullyImportedModalOpen bool
 
 	publicKeyID             string
@@ -173,7 +173,7 @@ func (c *Home) Render() app.UI {
 				},
 			),
 			app.If(
-				c.keyImportPasswordModalOpen,
+				c.keyPasswordModalOpen,
 				&PasswordModal{
 					Title:         "Enter Key Password",
 					WrongPassword: c.wrongPassword,
@@ -236,14 +236,17 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.encryptAndSignPasswordModalOpen,
 				&PasswordModal{
-					Title: `Enter password for key "` + c.privateKeyID + `"`,
+					Title:         `Enter Password for Key "` + c.privateKeyID + `"`,
+					WrongPassword: c.wrongPassword,
+					ClearWrongPassword: func() {
+						c.wrongPassword = false
+					},
 					OnSubmit: func(password string) {
-						c.encryptAndSignPasswordModalOpen = false
-						c.encryptAndSignDownloadModalOpen = true
+						c.keyPasswordChan <- password
 					},
 					OnCancel: func() {
 						c.confirmModalClose = func() {
-							c.encryptAndSignPasswordModalOpen = false
+							c.keyPasswordChan <- ""
 						}
 						c.confirmCloseModalOpen = true
 
@@ -254,7 +257,7 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.decryptAndVerifyPasswordModalOpen,
 				&PasswordModal{
-					Title: `Enter password for key "` + c.privateKeyID + `"`,
+					Title: `Enter Password for Key "` + c.privateKeyID + `"`,
 					OnSubmit: func(password string) {
 						c.decryptAndVerifyPasswordModalOpen = false
 						c.decryptAndVerifyDownloadModalOpen = true
@@ -360,7 +363,7 @@ func (c *Home) Render() app.UI {
 										c.createKeyModalOpen = !c.createKeyModalOpen
 									},
 									OnImportKey: func() {
-										c.importKeyModal = !c.importKeyModal
+										c.importKeyModalOpen = !c.importKeyModalOpen
 									},
 
 									OnEncryptAndSign: func() {
@@ -382,7 +385,7 @@ func (c *Home) Render() app.UI {
 										c.createKeyModalOpen = !c.createKeyModalOpen
 									},
 									OnImportKey: func() {
-										c.importKeyModal = !c.importKeyModal
+										c.importKeyModalOpen = !c.importKeyModalOpen
 									},
 								},
 							).Else(
@@ -464,10 +467,10 @@ func (c *Home) Render() app.UI {
 				},
 			),
 			app.If(
-				c.importKeyModal,
+				c.importKeyModalOpen,
 				&ImportKeyModal{
 					OnSubmit: func(key string) {
-						c.importKeyModal = false
+						c.importKeyModalOpen = false
 
 						parsedKey, err := crypto.NewKeyFromArmored(key)
 						if err != nil {
@@ -487,7 +490,7 @@ func (c *Home) Render() app.UI {
 								}
 
 								if locked {
-									c.keyImportPasswordModalOpen = true
+									c.keyPasswordModalOpen = true
 
 									c.Update()
 
@@ -496,7 +499,7 @@ func (c *Home) Render() app.UI {
 
 										// Stop import if no password has been entered
 										if password == "" {
-											c.keyImportPasswordModalOpen = false
+											c.keyPasswordModalOpen = false
 
 											return
 										}
@@ -509,7 +512,7 @@ func (c *Home) Render() app.UI {
 										}
 
 										parsedKey = newParsedKey
-										c.keyImportPasswordModalOpen = false
+										c.keyPasswordModalOpen = false
 										c.clearWrongPassword()
 
 										c.Update()
@@ -586,7 +589,7 @@ func (c *Home) Render() app.UI {
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
-							c.importKeyModal = false
+							c.importKeyModalOpen = false
 						})
 					},
 				},
@@ -602,39 +605,124 @@ func (c *Home) Render() app.UI {
 						c.createDetachedSignature = createDetachedSignature
 
 						c.encryptAndSignModalOpen = false
-						c.encryptAndSignPasswordModalOpen = true
 
-						// TODO: Only use if c.publicKeyID != ""
-						publicKey, err := c.getPublicKeyByID(c.publicKeyID)
-						if err != nil {
-							c.panic(err, func() {})
+						if c.publicKeyID != "" {
+							publicKey, err := c.getPublicKeyByID(c.publicKeyID)
+							if err != nil {
+								c.panic(err, func() {})
 
-							return
+								return
+							}
+
+							armoredCyphertext, err := helper.EncryptBinaryMessageArmored(publicKey, file)
+							if err != nil {
+								c.panic(err, func() {})
+
+								return
+							}
+
+							if enableArmor {
+								log.Println(armoredCyphertext)
+							} else {
+								rawCyphertext, err := armor.Unarmor(armoredCyphertext)
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								log.Println(rawCyphertext)
+							}
 						}
 
-						armoredCyphertext, err := helper.EncryptBinaryMessageArmored(publicKey, file)
-						if err != nil {
-							c.panic(err, func() {})
+						if c.privateKeyID != "" {
+							privateKey, err := c.getPrivateKeyByID(c.privateKeyID)
+							if err != nil {
+								c.panic(err, func() {})
 
-							return
+								return
+							}
+
+							parsedKey, err := crypto.NewKeyFromArmored(privateKey)
+							if err != nil {
+								c.panic(err, func() {})
+
+								return
+							}
+
+							go func() {
+								password := ""
+
+								// We might have to unlock a private key first
+								if parsedKey.IsPrivate() {
+									locked, err := parsedKey.IsLocked()
+									if err != nil {
+										c.panic(err, func() {})
+
+										return
+									}
+
+									if locked {
+										c.encryptAndSignPasswordModalOpen = true
+
+										c.Update()
+
+										for {
+											password = <-c.keyPasswordChan
+
+											// Stop import if no password has been entered
+											if password == "" {
+												c.encryptAndSignPasswordModalOpen = false
+
+												return
+											}
+
+											newParsedKey, err := parsedKey.Unlock([]byte(password))
+											if err != nil {
+												c.handleWrongPassword(err)
+
+												continue
+											}
+
+											parsedKey = newParsedKey
+											c.encryptAndSignPasswordModalOpen = false
+											c.clearWrongPassword()
+
+											c.Update()
+
+											break
+										}
+									}
+								}
+
+								armoredSignedText, err := helper.SignCleartextMessageArmored(privateKey, []byte(password), string(file)) // TODO: Find a method to sign a binary message without converting to a string
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								if enableArmor {
+									log.Println(armoredSignedText)
+								} else {
+									// TODO: Fix invalid base64 data by using plain openpgp.*-API
+									rawSignedText, err := armor.Unarmor(armoredSignedText)
+									if err != nil {
+										c.panic(err, func() {})
+
+										return
+									}
+
+									log.Println(rawSignedText)
+								}
+
+								c.encryptAndSignDownloadModalOpen = true
+
+								c.Update()
+							}()
 						}
 
-						if enableArmor {
-							log.Println(armoredCyphertext)
-
-							return
-						}
-
-						rawCyphertext, err := armor.Unarmor(armoredCyphertext)
-						if err != nil {
-							c.panic(err, func() {})
-
-							return
-						}
-
-						log.Println(rawCyphertext)
-
-						// TODO: Add signing based on private key; requires unlocking with modal
+						// TODO: Add helper.EncryptSignBinaryDetached() if both options are selected or use the plain openpgp.*-API directly
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
@@ -948,7 +1036,7 @@ func (c *Home) OnAppUpdate(ctx app.Context) {
 	}
 }
 
-func (c *Home) getPublicKeyByID(publicKeyID string) (string, error) {
+func (c *Home) getPublicKeyByID(ID string) (string, error) {
 	publicKeyExportArmored := ""
 	for _, candidate := range c.keys {
 		if candidate.ID == c.publicKeyID {
@@ -969,4 +1057,32 @@ func (c *Home) getPublicKeyByID(publicKeyID string) (string, error) {
 	}
 
 	return publicKeyExportArmored, nil
+}
+
+func (c *Home) getPrivateKeyByID(ID string) (string, error) {
+	privateKey := GPGKey{}
+	privateKeyExportArmored := ""
+	for _, candidate := range c.keys {
+		if candidate.ID == c.privateKeyID {
+			privateKey = candidate
+
+			parsedKey, err := crypto.NewKeyFromArmored(privateKey.Content)
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
+
+			privateKeyExportArmored, err = parsedKey.Armor()
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
+
+			break
+		}
+	}
+
+	return privateKeyExportArmored, nil
 }
