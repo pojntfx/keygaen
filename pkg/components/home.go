@@ -9,6 +9,7 @@ import (
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/ProtonMail/gopenpgp/v2/helper"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
+	"github.com/pojntfx/gridge/pkg/crypt"
 )
 
 type Home struct {
@@ -76,7 +77,7 @@ func (c *Home) Render() app.UI {
 		if candidate.ID == c.privateKeyID {
 			privateKey = candidate
 
-			parsedKey, err := crypto.NewKeyFromArmored(privateKey.Content)
+			parsedKey, err := crypto.NewKeyFromArmored(string(privateKey.Content)) // TODO: Use crypt package's implementation to support raw keys
 			if err != nil {
 				c.panic(err, func() {})
 
@@ -108,7 +109,7 @@ func (c *Home) Render() app.UI {
 		if candidate.ID == c.publicKeyID {
 			publicKey = candidate
 
-			parsedKey, err := crypto.NewKeyFromArmored(publicKey.Content)
+			parsedKey, err := crypto.NewKeyFromArmored(string(publicKey.Content)) // TODO: Use crypt package's implementation to support raw keys
 			if err != nil {
 				c.panic(err, func() {})
 
@@ -439,24 +440,28 @@ func (c *Home) Render() app.UI {
 						c.createKeyModalOpen = false
 						c.keySuccessfullyGeneratedModalOpen = true
 
-						fingerprints, err := helper.GetSHA256Fingerprints(key)
+						parsedKey, fingerprint, err := crypt.ReadKey([]byte(key), password)
 						if err != nil {
-							c.createKeyModalOpen = false
-							c.panic(err, func() {
-								c.createKeyModalOpen = true
-							})
+							c.panic(err, func() {})
+
+							return
+						}
+
+						id := parsedKey.PrimaryIdentity()
+						if id == nil {
+							c.panic(errors.New("no identity found in key"), func() {})
 
 							return
 						}
 
 						c.keys = append(c.keys, GPGKey{
-							ID:       fingerprints[0],       // Since we don't generate subkeys, we'll only have one fingerprint
-							Label:    fingerprints[0][0:10], // We can safely assume that the fingerprint is at least 10 chars long
-							FullName: fullName,
-							Email:    email,
-							Private:  true,
+							ID:       fingerprint,       // Since we don't generate subkeys, we'll only have one fingerprint
+							Label:    fingerprint[0:10], // We can safely assume that the fingerprint is at least 10 chars long
+							FullName: id.Name,
+							Email:    id.UserId.Email,
+							Private:  parsedKey.PrivateKey != nil,
 							Public:   true,
-							Content:  key,
+							Content:  []byte(key),
 						})
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
@@ -469,83 +474,62 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.importKeyModalOpen,
 				&ImportKeyModal{
-					OnSubmit: func(key string) {
+					OnSubmit: func(key []byte) {
 						c.importKeyModalOpen = false
 
-						parsedKey, err := crypto.NewKeyFromArmored(key)
-						if err != nil {
-							c.panic(err, func() {})
-
-							return
-						}
-
 						go func() {
+							var parsedKey *openpgp.Entity
+							fingerprint := ""
+
 							// We might have to unlock a private key first
-							if parsedKey.IsPrivate() {
-								locked, err := parsedKey.IsLocked()
-								if err != nil {
-									c.panic(err, func() {})
-
-									return
-								}
-
-								if locked {
-									c.keyPasswordModalOpen = true
-
-									c.Update()
-
-									for {
-										password := <-c.keyPasswordChan
-
-										// Stop import if no password has been entered
-										if password == "" {
-											c.keyPasswordModalOpen = false
-
-											return
-										}
-
-										newParsedKey, err := parsedKey.Unlock([]byte(password))
-										if err != nil {
-											c.handleWrongPassword(err)
-
-											continue
-										}
-
-										parsedKey = newParsedKey
-										c.keyPasswordModalOpen = false
-										c.clearWrongPassword()
-
-										c.Update()
-
-										break
-									}
-								}
-							}
-
-							parsedPublicKey, err := parsedKey.GetArmoredPublicKey()
+							locked, err := crypt.IsKeyLocked(key)
 							if err != nil {
 								c.panic(err, func() {})
 
 								return
 							}
 
-							fingerprints, err := helper.GetSHA256Fingerprints(parsedPublicKey)
-							if err != nil {
-								c.createKeyModalOpen = false
-								c.panic(err, func() {
-									c.createKeyModalOpen = true
-								})
+							if locked {
+								c.keyPasswordModalOpen = true
 
-								return
+								c.Update()
+
+								for {
+									password := <-c.keyPasswordChan
+
+									// Stop import if no password has been entered
+									if password == "" {
+										c.keyPasswordModalOpen = false
+
+										return
+									}
+
+									parsedKey, fingerprint, err = crypt.ReadKey(key, password)
+									if err != nil {
+										c.handleWrongPassword(err)
+
+										continue
+									}
+
+									c.keyPasswordModalOpen = false
+									c.clearWrongPassword()
+
+									c.Update()
+
+									break
+								}
 							}
 
-							var id *openpgp.Identity
-							for _, candidate := range parsedKey.GetEntity().Identities {
-								id = candidate
+							if parsedKey == nil {
+								parsedKey, fingerprint, err = crypt.ReadKey(key, "")
+								if err != nil {
+									c.panic(err, func() {})
 
-								break
+									return
+								}
 							}
 
+							id := parsedKey.PrimaryIdentity()
 							if id == nil {
 								c.panic(errors.New("no identity found in key"), func() {})
 
@@ -554,9 +538,9 @@ func (c *Home) Render() app.UI {
 
 							newKeys := []GPGKey{}
 							for _, candidate := range c.keys {
-								if candidate.ID == fingerprints[0] {
+								if candidate.ID == fingerprint {
 									// Replace the key if the existing key is a public key and the imported key is a private key
-									if !candidate.Private && parsedKey.IsPrivate() {
+									if !candidate.Private && parsedKey.PrivateKey != nil {
 										continue
 									} else {
 										// Don't add the duplicate key
@@ -572,11 +556,11 @@ func (c *Home) Render() app.UI {
 							}
 
 							newKeys = append(newKeys, GPGKey{
-								ID:       fingerprints[0],       // Since we don't generate subkeys, we'll only have one fingerprint
-								Label:    fingerprints[0][0:10], // We can safely assume that the fingerprint is at least 10 chars long
+								ID:       fingerprint,       // Since we don't generate subkeys, we'll only have one fingerprint
+								Label:    fingerprint[0:10], // We can safely assume that the fingerprint is at least 10 chars long
 								FullName: id.Name,
 								Email:    id.UserId.Email,
-								Private:  parsedKey.IsPrivate(),
+								Private:  parsedKey.PrivateKey != nil,
 								Public:   true,
 								Content:  key,
 							})
@@ -1042,7 +1026,7 @@ func (c *Home) getPublicKeyByID(ID string) (string, error) {
 		if candidate.ID == c.publicKeyID {
 			publicKey := candidate
 
-			parsedKey, err := crypto.NewKeyFromArmored(publicKey.Content)
+			parsedKey, err := crypto.NewKeyFromArmored(string(publicKey.Content)) // TODO: Use crypt package's implementation to support raw keys
 			if err != nil {
 				return "", err
 			}
@@ -1066,7 +1050,7 @@ func (c *Home) getPrivateKeyByID(ID string) (string, error) {
 		if candidate.ID == c.privateKeyID {
 			privateKey = candidate
 
-			parsedKey, err := crypto.NewKeyFromArmored(privateKey.Content)
+			parsedKey, err := crypto.NewKeyFromArmored(string(privateKey.Content)) // TODO: Use crypt package's implementation to support raw keys
 			if err != nil {
 				c.panic(err, func() {})
 

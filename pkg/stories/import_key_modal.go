@@ -26,7 +26,7 @@ func (c *ImportKeyModalStory) Render() app.UI {
 			c.modalOpen,
 			c.WithRoot(
 				&components.ImportKeyModal{
-					OnSubmit: func(key string) {
+					OnSubmit: func(key []byte) {
 						app.Window().Call("alert", fmt.Sprintf("Imported key with contents %v", key))
 
 						c.modalOpen = false

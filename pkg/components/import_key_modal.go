@@ -11,10 +11,10 @@ const (
 type ImportKeyModal struct {
 	app.Compo
 
-	OnSubmit func(key string)
+	OnSubmit func(key []byte)
 	OnCancel func(dirty bool, clear chan struct{})
 
-	key string
+	key []byte
 
 	dirty bool
 }
@@ -43,16 +43,16 @@ func (c *ImportKeyModal) Render() app.UI {
 								FileSelectionLabel:    "Drag and drop a key or select one",
 								ClearLabel:            "Clear",
 								TextEntryLabel:        "Or paste the key's contents here",
-								TextEntryBlockedLabel: c.key,
+								TextEntryBlockedLabel: string(c.key),
 								FileContents:          []byte(c.key),
 
 								OnChange: func(fileContents []byte) {
-									c.key = string(fileContents)
+									c.key = fileContents
 
 									c.dirty = true
 								},
 								OnClear: func() {
-									c.key = ""
+									c.key = []byte{}
 								},
 							},
 						),
@@ -83,6 +83,6 @@ func (c *ImportKeyModal) clear() {
 	app.Window().GetElementByID(selectKeyInput).Set("value", app.Null())
 
 	// Clear key
-	c.key = ""
+	c.key = []byte{}
 	c.dirty = false
 }
