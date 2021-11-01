@@ -12,7 +12,7 @@ var demoKeys = []components.GPGKey{
 		FullName: "Isegard Example",
 		Email:    "isegard@example.com",
 		Private:  true,
-		Content:  "",
+		Content:  []byte{},
 	},
 	{
 		ID:       "838431",
@@ -21,7 +21,7 @@ var demoKeys = []components.GPGKey{
 		Email:    "fred@example.com",
 		Private:  true,
 		Public:   true,
-		Content:  "",
+		Content:  []byte{},
 	},
 	{
 		ID:       "123456",
@@ -29,7 +29,7 @@ var demoKeys = []components.GPGKey{
 		FullName: "Alice Example",
 		Email:    "alice@example.com",
 		Public:   true,
-		Content:  "",
+		Content:  []byte{},
 	},
 	{
 		ID:       "319312",
@@ -37,7 +37,7 @@ var demoKeys = []components.GPGKey{
 		FullName: "Bob Example",
 		Email:    "bob@example.com",
 		Public:   true,
-		Content:  "",
+		Content:  []byte{},
 	},
 }
 
