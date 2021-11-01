@@ -7,8 +7,8 @@
 <meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:45541/stories">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
+<meta content="http://127.0.0.1:37213/stories" property="og:url">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -16,12 +16,12 @@
 <title>
 gridge
 </title>
-<link href="/gridge/web/default.png" rel="icon" type="image/png">
-<link rel="apple-touch-icon" href="/gridge/web/default.png">
-<link href="/gridge/manifest.webmanifest" rel="manifest">
+<link rel="icon" type="image/png" href="/gridge/web/default.png">
+<link href="/gridge/web/default.png" rel="apple-touch-icon">
+<link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
-<script src="/gridge/app.js" defer="true"></script>
+<script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
 <link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
@@ -52,7 +52,7 @@ Skip to content
 </span>
 <div class="pf-c-masthead__main">
 <a class="pf-c-masthead__brand" href="/">
-<img src="/gridge/web/logo.png" alt="Logo" class="pf-c-brand">
+<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -62,10 +62,10 @@ Stories
 </header>
 <div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
 <div class="pf-c-page__sidebar-body">
-<nav aria-label="Global" class="pf-c-nav">
+<nav class="pf-c-nav" aria-label="Global">
 <ul class="pf-c-nav__list">
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Confirmation%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Confirmation%2BModal">
 Confirmation Modal
 </a>
 </li>
@@ -75,7 +75,7 @@ Create Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Decrypt%252FVerify%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Decrypt%252FVerify%2BModal">
 Decrypt/Verify Modal
 </a>
 </li>
@@ -90,7 +90,7 @@ Empty State
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Encrypt%252FSign%2BModal">
+<a href="?activeTitle=Encrypt%252FSign%2BModal" class="pf-c-nav__link">
 Encrypt/Sign Modal
 </a>
 </li>
@@ -115,7 +115,7 @@ Home
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Import%2BKey%2BModal">
+<a href="?activeTitle=Import%2BKey%2BModal" class="pf-c-nav__link">
 Import Key Modal
 </a>
 </li>
@@ -179,14 +179,14 @@ Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
-<a class="pf-c-page__header-brand-link" href="#">
+<a href="#" class="pf-c-page__header-brand-link">
 <img class="pf-c-brand" src="/gridge/web/logo-light.png" alt="Logo">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a target="_blank" class="pf-c-button pf-m-plain" aria-label="Help" href="https://github.com/pojntfx/gridge">
+<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
 <i class="pf-icon pf-icon-help" aria-hidden="true"></i>
 </a>
 </div>
@@ -236,7 +236,7 @@ Reset props
 </button>
 </div>
 <div class="pf-c-code-block__actions-item">
-<button type="button" aria-label="Reload props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
+<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reload props">
 <div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
