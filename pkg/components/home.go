@@ -22,6 +22,7 @@ type Home struct {
 	keySuccessfullyGeneratedModalOpen bool
 
 	keyPasswordModalOpen             bool
+	keyPasswordModalKeyID            string
 	keySuccessfullyImportedModalOpen bool
 
 	publicKeyID             string
@@ -176,7 +177,7 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.keyPasswordModalOpen,
 				&PasswordModal{
-					Title:         "Enter Key Password",
+					Title:         `Enter Password for Key "` + c.keyPasswordModalKeyID + `"`,
 					WrongPassword: c.wrongPassword,
 					ClearWrongPassword: func() {
 						c.wrongPassword = false
@@ -479,10 +480,9 @@ func (c *Home) Render() app.UI {
 
 						go func() {
 							var parsedKey *openpgp.Entity
-							fingerprint := ""
 
 							// We might have to unlock a private key first
-							locked, err := crypt.IsKeyLocked(key)
+							locked, fingerprint, err := crypt.IsKeyLocked(key)
 							if err != nil {
 								c.panic(err, func() {})
 
@@ -490,33 +490,24 @@ func (c *Home) Render() app.UI {
 							}
 
 							if locked {
-								c.keyPasswordModalOpen = true
+								password := c.getPasswordForKey(
+									fingerprint,
+									func(password string) error {
+										pk, fp, err := crypt.ReadKey(key, password)
+										if err == nil {
+											parsedKey = pk
+											fingerprint = fp
+										}
 
-								c.Update()
+										return err
+									},
+								)
 
-								for {
-									password := <-c.keyPasswordChan
-
-									// Stop import if no password has been entered
-									if password == "" {
-										c.keyPasswordModalOpen = false
-
-										return
-									}
-
-									parsedKey, fingerprint, err = crypt.ReadKey(key, password)
-									if err != nil {
-										c.handleWrongPassword(err)
-
-										continue
-									}
-
+								// Stop import if no password has been entered
+								if password == "" {
 									c.keyPasswordModalOpen = false
-									c.clearWrongPassword()
 
-									c.Update()
-
-									break
+									return
 								}
 							}
 
@@ -620,14 +611,7 @@ func (c *Home) Render() app.UI {
 						}
 
 						if c.privateKeyID != "" {
-							privateKey, err := c.getPrivateKeyByID(c.privateKeyID)
-							if err != nil {
-								c.panic(err, func() {})
-
-								return
-							}
-
-							parsedKey, err := crypto.NewKeyFromArmored(privateKey)
+							key, err := c.getPrivateKeyByID(c.privateKeyID)
 							if err != nil {
 								c.panic(err, func() {})
 
@@ -635,51 +619,62 @@ func (c *Home) Render() app.UI {
 							}
 
 							go func() {
-								password := ""
+								var parsedKey *openpgp.Entity
 
 								// We might have to unlock a private key first
-								if parsedKey.IsPrivate() {
-									locked, err := parsedKey.IsLocked()
+								locked, fingerprint, err := crypt.IsKeyLocked([]byte(key))
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								if locked {
+									password := c.getPasswordForKey(
+										fingerprint,
+										func(password string) error {
+											pk, fp, err := crypt.ReadKey([]byte(key), password)
+											if err == nil {
+												parsedKey = pk
+												fingerprint = fp
+											}
+
+											return err
+										},
+									)
+
+									// Stop import if no password has been entered
+									if password == "" {
+										c.keyPasswordModalOpen = false
+
+										return
+									}
+								}
+
+								if parsedKey == nil {
+									parsedKey, fingerprint, err = crypt.ReadKey([]byte(key), "")
 									if err != nil {
 										c.panic(err, func() {})
 
 										return
 									}
-
-									if locked {
-										c.encryptAndSignPasswordModalOpen = true
-
-										c.Update()
-
-										for {
-											password = <-c.keyPasswordChan
-
-											// Stop import if no password has been entered
-											if password == "" {
-												c.encryptAndSignPasswordModalOpen = false
-
-												return
-											}
-
-											newParsedKey, err := parsedKey.Unlock([]byte(password))
-											if err != nil {
-												c.handleWrongPassword(err)
-
-												continue
-											}
-
-											parsedKey = newParsedKey
-											c.encryptAndSignPasswordModalOpen = false
-											c.clearWrongPassword()
-
-											c.Update()
-
-											break
-										}
-									}
 								}
 
-								armoredSignedText, err := helper.SignCleartextMessageArmored(privateKey, []byte(password), string(file)) // TODO: Find a method to sign a binary message without converting to a string
+								helperKey, err := crypto.NewKeyFromEntity(parsedKey)
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								keyring, err := crypto.NewKeyRing(helperKey)
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								armoredSignedText, err := helper.SignCleartextMessage(keyring, string(file)) // TODO: Find a method to sign a binary message without converting to a string
 								if err != nil {
 									c.panic(err, func() {})
 
@@ -1069,4 +1064,35 @@ func (c *Home) getPrivateKeyByID(ID string) (string, error) {
 	}
 
 	return privateKeyExportArmored, nil
+}
+
+func (c *Home) getPasswordForKey(ID string, checkPassword func(password string) error) string {
+	c.keyPasswordModalOpen = true
+	c.keyPasswordModalKeyID = ID
+
+	c.Update()
+
+	for {
+		password := <-c.keyPasswordChan
+
+		// Stop if no password has been entered
+		if password == "" {
+			c.keyPasswordModalOpen = false
+
+			return ""
+		}
+
+		if err := checkPassword(password); err != nil {
+			c.handleWrongPassword(err)
+
+			continue
+		}
+
+		c.keyPasswordModalOpen = false
+		c.clearWrongPassword()
+
+		c.Update()
+
+		return password
+	}
 }

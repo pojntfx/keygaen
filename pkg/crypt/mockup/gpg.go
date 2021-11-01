@@ -2,7 +2,7 @@ package crypto
 
 import "github.com/ProtonMail/go-crypto/openpgp"
 
-func IsKeyLocked(key []byte) (bool, error) // May also be armored
+func IsKeyLocked(key []byte) (bool, string, error) // May also be armored
 
 func ReadKey(
 	key []byte, // May also be armored

@@ -36,13 +36,18 @@ func isEntityLocked(entity *openpgp.Entity) (bool, error) {
 	return false, nil
 }
 
-func IsKeyLocked(key []byte) (bool, error) {
+func IsKeyLocked(key []byte) (bool, string, error) {
 	entity, err := getEntity(key)
 	if err != nil {
-		return false, err
+		return false, "", err
 	}
 
-	return isEntityLocked(entity)
+	locked, err := isEntityLocked(entity)
+	if err != nil {
+		return false, "", err
+	}
+
+	return locked, hex.EncodeToString(entity.PrimaryKey.Fingerprint), err
 }
 
 func ReadKey(key []byte, password string) (*openpgp.Entity, string, error) {
