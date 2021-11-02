@@ -21,8 +21,8 @@ type SignatureConfig struct {
 }
 
 func EncryptSign(
-	encryptConfig EncryptConfig, // May also be nil
-	signatureConfig SignatureConfig, // May also be nil
+	encryptConfig *EncryptConfig, // May also be nil
+	signatureConfig *SignatureConfig, // May also be nil
 
 	plaintext []byte,
 ) (cyphertext []byte, signature []byte, err error) // May also be only cyphertext or signature
@@ -37,8 +37,8 @@ type VerifyConfig struct {
 }
 
 func DecryptVerify(
-	decryptConfig DecryptConfig, // May also be nil
-	verfiyConfig VerifyConfig, // May also be nil
+	decryptConfig *DecryptConfig, // May also be nil
+	verfiyConfig *VerifyConfig, // May also be nil
 
 	cyphertext []byte, // May also be armored
 ) (plaintext []byte, verified bool, err error) // verified is always false if verifyConfig == nil

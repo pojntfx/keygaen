@@ -4,8 +4,14 @@ import (
 	"bytes"
 	"encoding/hex"
 	"errors"
+	"io/ioutil"
 
 	"github.com/ProtonMail/go-crypto/openpgp"
+	"github.com/ProtonMail/go-crypto/openpgp/armor"
+)
+
+const (
+	pgpBlockTypeMessage = "PGP MESSAGE"
 )
 
 func getEntity(key []byte) (*openpgp.Entity, error) {
@@ -68,4 +74,76 @@ func ReadKey(key []byte, password string) (*openpgp.Entity, string, error) {
 	}
 
 	return entity, hex.EncodeToString(entity.PrimaryKey.Fingerprint), nil
+}
+
+type EncryptConfig struct {
+	PublicKey       *openpgp.Entity
+	ArmorCyphertext bool
+}
+
+type SignatureConfig struct {
+	PrivateKey      *openpgp.Entity
+	ArmorSignature  bool
+	DetachSignature bool
+}
+
+func EncryptSign(
+	encryptConfig *EncryptConfig, // May also be nil
+	signatureConfig *SignatureConfig, // May also be nil
+
+	plaintext []byte,
+) ([]byte, []byte, error) { // cyphertext, signature, error
+	if encryptConfig != nil && signatureConfig == nil {
+		// Encrypt the plaintext
+		buf := &bytes.Buffer{}
+
+		w, err := openpgp.Encrypt(buf, []*openpgp.Entity{encryptConfig.PublicKey}, nil, nil, nil)
+		if err != nil {
+			return []byte{}, []byte{}, err
+		}
+
+		if _, err := w.Write(plaintext); err != nil {
+			return []byte{}, []byte{}, err
+		}
+
+		// We have to close before returning, as this adds the footer!
+		if err := w.Close(); err != nil {
+			return []byte{}, []byte{}, err
+		}
+
+		rawCyphertext, err := ioutil.ReadAll(buf)
+		if err != nil {
+			return []byte{}, []byte{}, err
+		}
+
+		if encryptConfig.ArmorCyphertext {
+			// Armor the cyphertext
+			buf := &bytes.Buffer{}
+
+			w, err := armor.Encode(buf, pgpBlockTypeMessage, nil)
+			if err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			if _, err := w.Write(rawCyphertext); err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			// We have to close before returning, as this adds the footer!
+			if err := w.Close(); err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			armoredCyphertext, err := ioutil.ReadAll(buf)
+			if err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			return armoredCyphertext, []byte{}, nil
+		}
+
+		return rawCyphertext, []byte{}, nil
+	}
+
+	return []byte{}, []byte{}, nil
 }

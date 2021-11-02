@@ -302,10 +302,10 @@ func (c *Home) Render() app.UI {
 						c.Update()
 					},
 					OnDownload: func() {
-						c.download([]byte("Hello, world"), "cypher.txt", "text/plain")
+						c.download([]byte("Hello, world"), "cypher.txt", "text/plain") // TODO: Use `.gpg` if unarmored, `.asc` if armored
 
 						if c.createDetachedSignature {
-							c.download([]byte("asdf"), "signature.asc", "text/plain")
+							c.download([]byte("asdf"), "signature.asc", "text/plain") // TODO: Use `.gpg` if unarmored, `.asc` if armored
 						}
 					},
 					OnView: func() {
@@ -342,7 +342,7 @@ func (c *Home) Render() app.UI {
 						c.Update()
 					},
 					OnDownload: func() {
-						c.download([]byte("Hello, world"), "plaintext.txt", "text/plain")
+						c.download([]byte("Hello, world"), "plaintext.txt", "text/plain") // TODO: Use `.gpg` if unarmored, `.asc` if armored
 					},
 					OnView: func() {
 						c.decryptAndVerifyDownloadModalOpen = false
@@ -582,14 +582,28 @@ func (c *Home) Render() app.UI {
 						c.encryptAndSignModalOpen = false
 
 						if c.publicKeyID != "" {
-							publicKey, err := c.getPublicKeyByID(c.publicKeyID)
+							rawPublicKey, err := c.getPublicKeyByID(c.publicKeyID)
 							if err != nil {
 								c.panic(err, func() {})
 
 								return
 							}
 
-							armoredCyphertext, err := helper.EncryptBinaryMessageArmored(publicKey, file)
+							publicKey, _, err := crypt.ReadKey([]byte(rawPublicKey), "")
+							if err != nil {
+								c.panic(err, func() {})
+
+								return
+							}
+
+							cyphertext, _, err := crypt.EncryptSign(
+								&crypt.EncryptConfig{
+									PublicKey:       publicKey,
+									ArmorCyphertext: enableArmor,
+								},
+								nil,
+								file,
+							)
 							if err != nil {
 								c.panic(err, func() {})
 
@@ -597,16 +611,9 @@ func (c *Home) Render() app.UI {
 							}
 
 							if enableArmor {
-								log.Println(armoredCyphertext)
+								log.Printf("%s\n", cyphertext)
 							} else {
-								rawCyphertext, err := armor.Unarmor(armoredCyphertext)
-								if err != nil {
-									c.panic(err, func() {})
-
-									return
-								}
-
-								log.Println(rawCyphertext)
+								log.Print(cyphertext)
 							}
 						}
 
@@ -735,7 +742,7 @@ func (c *Home) Render() app.UI {
 					tabs := []TextOutputModalTab{
 						{
 							Language: "text/plain",
-							Title:    "cypher.txt",
+							Title:    "cypher.txt", // TODO: Use `.gpg` if unarmored, `.asc` if armored
 							Body:     "Hello, world",
 						},
 					}
@@ -773,7 +780,7 @@ func (c *Home) Render() app.UI {
 						Tabs: []TextOutputModalTab{
 							{
 								Language: "text/plain",
-								Title:    "plaintext.txt",
+								Title:    "plaintext.txt", // TODO: Use `.gpg` if unarmored, `.asc` if armored
 								Body:     "Hello, world",
 							},
 						},
@@ -792,9 +799,9 @@ func (c *Home) Render() app.UI {
 					PublicKey: c.publicKeyID != "",
 					OnDownloadPublicKey: func(armor bool) {
 						if armor {
-							c.download([]byte(publicKeyExportArmored), publicKey.Label+".pub", "text/plain")
+							c.download([]byte(publicKeyExportArmored), publicKey.Label+".asc", "text/plain")
 						} else {
-							c.download(publicKeyExport, publicKey.Label+".pub", "application/octet-stream")
+							c.download(publicKeyExport, publicKey.Label+".gpg", "application/octet-stream")
 						}
 					},
 					OnViewPublicKey: func() {
@@ -806,9 +813,9 @@ func (c *Home) Render() app.UI {
 					PrivateKey: c.privateKeyID != "",
 					OnDownloadPrivateKey: func(armor bool) {
 						if armor {
-							c.download([]byte(privateKeyExportArmored), privateKey.Label, "text/plain")
+							c.download([]byte(privateKeyExportArmored), privateKey.Label+".asc", "text/plain")
 						} else {
-							c.download(privateKeyExport, privateKey.Label, "application/octet-stream")
+							c.download(privateKeyExport, privateKey.Label+".gpg", "application/octet-stream")
 						}
 					},
 					OnViewPrivateKey: func() {
