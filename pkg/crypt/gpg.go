@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"io/ioutil"
+	"strings"
 
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
@@ -17,7 +18,7 @@ const (
 func getEntity(key []byte) (*openpgp.Entity, error) {
 	entities, err := openpgp.ReadArmoredKeyRing(bytes.NewReader(key))
 	if err != nil {
-		if err.Error() == "openpgp: invalid argument: no armored data found" {
+		if strings.Contains(err.Error(), "openpgp: invalid argument: no armored data found") {
 			entities, err = openpgp.ReadKeyRing(bytes.NewReader(key))
 			if err != nil {
 				return nil, err
@@ -143,6 +144,74 @@ func EncryptSign(
 		}
 
 		return rawCyphertext, []byte{}, nil
+	}
+
+	if signatureConfig != nil && encryptConfig == nil {
+		// Sign the plaintext
+		buf := &bytes.Buffer{}
+
+		if signatureConfig.DetachSignature {
+			if err := openpgp.DetachSign(buf, signatureConfig.PrivateKey, bytes.NewReader(plaintext), nil); err != nil {
+				return []byte{}, []byte{}, err
+			}
+		} else {
+			w, err := openpgp.Sign(buf, signatureConfig.PrivateKey, nil, nil)
+			if err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			if _, err := w.Write(plaintext); err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			// We have to close before returning, as this adds the footer!
+			if err := w.Close(); err != nil {
+				return []byte{}, []byte{}, err
+			}
+		}
+
+		rawSignature, err := ioutil.ReadAll(buf)
+		if err != nil {
+			return []byte{}, []byte{}, err
+		}
+
+		if signatureConfig.ArmorSignature {
+			// Armor the signature
+			buf := &bytes.Buffer{}
+
+			w, err := armor.Encode(
+				buf,
+				func() string {
+					if signatureConfig.DetachSignature {
+						return openpgp.SignatureType
+					}
+
+					return pgpBlockTypeMessage
+				}(),
+				nil,
+			)
+			if err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			if _, err := w.Write(rawSignature); err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			// We have to close before returning, as this adds the footer!
+			if err := w.Close(); err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			armoredSignature, err := ioutil.ReadAll(buf)
+			if err != nil {
+				return []byte{}, []byte{}, err
+			}
+
+			return armoredSignature, []byte{}, nil
+		}
+
+		return rawSignature, []byte{}, nil
 	}
 
 	return []byte{}, []byte{}, nil
