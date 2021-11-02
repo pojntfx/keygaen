@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/ProtonMail/go-crypto/openpgp"
-	"github.com/ProtonMail/gopenpgp/armor"
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/ProtonMail/gopenpgp/v2/helper"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
@@ -581,7 +580,8 @@ func (c *Home) Render() app.UI {
 
 						c.encryptAndSignModalOpen = false
 
-						if c.publicKeyID != "" {
+						// Encrypt
+						if c.publicKeyID != "" && c.privateKeyID == "" {
 							rawPublicKey, err := c.getPublicKeyByID(c.publicKeyID)
 							if err != nil {
 								c.panic(err, func() {})
@@ -615,10 +615,17 @@ func (c *Home) Render() app.UI {
 							} else {
 								log.Print(cyphertext)
 							}
+
+							c.encryptAndSignDownloadModalOpen = true
+
+							c.Update()
+
+							return
 						}
 
-						if c.privateKeyID != "" {
-							key, err := c.getPrivateKeyByID(c.privateKeyID)
+						// Sign
+						if c.privateKeyID != "" && c.publicKeyID == "" {
+							rawPrivateKey, err := c.getPrivateKeyByID(c.privateKeyID)
 							if err != nil {
 								c.panic(err, func() {})
 
@@ -626,10 +633,10 @@ func (c *Home) Render() app.UI {
 							}
 
 							go func() {
-								var parsedKey *openpgp.Entity
+								var privateKey *openpgp.Entity
 
 								// We might have to unlock a private key first
-								locked, fingerprint, err := crypt.IsKeyLocked([]byte(key))
+								locked, fingerprint, err := crypt.IsKeyLocked([]byte(rawPrivateKey))
 								if err != nil {
 									c.panic(err, func() {})
 
@@ -640,9 +647,9 @@ func (c *Home) Render() app.UI {
 									password := c.getPasswordForKey(
 										fingerprint,
 										func(password string) error {
-											pk, fp, err := crypt.ReadKey([]byte(key), password)
+											pk, fp, err := crypt.ReadKey([]byte(rawPrivateKey), password)
 											if err == nil {
-												parsedKey = pk
+												privateKey = pk
 												fingerprint = fp
 											}
 
@@ -658,8 +665,8 @@ func (c *Home) Render() app.UI {
 									}
 								}
 
-								if parsedKey == nil {
-									parsedKey, fingerprint, err = crypt.ReadKey([]byte(key), "")
+								if privateKey == nil {
+									privateKey, fingerprint, err = crypt.ReadKey([]byte(rawPrivateKey), "")
 									if err != nil {
 										c.panic(err, func() {})
 
@@ -667,21 +674,15 @@ func (c *Home) Render() app.UI {
 									}
 								}
 
-								helperKey, err := crypto.NewKeyFromEntity(parsedKey)
-								if err != nil {
-									c.panic(err, func() {})
-
-									return
-								}
-
-								keyring, err := crypto.NewKeyRing(helperKey)
-								if err != nil {
-									c.panic(err, func() {})
-
-									return
-								}
-
-								armoredSignedText, err := helper.SignCleartextMessage(keyring, string(file)) // TODO: Find a method to sign a binary message without converting to a string
+								signature, _, err := crypt.EncryptSign(
+									nil,
+									&crypt.SignatureConfig{
+										PrivateKey:      privateKey,
+										ArmorSignature:  enableArmor,
+										DetachSignature: createDetachedSignature,
+									},
+									file,
+								)
 								if err != nil {
 									c.panic(err, func() {})
 
@@ -689,22 +690,16 @@ func (c *Home) Render() app.UI {
 								}
 
 								if enableArmor {
-									log.Println(armoredSignedText)
+									log.Printf("%s\n", signature)
 								} else {
-									// TODO: Fix invalid base64 data by using plain openpgp.*-API
-									rawSignedText, err := armor.Unarmor(armoredSignedText)
-									if err != nil {
-										c.panic(err, func() {})
-
-										return
-									}
-
-									log.Println(rawSignedText)
+									log.Print(signature)
 								}
 
 								c.encryptAndSignDownloadModalOpen = true
 
 								c.Update()
+
+								return
 							}()
 						}
 
