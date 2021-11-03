@@ -580,59 +580,40 @@ func (c *Home) Render() app.UI {
 
 						c.encryptAndSignModalOpen = false
 
-						// Encrypt
-						if c.publicKeyID != "" && c.privateKeyID == "" {
-							rawPublicKey, err := c.getPublicKeyByID(c.publicKeyID)
-							if err != nil {
-								c.panic(err, func() {})
+						go func() {
+							// Encrypt
+							var encryptConfig *crypt.EncryptConfig
+							if c.publicKeyID != "" {
+								rawPublicKey, err := c.getPublicKeyByID(c.publicKeyID)
+								if err != nil {
+									c.panic(err, func() {})
 
-								return
-							}
+									return
+								}
 
-							publicKey, _, err := crypt.ReadKey([]byte(rawPublicKey), "")
-							if err != nil {
-								c.panic(err, func() {})
+								publicKey, _, err := crypt.ReadKey([]byte(rawPublicKey), "")
+								if err != nil {
+									c.panic(err, func() {})
 
-								return
-							}
+									return
+								}
 
-							cyphertext, _, err := crypt.EncryptSign(
-								&crypt.EncryptConfig{
+								encryptConfig = &crypt.EncryptConfig{
 									PublicKey:       publicKey,
 									ArmorCyphertext: enableArmor,
-								},
-								nil,
-								file,
-							)
-							if err != nil {
-								c.panic(err, func() {})
-
-								return
+								}
 							}
 
-							if enableArmor {
-								log.Printf("%s\n", cyphertext)
-							} else {
-								log.Print(cyphertext)
-							}
+							// Sign
+							var signatureConfig *crypt.SignatureConfig
+							if c.privateKeyID != "" {
+								rawPrivateKey, err := c.getPrivateKeyByID(c.privateKeyID)
+								if err != nil {
+									c.panic(err, func() {})
 
-							c.encryptAndSignDownloadModalOpen = true
+									return
+								}
 
-							c.Update()
-
-							return
-						}
-
-						// Sign
-						if c.privateKeyID != "" && c.publicKeyID == "" {
-							rawPrivateKey, err := c.getPrivateKeyByID(c.privateKeyID)
-							if err != nil {
-								c.panic(err, func() {})
-
-								return
-							}
-
-							go func() {
 								var privateKey *openpgp.Entity
 
 								// We might have to unlock a private key first
@@ -674,36 +655,36 @@ func (c *Home) Render() app.UI {
 									}
 								}
 
-								signature, _, err := crypt.EncryptSign(
-									nil,
-									&crypt.SignatureConfig{
-										PrivateKey:      privateKey,
-										ArmorSignature:  enableArmor,
-										DetachSignature: createDetachedSignature,
-									},
-									file,
-								)
-								if err != nil {
-									c.panic(err, func() {})
-
-									return
+								signatureConfig = &crypt.SignatureConfig{
+									PrivateKey:      privateKey,
+									ArmorSignature:  enableArmor,
+									DetachSignature: createDetachedSignature,
 								}
+							}
 
-								if enableArmor {
-									log.Printf("%s\n", signature)
-								} else {
-									log.Print(signature)
-								}
-
-								c.encryptAndSignDownloadModalOpen = true
-
-								c.Update()
+							cyphertext, signature, err := crypt.EncryptSign(
+								encryptConfig,
+								signatureConfig,
+								file,
+							)
+							if err != nil {
+								c.panic(err, func() {})
 
 								return
-							}()
-						}
+							}
 
-						// TODO: Add helper.EncryptSignBinaryDetached() if both options are selected or use the plain openpgp.*-API directly
+							if enableArmor {
+								log.Printf("Cyphertext: %s\n", cyphertext)
+								log.Printf("Signature: %s\n", signature)
+							} else {
+								log.Print(cyphertext)
+								log.Print(signature)
+							}
+
+							c.encryptAndSignDownloadModalOpen = true
+
+							c.Update()
+						}()
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
