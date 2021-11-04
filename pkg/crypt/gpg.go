@@ -16,10 +16,10 @@ const (
 )
 
 func getEntity(key []byte) (*openpgp.Entity, error) {
-	entities, err := openpgp.ReadArmoredKeyRing(bytes.NewReader(key))
+	entities, err := openpgp.ReadArmoredKeyRing(bytes.NewBuffer(key))
 	if err != nil {
 		if strings.Contains(err.Error(), "openpgp: invalid argument: no armored data found") {
-			entities, err = openpgp.ReadKeyRing(bytes.NewReader(key))
+			entities, err = openpgp.ReadKeyRing(bytes.NewBuffer(key))
 			if err != nil {
 				return nil, err
 			}
@@ -72,6 +72,11 @@ func ReadKey(key []byte, password string) (*openpgp.Entity, string, error) {
 		if err := entity.PrivateKey.Decrypt([]byte(password)); err != nil {
 			return nil, "", err
 		}
+		for _, subkey := range entity.Subkeys {
+			if err := subkey.PrivateKey.Decrypt([]byte(password)); err != nil {
+				return nil, "", err
+			}
+		}
 	}
 
 	return entity, hex.EncodeToString(entity.PrimaryKey.Fingerprint), nil
@@ -102,7 +107,7 @@ func EncryptSign(
 		buf := &bytes.Buffer{}
 
 		if signatureConfig.DetachSignature {
-			if err := openpgp.DetachSign(buf, signatureConfig.PrivateKey, bytes.NewReader(plaintext), nil); err != nil {
+			if err := openpgp.DetachSign(buf, signatureConfig.PrivateKey, bytes.NewBuffer(plaintext), nil); err != nil {
 				return []byte{}, []byte{}, err
 			}
 		} else {
@@ -228,4 +233,45 @@ func EncryptSign(
 	}
 
 	return cyphertext, signature, nil
+}
+
+type DecryptConfig struct {
+	PrivateKey *openpgp.Entity
+}
+
+type VerifyConfig struct {
+	PublicKey         *openpgp.Entity
+	DetachedSignature []byte // May also be armored
+}
+
+func DecryptVerify(
+	decryptConfig *DecryptConfig, // May also be nil
+	verifyConfig *VerifyConfig, // May also be nil
+
+	cyphertext []byte, // May also be armored
+) ([]byte, bool, error) { // plaintext, verified, error
+	if decryptConfig != nil && verifyConfig == nil {
+		if c, err := armor.Decode(bytes.NewBuffer(cyphertext)); err == nil {
+			unarmoredCyphertext, err := ioutil.ReadAll(c.Body)
+			if err != nil {
+				return []byte{}, false, err
+			}
+
+			cyphertext = unarmoredCyphertext
+		}
+
+		rawPlaintext, err := openpgp.ReadMessage(bytes.NewBuffer(cyphertext), openpgp.EntityList{decryptConfig.PrivateKey}, nil, nil)
+		if err != nil {
+			return []byte{}, false, err
+		}
+
+		plaintext, err := ioutil.ReadAll(rawPlaintext.UnverifiedBody)
+		if err != nil {
+			return []byte{}, false, err
+		}
+
+		return plaintext, false, nil
+	}
+
+	return []byte{}, false, nil
 }
