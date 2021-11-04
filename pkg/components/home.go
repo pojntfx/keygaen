@@ -28,7 +28,6 @@ type Home struct {
 	privateKeyID            string
 	createDetachedSignature bool
 
-	encryptAndSignPasswordModalOpen bool
 	encryptAndSignDownloadModalOpen bool
 
 	confirmCloseModalOpen bool
@@ -36,7 +35,6 @@ type Home struct {
 
 	viewCypherAndSignatureModalOpen bool
 
-	decryptAndVerifyPasswordModalOpen bool
 	decryptAndVerifyDownloadModalOpen bool
 
 	viewPlaintextModalOpen bool
@@ -231,45 +229,6 @@ func (c *Home) Render() app.UI {
 					},
 					OnAction: func() {
 						c.keyDuplicateModalOpen = false
-					},
-				},
-			),
-			app.If(
-				c.encryptAndSignPasswordModalOpen,
-				&PasswordModal{
-					Title:         `Enter Password for Key "` + c.privateKeyID + `"`,
-					WrongPassword: c.wrongPassword,
-					ClearWrongPassword: func() {
-						c.wrongPassword = false
-					},
-					OnSubmit: func(password string) {
-						c.keyPasswordChan <- password
-					},
-					OnCancel: func() {
-						c.confirmModalClose = func() {
-							c.keyPasswordChan <- ""
-						}
-						c.confirmCloseModalOpen = true
-
-						c.Update()
-					},
-				},
-			),
-			app.If(
-				c.decryptAndVerifyPasswordModalOpen,
-				&PasswordModal{
-					Title: `Enter Password for Key "` + c.privateKeyID + `"`,
-					OnSubmit: func(password string) {
-						c.decryptAndVerifyPasswordModalOpen = false
-						c.decryptAndVerifyDownloadModalOpen = true
-					},
-					OnCancel: func() {
-						c.confirmModalClose = func() {
-							c.decryptAndVerifyPasswordModalOpen = false
-						}
-						c.confirmCloseModalOpen = true
-
-						c.Update()
 					},
 				},
 			),
@@ -703,7 +662,78 @@ func (c *Home) Render() app.UI {
 						c.privateKeyID = privateKeyID
 
 						c.decryptAndVerifyModalOpen = false
-						c.decryptAndVerifyPasswordModalOpen = true
+
+						go func() {
+							// Decrypt
+							if c.privateKeyID != "" && c.publicKeyID == "" {
+								rawPrivateKey, err := c.getPrivateKeyByID(c.privateKeyID)
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								var privateKey *openpgp.Entity
+
+								// We might have to unlock a private key first
+								locked, fingerprint, err := crypt.IsKeyLocked([]byte(rawPrivateKey))
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								if locked {
+									password := c.getPasswordForKey(
+										fingerprint,
+										func(password string) error {
+											pk, fp, err := crypt.ReadKey([]byte(rawPrivateKey), password)
+											if err == nil {
+												privateKey = pk
+												fingerprint = fp
+											}
+
+											return err
+										},
+									)
+
+									// Stop import if no password has been entered
+									if password == "" {
+										c.keyPasswordModalOpen = false
+
+										return
+									}
+								}
+
+								if privateKey == nil {
+									privateKey, fingerprint, err = crypt.ReadKey([]byte(rawPrivateKey), "")
+									if err != nil {
+										c.panic(err, func() {})
+
+										return
+									}
+								}
+
+								plaintext, _, err := crypt.DecryptVerify(
+									&crypt.DecryptConfig{
+										PrivateKey: privateKey,
+									},
+									nil,
+									file,
+								)
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								log.Printf("Plaintext: %s\n", plaintext)
+
+								c.decryptAndVerifyDownloadModalOpen = true
+
+								c.Update()
+							}
+						}()
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {

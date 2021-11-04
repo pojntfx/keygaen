@@ -28,17 +28,17 @@ func EncryptSign(
 ) (cyphertext []byte, signature []byte, err error) // May also be only cyphertext or signature
 
 type DecryptConfig struct {
-	PrivateKey *openpgp.Identity
+	PrivateKey *openpgp.Entity
 }
 
 type VerifyConfig struct {
-	PublicKey         *openpgp.Identity
+	PublicKey         *openpgp.Entity
 	DetachedSignature []byte // May also be armored
 }
 
 func DecryptVerify(
 	decryptConfig *DecryptConfig, // May also be nil
-	verfiyConfig *VerifyConfig, // May also be nil
+	verifyConfig *VerifyConfig, // May also be nil
 
 	cyphertext []byte, // May also be armored
 ) (plaintext []byte, verified bool, err error) // verified is always false if verifyConfig == nil
