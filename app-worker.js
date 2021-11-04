@@ -1,7 +1,7 @@
-const cacheName = "app-" + "ee78f52f84dfc624fc7c75fe6d4f51efa5c5d55b";
+const cacheName = "app-" + "8117ee292d4b4d1537ea08f16ab35a8487ce47de";
 
 self.addEventListener("install", event => {
-  console.log("installing app worker ee78f52f84dfc624fc7c75fe6d4f51efa5c5d55b");
+  console.log("installing app worker 8117ee292d4b4d1537ea08f16ab35a8487ce47de");
 
   event.waitUntil(
     caches.open(cacheName).
@@ -39,7 +39,7 @@ self.addEventListener("activate", event => {
       );
     })
   );
-  console.log("app worker ee78f52f84dfc624fc7c75fe6d4f51efa5c5d55b is activated");
+  console.log("app worker 8117ee292d4b4d1537ea08f16ab35a8487ce47de is activated");
 });
 
 self.addEventListener("fetch", event => {
