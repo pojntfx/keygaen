@@ -9,6 +9,7 @@ import (
 
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
+	"github.com/ProtonMail/go-crypto/openpgp/packet"
 )
 
 const (
@@ -55,6 +56,14 @@ func IsKeyLocked(key []byte) (bool, string, error) {
 	}
 
 	return locked, hex.EncodeToString(entity.PrimaryKey.Fingerprint), err
+}
+
+func unarmor(data []byte) ([]byte, error) {
+	if c, err := armor.Decode(bytes.NewBuffer(data)); err == nil {
+		return ioutil.ReadAll(c.Body)
+	}
+
+	return data, nil
 }
 
 func ReadKey(key []byte, password string) (*openpgp.Entity, string, error) {
@@ -251,13 +260,9 @@ func DecryptVerify(
 	cyphertext []byte, // May also be armored
 ) ([]byte, bool, error) { // plaintext, verified, error
 	if decryptConfig != nil && verifyConfig == nil {
-		if c, err := armor.Decode(bytes.NewBuffer(cyphertext)); err == nil {
-			unarmoredCyphertext, err := ioutil.ReadAll(c.Body)
-			if err != nil {
-				return []byte{}, false, err
-			}
-
-			cyphertext = unarmoredCyphertext
+		cyphertext, err := unarmor(cyphertext)
+		if err != nil {
+			return []byte{}, false, err
 		}
 
 		rawPlaintext, err := openpgp.ReadMessage(bytes.NewBuffer(cyphertext), openpgp.EntityList{decryptConfig.PrivateKey}, nil, nil)
@@ -271,6 +276,36 @@ func DecryptVerify(
 		}
 
 		return plaintext, false, nil
+	}
+
+	// TODO: Support non-detached signatures by calling openpgp.ReadMessage like above and accessing .Signature and .UnverifiedBody
+	if verifyConfig != nil && decryptConfig == nil {
+		rawSignature, err := unarmor(verifyConfig.DetachedSignature)
+		if err != nil {
+			return []byte{}, false, err
+		}
+
+		r := packet.NewReader(bytes.NewBuffer(rawSignature))
+		parsedSignature, err := r.Next()
+		if err != nil {
+			return []byte{}, false, err
+		}
+
+		signature, ok := parsedSignature.(*packet.Signature)
+		if !ok {
+			return []byte{}, false, errors.New("could not parse signature")
+		}
+
+		hash := signature.Hash.New()
+		if _, err := hash.Write(cyphertext); err != nil {
+			return []byte{}, false, err
+		}
+
+		if err := verifyConfig.PublicKey.PrimaryKey.VerifySignature(hash, signature); err != nil {
+			return []byte{}, false, err
+		}
+
+		return []byte{}, true, nil
 	}
 
 	return []byte{}, false, nil

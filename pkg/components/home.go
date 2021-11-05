@@ -657,7 +657,7 @@ func (c *Home) Render() app.UI {
 				&DecryptAndVerifyModal{
 					Keys: c.keys,
 
-					OnSubmit: func(file []byte, publicKeyID, privateKeyID, detachedSignature string) {
+					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, detachedSignature []byte) {
 						c.publicKeyID = publicKeyID
 						c.privateKeyID = privateKeyID
 
@@ -732,6 +732,47 @@ func (c *Home) Render() app.UI {
 								c.decryptAndVerifyDownloadModalOpen = true
 
 								c.Update()
+
+								return
+							}
+
+							// Verify
+							if c.publicKeyID != "" && c.privateKeyID == "" {
+								rawPublicKey, err := c.getPublicKeyByID(c.publicKeyID)
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								publicKey, _, err := crypt.ReadKey([]byte(rawPublicKey), "")
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								_, validSignature, err := crypt.DecryptVerify(
+									nil,
+									&crypt.VerifyConfig{
+										PublicKey:         publicKey,
+										DetachedSignature: detachedSignature,
+									},
+									file,
+								)
+								if err != nil {
+									c.panic(err, func() {})
+
+									return
+								}
+
+								log.Printf("Signature: %v\n", validSignature)
+
+								c.decryptAndVerifyDownloadModalOpen = true
+
+								c.Update()
+
+								return
 							}
 						}()
 					},

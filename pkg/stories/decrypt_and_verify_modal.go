@@ -28,7 +28,7 @@ func (c *DecryptAndVerifyModalStory) Render() app.UI {
 				&components.DecryptAndVerifyModal{
 					Keys: demoKeys,
 
-					OnSubmit: func(file []byte, publicKeyID, privateKeyID, detachedSignature string) {
+					OnSubmit: func(file []byte, publicKeyID, privateKeyID string, detachedSignature []byte) {
 						app.Window().Call("alert", fmt.Sprintf("Decrypted and verified file %v, using public key ID %v, private key ID %v and detached signature %v", file, publicKeyID, privateKeyID, detachedSignature))
 
 						c.modalOpen = false

@@ -18,7 +18,7 @@ type DecryptAndVerifyModal struct {
 		file []byte,
 		publicKeyID string,
 		privateKeyID string,
-		detachedSignature string,
+		detachedSignature []byte,
 	)
 	OnCancel func(dirty bool, clear chan struct{})
 
@@ -31,7 +31,7 @@ type DecryptAndVerifyModal struct {
 	privateKeyID     string
 
 	useDetachedSignature bool
-	detachedSignature    string
+	detachedSignature    []byte
 
 	dirty bool
 }
@@ -290,16 +290,16 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																								FileSelectionLabel:    "Drag and drop a detached signature or select one",
 																								ClearLabel:            "Clear",
 																								TextEntryLabel:        "Or enter the detached signature's content here",
-																								TextEntryBlockedLabel: c.detachedSignature,
+																								TextEntryBlockedLabel: string(c.detachedSignature),
 																								FileContents:          []byte(c.detachedSignature),
 
 																								OnChange: func(fileContents []byte) {
-																									c.detachedSignature = string(fileContents)
+																									c.detachedSignature = fileContents
 
 																									c.dirty = true
 																								},
 																								OnClear: func() {
-																									c.detachedSignature = ""
+																									c.detachedSignature = []byte{}
 																								},
 																							},
 																						),
@@ -363,7 +363,7 @@ func (c *DecryptAndVerifyModal) clear() {
 	c.privateKeyID = ""
 
 	c.useDetachedSignature = false
-	c.detachedSignature = ""
+	c.detachedSignature = []byte{}
 
 	c.dirty = false
 }
