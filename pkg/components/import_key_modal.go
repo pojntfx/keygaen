@@ -43,7 +43,7 @@ func (c *ImportKeyModal) Render() app.UI {
 								FileSelectionLabel:    "Drag and drop a key or select one",
 								ClearLabel:            "Clear",
 								TextEntryLabel:        "Or paste the key's contents here",
-								TextEntryBlockedLabel: string(c.key),
+								TextEntryBlockedLabel: "File has been selected.",
 								FileContents:          []byte(c.key),
 
 								OnChange: func(fileContents []byte) {
