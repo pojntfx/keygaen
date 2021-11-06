@@ -10,6 +10,7 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
 	"github.com/ProtonMail/go-crypto/openpgp/packet"
+	"github.com/ProtonMail/gopenpgp/v2/helper"
 )
 
 const (
@@ -58,7 +59,7 @@ func IsKeyLocked(key []byte) (bool, string, error) {
 	return locked, hex.EncodeToString(entity.PrimaryKey.Fingerprint), err
 }
 
-func unarmor(data []byte) ([]byte, error) {
+func Unarmor(data []byte) ([]byte, error) {
 	if c, err := armor.Decode(bytes.NewBuffer(data)); err == nil {
 		return ioutil.ReadAll(c.Body)
 	}
@@ -89,6 +90,19 @@ func ReadKey(key []byte, password string) (*openpgp.Entity, string, error) {
 	}
 
 	return entity, hex.EncodeToString(entity.PrimaryKey.Fingerprint), nil
+}
+
+func GenerateKey(
+	fullName string,
+	email string,
+	password string,
+) ([]byte, error) { // key, error
+	key, err := helper.GenerateKey(fullName, email, []byte(password), "x25519", 0)
+	if err != nil {
+		return []byte{}, err
+	}
+
+	return []byte(key), err
 }
 
 type EncryptConfig struct {
@@ -260,7 +274,7 @@ func DecryptVerify(
 	cyphertext []byte, // May also be armored
 ) ([]byte, bool, error) { // plaintext, verified, error
 	// Unarmor the cyphertext
-	text, err := unarmor(cyphertext)
+	text, err := Unarmor(cyphertext)
 	if err != nil {
 		return []byte{}, false, err
 	}
@@ -281,7 +295,7 @@ func DecryptVerify(
 	if verifyConfig != nil {
 		if verifyConfig.DetachedSignature == nil {
 			// Unarmor the signature
-			signature, err := unarmor(text)
+			signature, err := Unarmor(text)
 			if err != nil {
 				return []byte{}, false, err
 			}
@@ -310,7 +324,7 @@ func DecryptVerify(
 		}
 
 		// Verify the detached signature
-		rawSignature, err := unarmor(verifyConfig.DetachedSignature)
+		rawSignature, err := Unarmor(verifyConfig.DetachedSignature)
 		if err != nil {
 			return []byte{}, false, err
 		}
