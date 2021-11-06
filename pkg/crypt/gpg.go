@@ -278,8 +278,35 @@ func DecryptVerify(
 		return plaintext, false, nil
 	}
 
-	// TODO: Support non-detached signatures by calling openpgp.ReadMessage like above and accessing .Signature and .UnverifiedBody
 	if verifyConfig != nil && decryptConfig == nil {
+		if verifyConfig.DetachedSignature == nil {
+			cyphertext, err := unarmor(cyphertext)
+			if err != nil {
+				return []byte{}, false, err
+			}
+
+			rawPlaintext, err := openpgp.ReadMessage(bytes.NewBuffer(cyphertext), openpgp.EntityList{verifyConfig.PublicKey}, nil, nil)
+			if err != nil {
+				return []byte{}, false, err
+			}
+
+			plaintext, err := ioutil.ReadAll(rawPlaintext.UnverifiedBody)
+			if err != nil {
+				return []byte{}, false, err
+			}
+
+			hash := rawPlaintext.Signature.Hash.New()
+			if _, err := hash.Write(plaintext); err != nil {
+				return []byte{}, false, err
+			}
+
+			if err := verifyConfig.PublicKey.PrimaryKey.VerifySignature(hash, rawPlaintext.Signature); err != nil {
+				return []byte{}, false, err
+			}
+
+			return plaintext, true, nil
+		}
+
 		rawSignature, err := unarmor(verifyConfig.DetachedSignature)
 		if err != nil {
 			return []byte{}, false, err
