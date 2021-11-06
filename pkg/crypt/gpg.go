@@ -259,54 +259,57 @@ func DecryptVerify(
 
 	cyphertext []byte, // May also be armored
 ) ([]byte, bool, error) { // plaintext, verified, error
-	if decryptConfig != nil && verifyConfig == nil {
-		cyphertext, err := unarmor(cyphertext)
-		if err != nil {
-			return []byte{}, false, err
-		}
-
-		rawPlaintext, err := openpgp.ReadMessage(bytes.NewBuffer(cyphertext), openpgp.EntityList{decryptConfig.PrivateKey}, nil, nil)
-		if err != nil {
-			return []byte{}, false, err
-		}
-
-		plaintext, err := ioutil.ReadAll(rawPlaintext.UnverifiedBody)
-		if err != nil {
-			return []byte{}, false, err
-		}
-
-		return plaintext, false, nil
+	// Unarmor the cyphertext
+	text, err := unarmor(cyphertext)
+	if err != nil {
+		return []byte{}, false, err
 	}
 
-	if verifyConfig != nil && decryptConfig == nil {
-		if verifyConfig.DetachedSignature == nil {
-			cyphertext, err := unarmor(cyphertext)
-			if err != nil {
-				return []byte{}, false, err
-			}
-
-			rawPlaintext, err := openpgp.ReadMessage(bytes.NewBuffer(cyphertext), openpgp.EntityList{verifyConfig.PublicKey}, nil, nil)
-			if err != nil {
-				return []byte{}, false, err
-			}
-
-			plaintext, err := ioutil.ReadAll(rawPlaintext.UnverifiedBody)
-			if err != nil {
-				return []byte{}, false, err
-			}
-
-			hash := rawPlaintext.Signature.Hash.New()
-			if _, err := hash.Write(plaintext); err != nil {
-				return []byte{}, false, err
-			}
-
-			if err := verifyConfig.PublicKey.PrimaryKey.VerifySignature(hash, rawPlaintext.Signature); err != nil {
-				return []byte{}, false, err
-			}
-
-			return plaintext, true, nil
+	if decryptConfig != nil {
+		// Decrypt the cyphertext
+		rawText, err := openpgp.ReadMessage(bytes.NewBuffer(text), openpgp.EntityList{decryptConfig.PrivateKey}, nil, nil)
+		if err != nil {
+			return []byte{}, false, err
 		}
 
+		text, err = ioutil.ReadAll(rawText.UnverifiedBody)
+		if err != nil {
+			return []byte{}, false, err
+		}
+	}
+
+	if verifyConfig != nil {
+		if verifyConfig.DetachedSignature == nil {
+			// Unarmor the signature
+			signature, err := unarmor(text)
+			if err != nil {
+				return []byte{}, false, err
+			}
+
+			// Verify the non-detached signature
+			rawText, err := openpgp.ReadMessage(bytes.NewBuffer(signature), openpgp.EntityList{verifyConfig.PublicKey}, nil, nil)
+			if err != nil {
+				return []byte{}, false, err
+			}
+
+			body, err := ioutil.ReadAll(rawText.UnverifiedBody)
+			if err != nil {
+				return []byte{}, false, err
+			}
+
+			hash := rawText.Signature.Hash.New()
+			if _, err := hash.Write(body); err != nil {
+				return []byte{}, false, err
+			}
+
+			if err := verifyConfig.PublicKey.PrimaryKey.VerifySignature(hash, rawText.Signature); err != nil {
+				return []byte{}, false, err
+			}
+
+			return body, true, nil
+		}
+
+		// Verify the detached signature
 		rawSignature, err := unarmor(verifyConfig.DetachedSignature)
 		if err != nil {
 			return []byte{}, false, err
@@ -324,7 +327,7 @@ func DecryptVerify(
 		}
 
 		hash := signature.Hash.New()
-		if _, err := hash.Write(cyphertext); err != nil {
+		if _, err := hash.Write(text); err != nil {
 			return []byte{}, false, err
 		}
 
@@ -332,8 +335,8 @@ func DecryptVerify(
 			return []byte{}, false, err
 		}
 
-		return []byte{}, true, nil
+		return text, true, nil
 	}
 
-	return []byte{}, false, nil
+	return text, false, nil
 }

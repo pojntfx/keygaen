@@ -665,7 +665,8 @@ func (c *Home) Render() app.UI {
 
 						go func() {
 							// Decrypt
-							if c.privateKeyID != "" && c.publicKeyID == "" {
+							var decryptConfig *crypt.DecryptConfig
+							if c.privateKeyID != "" {
 								rawPrivateKey, err := c.getPrivateKeyByID(c.privateKeyID)
 								if err != nil {
 									c.panic(err, func() {})
@@ -714,30 +715,14 @@ func (c *Home) Render() app.UI {
 									}
 								}
 
-								plaintext, _, err := crypt.DecryptVerify(
-									&crypt.DecryptConfig{
-										PrivateKey: privateKey,
-									},
-									nil,
-									file,
-								)
-								if err != nil {
-									c.panic(err, func() {})
-
-									return
+								decryptConfig = &crypt.DecryptConfig{
+									PrivateKey: privateKey,
 								}
-
-								log.Printf("Plaintext: %s\n", plaintext)
-
-								c.decryptAndVerifyDownloadModalOpen = true
-
-								c.Update()
-
-								return
 							}
 
 							// Verify
-							if c.publicKeyID != "" && c.privateKeyID == "" {
+							var verifyConfig *crypt.VerifyConfig
+							if c.publicKeyID != "" {
 								rawPublicKey, err := c.getPublicKeyByID(c.publicKeyID)
 								if err != nil {
 									c.panic(err, func() {})
@@ -752,29 +737,29 @@ func (c *Home) Render() app.UI {
 									return
 								}
 
-								plaintext, verified, err := crypt.DecryptVerify(
-									nil,
-									&crypt.VerifyConfig{
-										PublicKey:         publicKey,
-										DetachedSignature: detachedSignature,
-									},
-									file,
-								)
-								if err != nil {
-									c.panic(err, func() {})
-
-									return
+								verifyConfig = &crypt.VerifyConfig{
+									PublicKey:         publicKey,
+									DetachedSignature: detachedSignature,
 								}
+							}
 
-								log.Printf("Plaintext: %s\n", plaintext)
-								log.Printf("Verified: %v\n", verified)
-
-								c.decryptAndVerifyDownloadModalOpen = true
-
-								c.Update()
+							plaintext, verified, err := crypt.DecryptVerify(
+								decryptConfig,
+								verifyConfig,
+								file,
+							)
+							if err != nil {
+								c.panic(err, func() {})
 
 								return
 							}
+
+							log.Printf("Plaintext: %s\n", plaintext)
+							log.Printf("Verified: %v\n", verified)
+
+							c.decryptAndVerifyDownloadModalOpen = true
+
+							c.Update()
 						}()
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
