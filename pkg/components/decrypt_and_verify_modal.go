@@ -290,7 +290,7 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																								FileSelectionLabel:    "Drag and drop a detached signature or select one",
 																								ClearLabel:            "Clear",
 																								TextEntryLabel:        "Or enter the detached signature's content here",
-																								TextEntryBlockedLabel: string(c.detachedSignature),
+																								TextEntryBlockedLabel: "File has been selected.",
 																								FileContents:          []byte(c.detachedSignature),
 
 																								OnChange: func(fileContents []byte) {
