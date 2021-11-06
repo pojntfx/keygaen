@@ -752,7 +752,7 @@ func (c *Home) Render() app.UI {
 									return
 								}
 
-								_, validSignature, err := crypt.DecryptVerify(
+								plaintext, verified, err := crypt.DecryptVerify(
 									nil,
 									&crypt.VerifyConfig{
 										PublicKey:         publicKey,
@@ -766,7 +766,8 @@ func (c *Home) Render() app.UI {
 									return
 								}
 
-								log.Printf("Signature: %v\n", validSignature)
+								log.Printf("Plaintext: %s\n", plaintext)
+								log.Printf("Verified: %v\n", verified)
 
 								c.decryptAndVerifyDownloadModalOpen = true
 
