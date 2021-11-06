@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta httpequiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="author" content="Felicitas Pojtinger">
-<meta name="description" content="Sign, verify, encrypt and decrypt data with GPG.">
+<meta content="Sign, verify, encrypt and decrypt data with GPG." name="description">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:39953/">
+<meta content="http://127.0.0.1:35045/" property="og:url">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -19,12 +19,12 @@ gridge
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link href="/gridge/app.css" type="text/css" rel="stylesheet">
-<script defer="true" src="/gridge/wasm_exec.js"></script>
+<link type="text/css" rel="stylesheet" href="/gridge/app.css">
+<script src="/gridge/wasm_exec.js" defer="true"></script>
 <script src="/gridge/app.js" defer="true"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
-<link href="/gridge/web/index.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -32,34 +32,34 @@ gridge
 </head>
 <body>
 <div>
-<aside id="app-wasm-loader" class="goapp-app-info">
+<aside class="goapp-app-info" id="app-wasm-loader">
 <img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
-<p id="app-wasm-loader-label" class="goapp-label">
+<p class="goapp-label" id="app-wasm-loader-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
 </aside>
 <div id="app-pre-render">
 <div class="pf-c-page">
-<a href="#gridge-main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
+<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#gridge-main">
 Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
 <a class="pf-c-page__header-brand-link" href="#">
-<img class="pf-c-brand" src="/gridge/web/logo-light.png" alt="Logo">
+<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo-light.png">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a aria-label="Help" href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain">
+<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
 <i class="pf-icon pf-icon-help" aria-hidden="true"></i>
 </a>
 </div>
 </div>
 </div>
 </header>
-<main id="gridge-main" tabindex="-1" class="pf-c-page__main">
+<main class="pf-c-page__main" id="gridge-main" tabindex="-1">
 <section class="pf-c-page__main-section pf-m-fill">
 <div class="pf-c-empty-state">
 <div class="pf-c-empty-state__content">
@@ -70,7 +70,7 @@ No keys yet
 <div class="pf-c-empty-state__body">
 To get started, please create or import a key.
 </div>
-<button type="button" class="pf-c-button pf-m-primary">
+<button class="pf-c-button pf-m-primary" type="button">
 Create key
 </button>
 <div class="pf-c-empty-state__secondary">
