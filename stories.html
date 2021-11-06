@@ -8,7 +8,7 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:46581/stories">
+<meta content="http://127.0.0.1:39927/stories" property="og:url">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
@@ -16,14 +16,14 @@
 <title>
 gridge
 </title>
-<link rel="icon" type="image/png" href="/gridge/web/default.png">
-<link href="/gridge/web/default.png" rel="apple-touch-icon">
+<link type="image/png" href="/gridge/web/default.png" rel="icon">
+<link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
-<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
+<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css" type="text/css" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
@@ -51,8 +51,8 @@ Skip to content
 </button>
 </span>
 <div class="pf-c-masthead__main">
-<a class="pf-c-masthead__brand" href="/">
-<img class="pf-c-brand" src="/gridge/web/logo.png" alt="Logo">
+<a href="/" class="pf-c-masthead__brand">
+<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo.png">
 </a>
 <em class="pf-c-brand pf-u-ml-sm">
 Stories
@@ -62,7 +62,7 @@ Stories
 </header>
 <div class="pf-c-page__sidebar pf-m-collapsed" aria-hidden="true">
 <div class="pf-c-page__sidebar-body">
-<nav class="pf-c-nav" aria-label="Global">
+<nav aria-label="Global" class="pf-c-nav">
 <ul class="pf-c-nav__list">
 <li class="pf-c-nav__item">
 <a class="pf-c-nav__link" href="?activeTitle=Confirmation%2BModal">
@@ -75,7 +75,7 @@ Create Key Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Decrypt%252FVerify%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Decrypt%252FVerify%2BModal">
 Decrypt/Verify Modal
 </a>
 </li>
@@ -100,7 +100,7 @@ Error Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Export%2BKey" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Export%2BKey">
 Export Key
 </a>
 </li>
@@ -125,7 +125,7 @@ Key List
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Modal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Modal">
 Modal
 </a>
 </li>
@@ -135,7 +135,7 @@ Navbar
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Password%2BModal">
+<a href="?activeTitle=Password%2BModal" class="pf-c-nav__link">
 Password Modal
 </a>
 </li>
@@ -166,7 +166,7 @@ Toolbar
 Home
 </h1>
 <a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
-<i aria-hidden="true" class="fas fa-expand-arrows-alt"></i>
+<i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
 </div>
@@ -174,7 +174,7 @@ Home
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-overflow-scroll">
 <div class="pf-c-page__main-body">
 <div class="pf-c-page">
-<a href="#gridge-main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
+<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#gridge-main">
 Skip to content
 </a>
 <header class="pf-c-page__header">
@@ -186,14 +186,14 @@ Skip to content
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
-<i class="pf-icon pf-icon-help" aria-hidden="true"></i>
+<a aria-label="Help" href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain">
+<i aria-hidden="true" class="pf-icon pf-icon-help"></i>
 </a>
 </div>
 </div>
 </div>
 </header>
-<main id="gridge-main" tabindex="-1" class="pf-c-page__main">
+<main class="pf-c-page__main" id="gridge-main" tabindex="-1">
 <section class="pf-c-page__main-section pf-m-fill">
 <div class="pf-c-empty-state">
 <div class="pf-c-empty-state__content">
@@ -225,7 +225,7 @@ Or import key
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button aria-label="Reset props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button">
+<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reset props">
 <div class="pf-c-tooltip pf-m-top pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
@@ -236,7 +236,7 @@ Reset props
 </button>
 </div>
 <div class="pf-c-code-block__actions-item">
-<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reload props">
+<button type="button" aria-label="Reload props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
 <div class="pf-c-tooltip pf-m-left pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
