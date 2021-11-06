@@ -6,7 +6,6 @@ import (
 
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
-	"github.com/ProtonMail/gopenpgp/v2/helper"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 	"github.com/pojntfx/gridge/pkg/crypt"
 )
@@ -75,7 +74,14 @@ func (c *Home) Render() app.UI {
 		if candidate.ID == c.privateKeyID {
 			privateKey = candidate
 
-			parsedKey, err := crypto.NewKeyFromArmored(string(privateKey.Content)) // TODO: Use crypt package's implementation to support raw keys
+			rawKey, err := crypt.Unarmor(privateKey.Content)
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
+
+			parsedKey, err := crypto.NewKey(rawKey)
 			if err != nil {
 				c.panic(err, func() {})
 
@@ -107,7 +113,14 @@ func (c *Home) Render() app.UI {
 		if candidate.ID == c.publicKeyID {
 			publicKey = candidate
 
-			parsedKey, err := crypto.NewKeyFromArmored(string(publicKey.Content)) // TODO: Use crypt package's implementation to support raw keys
+			rawKey, err := crypt.Unarmor(publicKey.Content)
+			if err != nil {
+				c.panic(err, func() {})
+
+				break
+			}
+
+			parsedKey, err := crypto.NewKey(rawKey)
 			if err != nil {
 				c.panic(err, func() {})
 
@@ -386,7 +399,7 @@ func (c *Home) Render() app.UI {
 				c.createKeyModalOpen,
 				&CreateKeyModal{
 					OnSubmit: func(fullName, email, password string) {
-						key, err := helper.GenerateKey(fullName, email, []byte(password), "x25519", 0)
+						key, err := crypt.GenerateKey(fullName, email, password)
 						if err != nil {
 							c.createKeyModalOpen = false
 							c.panic(err, func() {
@@ -399,7 +412,7 @@ func (c *Home) Render() app.UI {
 						c.createKeyModalOpen = false
 						c.keySuccessfullyGeneratedModalOpen = true
 
-						parsedKey, fingerprint, err := crypt.ReadKey([]byte(key), password)
+						parsedKey, fingerprint, err := crypt.ReadKey(key, password)
 						if err != nil {
 							c.panic(err, func() {})
 
@@ -420,7 +433,7 @@ func (c *Home) Render() app.UI {
 							Email:    id.UserId.Email,
 							Private:  parsedKey.PrivateKey != nil,
 							Public:   true,
-							Content:  []byte(key),
+							Content:  key,
 						})
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
@@ -550,7 +563,7 @@ func (c *Home) Render() app.UI {
 									return
 								}
 
-								publicKey, _, err := crypt.ReadKey([]byte(rawPublicKey), "")
+								publicKey, _, err := crypt.ReadKey(rawPublicKey, "")
 								if err != nil {
 									c.panic(err, func() {})
 
@@ -576,7 +589,7 @@ func (c *Home) Render() app.UI {
 								var privateKey *openpgp.Entity
 
 								// We might have to unlock a private key first
-								locked, fingerprint, err := crypt.IsKeyLocked([]byte(rawPrivateKey))
+								locked, fingerprint, err := crypt.IsKeyLocked(rawPrivateKey)
 								if err != nil {
 									c.panic(err, func() {})
 
@@ -587,7 +600,7 @@ func (c *Home) Render() app.UI {
 									password := c.getPasswordForKey(
 										fingerprint,
 										func(password string) error {
-											pk, fp, err := crypt.ReadKey([]byte(rawPrivateKey), password)
+											pk, fp, err := crypt.ReadKey(rawPrivateKey, password)
 											if err == nil {
 												privateKey = pk
 												fingerprint = fp
@@ -606,7 +619,7 @@ func (c *Home) Render() app.UI {
 								}
 
 								if privateKey == nil {
-									privateKey, fingerprint, err = crypt.ReadKey([]byte(rawPrivateKey), "")
+									privateKey, fingerprint, err = crypt.ReadKey(rawPrivateKey, "")
 									if err != nil {
 										c.panic(err, func() {})
 
@@ -677,7 +690,7 @@ func (c *Home) Render() app.UI {
 								var privateKey *openpgp.Entity
 
 								// We might have to unlock a private key first
-								locked, fingerprint, err := crypt.IsKeyLocked([]byte(rawPrivateKey))
+								locked, fingerprint, err := crypt.IsKeyLocked(rawPrivateKey)
 								if err != nil {
 									c.panic(err, func() {})
 
@@ -688,7 +701,7 @@ func (c *Home) Render() app.UI {
 									password := c.getPasswordForKey(
 										fingerprint,
 										func(password string) error {
-											pk, fp, err := crypt.ReadKey([]byte(rawPrivateKey), password)
+											pk, fp, err := crypt.ReadKey(rawPrivateKey, password)
 											if err == nil {
 												privateKey = pk
 												fingerprint = fp
@@ -707,7 +720,7 @@ func (c *Home) Render() app.UI {
 								}
 
 								if privateKey == nil {
-									privateKey, fingerprint, err = crypt.ReadKey([]byte(rawPrivateKey), "")
+									privateKey, fingerprint, err = crypt.ReadKey(rawPrivateKey, "")
 									if err != nil {
 										c.panic(err, func() {})
 
@@ -730,7 +743,7 @@ func (c *Home) Render() app.UI {
 									return
 								}
 
-								publicKey, _, err := crypt.ReadKey([]byte(rawPublicKey), "")
+								publicKey, _, err := crypt.ReadKey(rawPublicKey, "")
 								if err != nil {
 									c.panic(err, func() {})
 
@@ -1055,55 +1068,54 @@ func (c *Home) OnAppUpdate(ctx app.Context) {
 	}
 }
 
-func (c *Home) getPublicKeyByID(ID string) (string, error) {
-	publicKeyExportArmored := ""
-	for _, candidate := range c.keys {
-		if candidate.ID == c.publicKeyID {
-			publicKey := candidate
-
-			parsedKey, err := crypto.NewKeyFromArmored(string(publicKey.Content)) // TODO: Use crypt package's implementation to support raw keys
+func (c *Home) getPublicKeyByID(ID string) ([]byte, error) {
+	for _, publicKey := range c.keys {
+		if publicKey.ID == c.publicKeyID {
+			rawKey, err := crypt.Unarmor(publicKey.Content)
 			if err != nil {
-				return "", err
+				return []byte{}, err
 			}
 
-			publicKeyExportArmored, err = parsedKey.GetArmoredPublicKey()
+			parsedKey, err := crypto.NewKey(rawKey)
 			if err != nil {
-				return "", err
+				return []byte{}, err
 			}
 
-			break
+			publicKeyExport, err := parsedKey.GetArmoredPublicKey()
+			if err != nil {
+				return []byte{}, err
+			}
+
+			return []byte(publicKeyExport), nil
 		}
 	}
 
-	return publicKeyExportArmored, nil
+	return []byte{}, errors.New("could not find public key")
 }
 
-func (c *Home) getPrivateKeyByID(ID string) (string, error) {
-	privateKey := GPGKey{}
-	privateKeyExportArmored := ""
-	for _, candidate := range c.keys {
-		if candidate.ID == c.privateKeyID {
-			privateKey = candidate
-
-			parsedKey, err := crypto.NewKeyFromArmored(string(privateKey.Content)) // TODO: Use crypt package's implementation to support raw keys
+func (c *Home) getPrivateKeyByID(ID string) ([]byte, error) {
+	for _, privateKey := range c.keys {
+		if privateKey.ID == c.privateKeyID {
+			rawKey, err := crypt.Unarmor(privateKey.Content)
 			if err != nil {
-				c.panic(err, func() {})
-
-				break
+				return []byte{}, err
 			}
 
-			privateKeyExportArmored, err = parsedKey.Armor()
+			parsedKey, err := crypto.NewKey(rawKey)
 			if err != nil {
-				c.panic(err, func() {})
-
-				break
+				return []byte{}, err
 			}
 
-			break
+			privateKeyExport, err := parsedKey.Armor()
+			if err != nil {
+				return []byte{}, err
+			}
+
+			return []byte(privateKeyExport), nil
 		}
 	}
 
-	return privateKeyExportArmored, nil
+	return []byte{}, errors.New("could not find private key")
 }
 
 func (c *Home) getPasswordForKey(ID string, checkPassword func(password string) error) string {
