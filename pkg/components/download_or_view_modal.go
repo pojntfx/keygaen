@@ -19,6 +19,8 @@ type DownloadOrViewModal struct {
 	OnDownload func()
 	OnView     func()
 
+	ShowView bool
+
 	used bool
 }
 
@@ -76,15 +78,18 @@ func (c *DownloadOrViewModal) Render() app.UI {
 
 					c.OnDownload()
 				}),
-			app.Button().
-				Class("pf-c-button pf-m-link").
-				Type("button").
-				Text(viewLabel).
-				OnClick(func(ctx app.Context, e app.Event) {
-					c.used = true
+			app.If(
+				c.ShowView,
+				app.Button().
+					Class("pf-c-button pf-m-link").
+					Type("button").
+					Text(viewLabel).
+					OnClick(func(ctx app.Context, e app.Event) {
+						c.used = true
 
-					c.OnView()
-				}),
+						c.OnView()
+					}),
+			),
 		},
 
 		OnClose: func() {

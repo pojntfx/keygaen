@@ -3,6 +3,7 @@ package components
 import (
 	"errors"
 	"log"
+	"unicode/utf8"
 
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
@@ -259,7 +260,7 @@ func (c *Home) Render() app.UI {
 					SubjectAVerb: "signed",
 
 					SubjectB:     c.publicKeyID != "",
-					SubjectBNoun: "cypher",
+					SubjectBNoun: "cyphertext",
 					SubjectBVerb: "encrypted",
 
 					OnClose: func(used bool) {
@@ -279,16 +280,20 @@ func (c *Home) Render() app.UI {
 						c.Update()
 					},
 					OnDownload: func() {
-						c.download(c.outputCyphertext, "cypher.txt", "text/plain") // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
+						cext, cmime := getEncryptedExtensionAndMIME(c.outputCyphertext, "cyphertext")
+						c.download(c.outputCyphertext, cext, cmime)
 
 						if c.createDetachedSignature {
-							c.download(c.outputSignature, "signature.asc", "text/plain") // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
+							sext, smime := getEncryptedExtensionAndMIME(c.outputSignature, "signature")
+							c.download(c.outputSignature, sext, smime)
 						}
 					},
 					OnView: func() {
 						c.encryptAndSignDownloadModalOpen = false
 						c.viewCypherAndSignatureModalOpen = true
 					},
+
+					ShowView: utf8.Valid(c.outputCyphertext) && utf8.Valid(c.outputSignature),
 				},
 			),
 			app.If(
@@ -319,12 +324,15 @@ func (c *Home) Render() app.UI {
 						c.Update()
 					},
 					OnDownload: func() {
-						c.download(c.outputPlaintext, "plaintext.txt", "text/plain") // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
+						pext, pmime := getDecryptedExtensionAndMIME(c.outputPlaintext, "plaintext")
+						c.download(c.outputPlaintext, pext, pmime)
 					},
 					OnView: func() {
 						c.decryptAndVerifyDownloadModalOpen = false
 						c.viewPlaintextModalOpen = true
 					},
+
+					ShowView: utf8.Valid(c.outputPlaintext),
 				},
 			),
 			app.Main().
@@ -789,7 +797,7 @@ func (c *Home) Render() app.UI {
 					tabs := []TextOutputModalTab{
 						{
 							Language: "text/plain",
-							Title:    "cypher.txt", // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
+							Title:    "cyphertext.asc",
 							Body:     string(c.outputCyphertext),
 						},
 					}
@@ -827,7 +835,7 @@ func (c *Home) Render() app.UI {
 						Tabs: []TextOutputModalTab{
 							{
 								Language: "text/plain",
-								Title:    "plaintext.txt", // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
+								Title:    "plaintext",
 								Body:     string(c.outputPlaintext),
 							},
 						},
@@ -1148,4 +1156,20 @@ func (c *Home) getPasswordForKey(ID string, checkPassword func(password string) 
 
 		return password
 	}
+}
+
+func getEncryptedExtensionAndMIME(content []byte, filename string) (string, string) {
+	if utf8.Valid(content) {
+		return filename + ".asc", "text/plain"
+	}
+
+	return filename + ".gpg", "application/octet-stream"
+}
+
+func getDecryptedExtensionAndMIME(content []byte, filename string) (string, string) {
+	if utf8.Valid(content) {
+		return filename, "text/plain"
+	}
+
+	return filename, "application/octet-stream"
 }
