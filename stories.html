@@ -2,21 +2,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta httpequiv="Content-Type" content="text/html; charset=utf-8">
+<meta content="text/html; charset=utf-8" httpequiv="Content-Type">
 <meta name="author" content="Felicitas Pojtinger">
 <meta content="Sign, verify, encrypt and decrypt data with GPG." name="description">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
-<meta property="og:url" content="http://127.0.0.1:40631/stories">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+<meta property="og:url" content="http://127.0.0.1:44329/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
-<meta property="og:type" content="website">
-<meta content property="og:image">
+<meta content="website" property="og:type">
+<meta property="og:image" content>
 <title>
 gridge
 </title>
-<link rel="icon" type="image/png" href="/gridge/web/default.png">
+<link href="/gridge/web/default.png" rel="icon" type="image/png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
@@ -24,7 +24,7 @@ gridge
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
-<link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
+<link href="/gridge/web/index.css" type="text/css" rel="stylesheet">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -41,7 +41,7 @@ Sign, verify, encrypt and decrypt data with GPG.
 <div id="app-pre-render">
 <div class="pf-c-page">
 <header class="pf-c-page__header">
-<a href="#main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
+<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#main">
 Skip to content
 </a>
 <header class="pf-c-masthead">
@@ -70,7 +70,7 @@ Confirmation Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Create%2BKey%2BModal">
+<a href="?activeTitle=Create%2BKey%2BModal" class="pf-c-nav__link">
 Create Key Modal
 </a>
 </li>
@@ -80,7 +80,7 @@ Decrypt/Verify Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Download%2Bor%2BView%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Download%2Bor%2BView%2BModal">
 Download or View Modal
 </a>
 </li>
@@ -95,7 +95,7 @@ Encrypt/Sign Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Error%2BModal">
+<a href="?activeTitle=Error%2BModal" class="pf-c-nav__link">
 Error Modal
 </a>
 </li>
@@ -135,12 +135,12 @@ Navbar
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Password%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Password%2BModal">
 Password Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Single%2BAction%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Single%2BAction%2BModal">
 Single Action Modal
 </a>
 </li>
@@ -165,7 +165,7 @@ Toolbar
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
+<a target="_blank" href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen">
 <i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
@@ -174,13 +174,13 @@ Home
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-overflow-scroll">
 <div class="pf-c-page__main-body">
 <div class="pf-c-page">
-<a href="#gridge-main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
+<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#gridge-main">
 Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
 <a class="pf-c-page__header-brand-link" href="#">
-<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo-light.png">
+<img class="pf-c-brand" src="/gridge/web/logo-light.png" alt="Logo">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
@@ -197,7 +197,7 @@ Skip to content
 <section class="pf-c-page__main-section pf-m-fill">
 <div class="pf-c-empty-state">
 <div class="pf-c-empty-state__content">
-<i aria-hidden="true" class="fas fa-folder-open pf-c-empty-state__icon"></i>
+<i class="fas fa-folder-open pf-c-empty-state__icon" aria-hidden="true"></i>
 <h1 class="pf-c-title pf-m-lg">
 No keys yet
 </h1>
@@ -208,7 +208,7 @@ To get started, please create or import a key.
 Create key
 </button>
 <div class="pf-c-empty-state__secondary">
-<button class="pf-c-button pf-m-link" type="button">
+<button type="button" class="pf-c-button pf-m-link">
 Or import key
 </button>
 </div>
@@ -225,7 +225,7 @@ Or import key
 <div class="pf-c-code-block__header">
 <div class="pf-c-code-block__actions">
 <div class="pf-c-code-block__actions-item">
-<button class="pf-c-button pf-m-plain pf-x-c-tooltip-parent" type="button" aria-label="Reset props">
+<button type="button" aria-label="Reset props" class="pf-c-button pf-m-plain pf-x-c-tooltip-parent">
 <div class="pf-c-tooltip pf-m-top pf-x-c-tooltip" aria-role="tooltip">
 <div class="pf-c-tooltip__arrow"></div>
 <div class="pf-c-tooltip__content">
@@ -243,7 +243,7 @@ Reset props
 Reload props
 </div>
 </div>
-<i aria-hidden="true" class="fas fa-sync"></i>
+<i class="fas fa-sync" aria-hidden="true"></i>
 </button>
 </div>
 </div>
