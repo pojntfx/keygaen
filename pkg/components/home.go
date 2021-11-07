@@ -56,6 +56,12 @@ type Home struct {
 	wrongPassword bool
 
 	keyDuplicateModalOpen bool
+
+	outputCyphertext []byte
+	outputSignature  []byte
+
+	outputPlaintext []byte
+	outputVerified  bool
 }
 
 func (c *Home) Render() app.UI {
@@ -273,10 +279,10 @@ func (c *Home) Render() app.UI {
 						c.Update()
 					},
 					OnDownload: func() {
-						c.download([]byte("Hello, world"), "cypher.txt", "text/plain") // TODO: Use `.gpg` if unarmored, `.asc` if armored
+						c.download(c.outputCyphertext, "cypher.txt", "text/plain") // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
 
 						if c.createDetachedSignature {
-							c.download([]byte("asdf"), "signature.asc", "text/plain") // TODO: Use `.gpg` if unarmored, `.asc` if armored
+							c.download(c.outputSignature, "signature.asc", "text/plain") // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
 						}
 					},
 					OnView: func() {
@@ -313,7 +319,7 @@ func (c *Home) Render() app.UI {
 						c.Update()
 					},
 					OnDownload: func() {
-						c.download([]byte("Hello, world"), "plaintext.txt", "text/plain") // TODO: Use `.gpg` if unarmored, `.asc` if armored
+						c.download(c.outputPlaintext, "plaintext.txt", "text/plain") // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
 					},
 					OnView: func() {
 						c.decryptAndVerifyDownloadModalOpen = false
@@ -645,13 +651,8 @@ func (c *Home) Render() app.UI {
 								return
 							}
 
-							if enableArmor {
-								log.Printf("Cyphertext: %s\n", cyphertext)
-								log.Printf("Signature: %s\n", signature)
-							} else {
-								log.Print(cyphertext)
-								log.Print(signature)
-							}
+							c.outputCyphertext = cyphertext
+							c.outputSignature = signature
 
 							c.encryptAndSignDownloadModalOpen = true
 
@@ -767,8 +768,8 @@ func (c *Home) Render() app.UI {
 								return
 							}
 
-							log.Printf("Plaintext: %s\n", plaintext)
-							log.Printf("Verified: %v\n", verified)
+							c.outputPlaintext = plaintext
+							c.outputVerified = verified
 
 							c.decryptAndVerifyDownloadModalOpen = true
 
@@ -788,8 +789,8 @@ func (c *Home) Render() app.UI {
 					tabs := []TextOutputModalTab{
 						{
 							Language: "text/plain",
-							Title:    "cypher.txt", // TODO: Use `.gpg` if unarmored, `.asc` if armored
-							Body:     "Hello, world",
+							Title:    "cypher.txt", // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
+							Body:     string(c.outputCyphertext),
 						},
 					}
 					title := "View Cypher"
@@ -800,7 +801,7 @@ func (c *Home) Render() app.UI {
 							TextOutputModalTab{
 								Language: "text/plain",
 								Title:    "signature.asc",
-								Body:     "uas-02rioj23jd",
+								Body:     string(c.outputSignature),
 							},
 						)
 						title += " and Signature"
@@ -826,8 +827,8 @@ func (c *Home) Render() app.UI {
 						Tabs: []TextOutputModalTab{
 							{
 								Language: "text/plain",
-								Title:    "plaintext.txt", // TODO: Use `.gpg` if unarmored, `.asc` if armored
-								Body:     "Hello, world",
+								Title:    "plaintext.txt", // TODO: Use application/octet-stream and `.gpg` if unarmored, `.asc` if armored
+								Body:     string(c.outputPlaintext),
 							},
 						},
 						OnClose: func() {
