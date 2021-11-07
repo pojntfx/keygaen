@@ -7,24 +7,24 @@
 <meta content="Sign, verify, encrypt and decrypt data with GPG." name="description">
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:36081/stories">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" name="viewport">
+<meta property="og:url" content="http://127.0.0.1:40631/stories">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
-<meta property="og:image" content>
+<meta content property="og:image">
 <title>
 gridge
 </title>
 <link rel="icon" type="image/png" href="/gridge/web/default.png">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
-<link href="/gridge/app.css" type="text/css" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
 <script defer="true" src="/gridge/app.js"></script>
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
-<link rel="stylesheet" href="/gridge/web/index.css" type="text/css">
+<link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -41,13 +41,13 @@ Sign, verify, encrypt and decrypt data with GPG.
 <div id="app-pre-render">
 <div class="pf-c-page">
 <header class="pf-c-page__header">
-<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#main">
+<a href="#main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
 Skip to content
 </a>
 <header class="pf-c-masthead">
 <span class="pf-c-masthead__toggle">
-<button type="button" aria-label="Global navigation" class="pf-c-button pf-m-plain">
-<i class="fas fa-bars" aria-hidden="true"></i>
+<button class="pf-c-button pf-m-plain" type="button" aria-label="Global navigation">
+<i aria-hidden="true" class="fas fa-bars"></i>
 </button>
 </span>
 <div class="pf-c-masthead__main">
@@ -70,7 +70,7 @@ Confirmation Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Create%2BKey%2BModal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Create%2BKey%2BModal">
 Create Key Modal
 </a>
 </li>
@@ -80,7 +80,7 @@ Decrypt/Verify Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Download%2Bor%2BView%2BModal">
+<a href="?activeTitle=Download%2Bor%2BView%2BModal" class="pf-c-nav__link">
 Download or View Modal
 </a>
 </li>
@@ -125,22 +125,22 @@ Key List
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Modal" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Modal">
 Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a href="?activeTitle=Navbar" class="pf-c-nav__link">
+<a class="pf-c-nav__link" href="?activeTitle=Navbar">
 Navbar
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Password%2BModal">
+<a href="?activeTitle=Password%2BModal" class="pf-c-nav__link">
 Password Modal
 </a>
 </li>
 <li class="pf-c-nav__item">
-<a class="pf-c-nav__link" href="?activeTitle=Single%2BAction%2BModal">
+<a href="?activeTitle=Single%2BAction%2BModal" class="pf-c-nav__link">
 Single Action Modal
 </a>
 </li>
@@ -158,14 +158,14 @@ Toolbar
 </nav>
 </div>
 </div>
-<main class="pf-c-page__main" tabindex="-1" id="main">
+<main id="main" class="pf-c-page__main" tabindex="-1">
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-light pf-m-shadow-bottom">
 <div class="pf-c-page__main-body">
 <div class="pf-c-content pf-u-display-flex pf-u-justify-content-space-between">
 <h1 class="pf-u-mb-0">
 Home
 </h1>
-<a href="?standalone=true" class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank">
+<a class="pf-c-button pf-m-plain pf-u-ml-sm" aria-label="Fullscreen" target="_blank" href="?standalone=true">
 <i class="fas fa-expand-arrows-alt" aria-hidden="true"></i>
 </a>
 </div>
@@ -174,30 +174,30 @@ Home
 <section class="pf-c-page__main-section pf-u-p-0 pf-m-overflow-scroll">
 <div class="pf-c-page__main-body">
 <div class="pf-c-page">
-<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#gridge-main">
+<a href="#gridge-main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
 Skip to content
 </a>
 <header class="pf-c-page__header">
 <div class="pf-c-page__header-brand">
 <a class="pf-c-page__header-brand-link" href="#">
-<img src="/gridge/web/logo-light.png" alt="Logo" class="pf-c-brand">
+<img alt="Logo" class="pf-c-brand" src="/gridge/web/logo-light.png">
 </a>
 </div>
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a target="_blank" class="pf-c-button pf-m-plain" aria-label="Help" href="https://github.com/pojntfx/gridge">
+<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
 <i class="pf-icon pf-icon-help" aria-hidden="true"></i>
 </a>
 </div>
 </div>
 </div>
 </header>
-<main tabindex="-1" class="pf-c-page__main" id="gridge-main">
+<main class="pf-c-page__main" id="gridge-main" tabindex="-1">
 <section class="pf-c-page__main-section pf-m-fill">
 <div class="pf-c-empty-state">
 <div class="pf-c-empty-state__content">
-<i class="fas fa-folder-open pf-c-empty-state__icon" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-folder-open pf-c-empty-state__icon"></i>
 <h1 class="pf-c-title pf-m-lg">
 No keys yet
 </h1>
@@ -243,7 +243,7 @@ Reset props
 Reload props
 </div>
 </div>
-<i class="fas fa-sync" aria-hidden="true"></i>
+<i aria-hidden="true" class="fas fa-sync"></i>
 </button>
 </div>
 </div>
