@@ -260,7 +260,7 @@ func (c *Home) Render() app.UI {
 					SubjectAVerb: "signed",
 
 					SubjectB:     c.publicKeyID != "",
-					SubjectBNoun: "cyphertext",
+					SubjectBNoun: "cypher",
 					SubjectBVerb: "encrypted",
 
 					OnClose: func(used bool) {
@@ -1025,21 +1025,8 @@ func (c *Home) handleCancel(dirty bool, clear chan struct{}, confirm func()) {
 	c.confirmModalClose = func() {
 		confirm()
 
-		// Remove the native confirmation prompt
-		app.Window().Set("onbeforeunload", app.Undefined())
-
 		clear <- struct{}{}
 	}
-
-	// Add the native confirmation prompt
-	app.Window().Set(
-		"onbeforeunload",
-		app.FuncOf(func(this app.Value, args []app.Value) interface{} {
-			args[0].Set("returnValue", "")
-
-			return nil
-		}),
-	)
 	c.confirmCloseModalOpen = true
 
 	c.Update()
