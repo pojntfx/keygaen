@@ -41,6 +41,7 @@ type Home struct {
 
 	selectedKeyID             string
 	deleteKeyConfirmModalOpen bool
+	confirmDeleteKey          func()
 
 	exportKeyModalOpen bool
 	viewKeyModalOpen   bool
@@ -403,6 +404,19 @@ func (c *Home) Render() app.UI {
 									},
 									OnDelete: func(keyID string) {
 										c.selectedKeyID = keyID
+
+										c.confirmDeleteKey = func() {
+											newKeys := []GPGKey{}
+											for _, candidate := range c.keys {
+												if candidate.ID == c.selectedKeyID {
+													continue
+												}
+
+												newKeys = append(newKeys, candidate)
+											}
+
+											c.keys = newKeys
+										}
 										c.deleteKeyConfirmModalOpen = !c.deleteKeyConfirmModalOpen
 									},
 								},
@@ -970,6 +984,8 @@ func (c *Home) Render() app.UI {
 					},
 					OnAction: func() {
 						c.deleteKeyConfirmModalOpen = false
+
+						c.confirmDeleteKey()
 
 						c.Update()
 					},
