@@ -1,6 +1,7 @@
 package components
 
 import (
+	"encoding/json"
 	"errors"
 	"log"
 	"unicode/utf8"
@@ -9,6 +10,10 @@ import (
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 	"github.com/pojntfx/gridge/pkg/crypt"
+)
+
+const (
+	storageKey = "gridge"
 )
 
 type Home struct {
@@ -68,7 +73,7 @@ type Home struct {
 
 func (c *Home) Render() app.UI {
 	if c.keys == nil {
-		c.keys = []GPGKey{}
+		c.readKeysFromToLocalStorage()
 	}
 
 	if c.keyPasswordChan == nil {
@@ -416,6 +421,9 @@ func (c *Home) Render() app.UI {
 											}
 
 											c.keys = newKeys
+											c.writeKeysToLocalStorage()
+
+											c.Update()
 										}
 										c.deleteKeyConfirmModalOpen = !c.deleteKeyConfirmModalOpen
 									},
@@ -463,6 +471,7 @@ func (c *Home) Render() app.UI {
 							Public:   true,
 							Content:  key,
 						})
+						c.writeKeysToLocalStorage()
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
@@ -555,6 +564,7 @@ func (c *Home) Render() app.UI {
 								Content:  key,
 							})
 							c.keys = newKeys
+							c.writeKeysToLocalStorage()
 
 							c.keySuccessfullyImportedModalOpen = true
 
@@ -1159,6 +1169,33 @@ func (c *Home) getPasswordForKey(ID string, checkPassword func(password string) 
 
 		return password
 	}
+}
+
+func (c *Home) readKeysFromToLocalStorage() {
+	marshalledKeys := app.Window().Get("localStorage").Call("getItem", storageKey).String()
+
+	// Ignore errors in JSON parsing
+	newKeys := []GPGKey{}
+	_ = json.Unmarshal([]byte(marshalledKeys), &newKeys)
+
+	if newKeys == nil {
+		c.keys = []GPGKey{}
+
+		return
+	}
+
+	c.keys = newKeys
+}
+
+func (c *Home) writeKeysToLocalStorage() {
+	marshalledKeys, err := json.Marshal(c.keys)
+	if err != nil {
+		c.panic(err, func() {})
+
+		return
+	}
+
+	app.Window().Get("localStorage").Call("setItem", storageKey, string(marshalledKeys))
 }
 
 func getEncryptedExtensionAndMIME(content []byte, filename string) (string, string) {

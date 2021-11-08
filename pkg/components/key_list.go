@@ -28,8 +28,6 @@ func (c *KeyList) Render() app.UI {
 		ID(keyListID).
 		Body(
 			app.Range(c.Keys).Slice(func(i int) app.UI {
-				key := c.Keys[i]
-
 				return app.Li().
 					Class("pf-c-data-list__item").
 					Body(
@@ -48,21 +46,21 @@ func (c *KeyList) Render() app.UI {
 														app.Div().
 															Body(
 																app.P().
-																	Text(key.FullName),
+																	Text(c.Keys[i].FullName),
 																app.Small().
 																	Body(
 																		app.A().
-																			Href("mailto:"+key.Email).
+																			Href("mailto:"+c.Keys[i].Email).
 																			OnClick(func(ctx app.Context, e app.Event) {
 																				// Prevent go-app from taking over this link
 																				e.Call("stopImmediatePropagation")
 																			}).
-																			Text(key.Email),
-																		app.Code().Text(" - "+key.Label),
+																			Text(c.Keys[i].Email),
+																		app.Code().Text(" - "+c.Keys[i].Label),
 																	),
 															),
 														app.If(
-															key.Private || key.Public,
+															c.Keys[i].Private || c.Keys[i].Public,
 															app.Div().
 																Class("pf-c-label-group").
 																Body(
@@ -75,7 +73,7 @@ func (c *KeyList) Render() app.UI {
 																				Aria("label", "Key attributes").
 																				Body(
 																					app.If(
-																						key.Public,
+																						c.Keys[i].Public,
 																						app.Li().
 																							Class("pf-c-label-group__list-item").
 																							Body(
@@ -98,7 +96,7 @@ func (c *KeyList) Render() app.UI {
 																							),
 																					),
 																					app.If(
-																						key.Private,
+																						c.Keys[i].Private,
 																						app.Li().
 																							Class("pf-c-label-group__list-item").
 																							Body(
@@ -138,7 +136,7 @@ func (c *KeyList) Render() app.UI {
 																app.Div().
 																	Class(func() string {
 																		dropdownClasses := "pf-c-dropdown"
-																		if c.expandedKeyID == key.ID {
+																		if c.expandedKeyID == c.Keys[i].ID {
 																			dropdownClasses += " pf-m-expanded"
 																		}
 
@@ -147,18 +145,18 @@ func (c *KeyList) Render() app.UI {
 																	Body(
 																		app.Button().
 																			Class("pf-c-dropdown__toggle pf-m-plain").
-																			ID("expand-key-actions-button-"+key.ID).
+																			ID("expand-key-actions-button-"+c.Keys[i].ID).
 																			Aria("expanded", true).
 																			Type("button").
 																			Aria("label", "Actions").
 																			OnClick(func(ctx app.Context, e app.Event) {
-																				if c.expandedKeyID == key.ID {
+																				if c.expandedKeyID == c.Keys[i].ID {
 																					c.closeKeyActions()
 
 																					return
 																				}
 
-																				c.expandedKeyID = key.ID
+																				c.expandedKeyID = c.Keys[i].ID // Required to update the state as else `i` would not change when deleting keys
 																			}).
 																			Body(
 																				app.I().
@@ -166,10 +164,10 @@ func (c *KeyList) Render() app.UI {
 																					Aria("hidden", true),
 																			),
 																		app.If(
-																			c.expandedKeyID == key.ID,
+																			c.expandedKeyID == c.Keys[i].ID,
 																			app.Ul().
 																				Class("pf-c-dropdown__menu pf-m-align-right-on-md").
-																				Aria("labelledby", "expand-key-actions-button-"+key.ID).
+																				Aria("labelledby", "expand-key-actions-button-"+c.Keys[i].ID).
 																				Body(
 																					app.Li().
 																						Body(
@@ -179,7 +177,7 @@ func (c *KeyList) Render() app.UI {
 																								OnClick(func(ctx app.Context, e app.Event) {
 																									c.closeKeyActions()
 
-																									c.OnExport(key.ID)
+																									c.OnExport(c.Keys[i].ID)
 																								}).
 																								Body(
 																									app.Span().
@@ -200,7 +198,7 @@ func (c *KeyList) Render() app.UI {
 																								OnClick(func(ctx app.Context, e app.Event) {
 																									c.closeKeyActions()
 
-																									c.OnDelete(key.ID)
+																									c.OnDelete(c.Keys[i].ID)
 																								}).
 																								Body(
 																									app.Span().

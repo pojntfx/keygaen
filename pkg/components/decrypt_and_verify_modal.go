@@ -155,12 +155,10 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																	Text("Select one").
 																	Selected(c.privateKeyID == ""),
 																app.Range(privateKeys).Slice(func(i int) app.UI {
-																	key := privateKeys[i]
-
 																	return app.Option().
-																		Value(key.ID).
-																		Text(getKeySummary(key)).
-																		Selected(c.privateKeyID == key.ID)
+																		Value(privateKeys[i].ID).
+																		Text(getKeySummary(privateKeys[i])).
+																		Selected(c.privateKeyID == privateKeys[i].ID)
 																}),
 															),
 													),
@@ -233,12 +231,10 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																	Text("Select one").
 																	Selected(c.publicKeyID == ""),
 																app.Range(publicKeys).Slice(func(i int) app.UI {
-																	key := publicKeys[i]
-
 																	return app.Option().
-																		Value(key.ID).
-																		Text(getKeySummary(key)).
-																		Selected(c.publicKeyID == key.ID)
+																		Value(publicKeys[i].ID).
+																		Text(getKeySummary(publicKeys[i])).
+																		Selected(c.publicKeyID == publicKeys[i].ID)
 																}),
 															),
 														app.Div().
