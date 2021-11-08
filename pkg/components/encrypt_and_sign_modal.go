@@ -9,13 +9,13 @@ const (
 )
 
 type GPGKey struct {
-	ID       string
-	Label    string
-	FullName string
-	Email    string
-	Private  bool
-	Public   bool
-	Content  []byte
+	ID       string `json:"id"`
+	Label    string `json:"label"`
+	FullName string `json:"fullName"`
+	Email    string `json:"email"`
+	Private  bool   `json:"private"`
+	Public   bool   `json:"public"`
+	Content  []byte `json:"content"`
 }
 
 type EncryptAndSignModal struct {
@@ -167,12 +167,10 @@ func (c *EncryptAndSignModal) Render() app.UI {
 																	Text("Select one").
 																	Selected(c.publicKeyID == ""),
 																app.Range(publicKeys).Slice(func(i int) app.UI {
-																	key := publicKeys[i]
-
 																	return app.Option().
-																		Value(key.ID).
-																		Text(getKeySummary(key)).
-																		Selected(c.publicKeyID == key.ID)
+																		Value(publicKeys[i].ID).
+																		Text(getKeySummary(publicKeys[i])).
+																		Selected(c.publicKeyID == publicKeys[i].ID)
 																}),
 															),
 													),
@@ -245,12 +243,10 @@ func (c *EncryptAndSignModal) Render() app.UI {
 																	Text("Select one").
 																	Selected(c.privateKeyID == ""),
 																app.Range(privateKeys).Slice(func(i int) app.UI {
-																	key := privateKeys[i]
-
 																	return app.Option().
-																		Value(key.ID).
-																		Text(getKeySummary(key)).
-																		Selected(c.privateKeyID == key.ID)
+																		Value(privateKeys[i].ID).
+																		Text(getKeySummary(privateKeys[i])).
+																		Selected(c.privateKeyID == privateKeys[i].ID)
 																}),
 															),
 														app.Div().
