@@ -69,6 +69,8 @@ type Home struct {
 
 	outputPlaintext []byte
 	outputVerified  bool
+
+	removeEventListeners []func()
 }
 
 func (c *Home) Render() app.UI {
@@ -1021,6 +1023,24 @@ func (c *Home) Render() app.UI {
 				},
 			),
 		)
+}
+
+func (c *Home) OnMount(ctx app.Context) {
+	c.removeEventListeners = []func(){
+		app.Window().AddEventListener("storage", func(ctx app.Context, e app.Event) { // This event only fires in other tabs; it does not lead to local race conditions with c.writeKeysToLocalStorage
+			c.readKeysFromToLocalStorage()
+
+			c.Update()
+		}),
+	}
+}
+
+func (c *Home) OnDismount() {
+	if c.removeEventListeners != nil {
+		for _, clearListener := range c.removeEventListeners {
+			clearListener()
+		}
+	}
 }
 
 func (c *Home) download(content []byte, name string, mimetype string) {

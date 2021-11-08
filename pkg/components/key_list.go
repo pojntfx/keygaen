@@ -252,8 +252,8 @@ func (c *KeyList) OnMount(ctx app.Context) {
 
 func (c *KeyList) OnDismount() {
 	if c.removeEventListeners != nil {
-		for _, listener := range c.removeEventListeners {
-			listener()
+		for _, clearListener := range c.removeEventListeners {
+			clearListener()
 		}
 	}
 }
