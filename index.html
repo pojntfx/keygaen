@@ -8,23 +8,23 @@
 <meta name="keywords" content="gpg, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta property="og:url" content="http://127.0.0.1:33593/">
-<meta property="og:title" content="gridge">
+<meta property="og:url" content="http://127.0.0.1:43301/">
+<meta content="gridge" property="og:title">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
 <meta property="og:type" content="website">
 <meta property="og:image" content>
 <title>
 gridge
 </title>
-<link rel="icon" type="image/png" href="/gridge/web/default.png">
+<link type="image/png" href="/gridge/web/default.png" rel="icon">
 <link rel="apple-touch-icon" href="/gridge/web/default.png">
 <link rel="manifest" href="/gridge/manifest.webmanifest">
 <link type="text/css" rel="stylesheet" href="/gridge/app.css">
 <script defer="true" src="/gridge/wasm_exec.js"></script>
-<script defer="true" src="/gridge/app.js"></script>
-<link href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css" type="text/css" rel="stylesheet">
+<script src="/gridge/app.js" defer="true"></script>
+<link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css">
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css">
-<link type="text/css" rel="stylesheet" href="/gridge/web/index.css">
+<link href="/gridge/web/index.css" type="text/css" rel="stylesheet">
 <meta property="og:url" content="https://pojntfx.github.io/gridge/">
 <meta property="og:title" content="gridge">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">
@@ -33,14 +33,14 @@ gridge
 <body>
 <div>
 <aside id="app-wasm-loader" class="goapp-app-info">
-<img id="app-wasm-loader-icon" class="goapp-logo goapp-spin" src="/gridge/web/default.png">
+<img class="goapp-logo goapp-spin" src="/gridge/web/default.png" id="app-wasm-loader-icon">
 <p id="app-wasm-loader-label" class="goapp-label">
 Sign, verify, encrypt and decrypt data with GPG.
 </p>
 </aside>
 <div id="app-pre-render">
 <div class="pf-c-page">
-<a href="#gridge-main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
+<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#gridge-main">
 Skip to content
 </a>
 <header class="pf-c-page__header">
@@ -52,8 +52,8 @@ Skip to content
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a href="https://github.com/pojntfx/gridge" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
-<i class="pf-icon pf-icon-help" aria-hidden="true"></i>
+<a target="_blank" class="pf-c-button pf-m-plain" aria-label="Help" href="https://github.com/pojntfx/gridge">
+<i aria-hidden="true" class="pf-icon pf-icon-help"></i>
 </a>
 </div>
 </div>
@@ -74,7 +74,7 @@ To get started, please create or import a key.
 Create key
 </button>
 <div class="pf-c-empty-state__secondary">
-<button type="button" class="pf-c-button pf-m-link">
+<button class="pf-c-button pf-m-link" type="button">
 Or import key
 </button>
 </div>
@@ -82,6 +82,39 @@ Or import key
 </div>
 </section>
 </main>
+<div class="pf-c-backdrop">
+<div class="pf-l-bullseye">
+<div class="pf-c-modal-box pf-m-modal pf-m-sm pf-m-warning" tabindex="-1" aria-role="dialog" aria-label="gridge has not yet been audited!" aria-labelledby="audit-modal" aria-modal="true">
+<button aria-disabled="false" aria-label="Close" class="pf-c-button pf-m-plain" type="button">
+<i class="fas fa-times" aria-hidden="true"></i>
+</button>
+<header class="pf-c-modal-box__header">
+<h1 id="audit-modal" class="pf-c-modal-box__title pf-m-icon">
+<span class="pf-c-modal-box__title-icon">
+<i class="fas fa-exclamation-triangle"></i>
+</span>
+<span class="pf-u-screen-reader">
+gridge has not yet been audited!
+</span>
+<span class="pf-c-modal-box__title-text">
+gridge has not yet been audited!
+</span>
+</h1>
+</header>
+<div class="pf-c-modal-box__body">
+While we try to make gridge as secure as possible, it has not yet undergone a formal security audit by a third party. Please keep this in mind if you use it for security-critical applications.
+</div>
+<footer class="pf-c-modal-box__footer">
+<button aria-disabled="false" class="pf-c-button pf-m-warning" type="button">
+Yes, I understand
+</button>
+<a class="pf-c-button pf-m-link" target="_blank" href="https://en.wikipedia.org/wiki/Information_security_audit">
+What is an audit?
+</a>
+</footer>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
