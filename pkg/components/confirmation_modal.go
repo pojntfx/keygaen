@@ -15,6 +15,7 @@ type ConfirmationModal struct {
 	ActionClass string
 	ActionLabel string
 	CancelLabel string
+	CancelLink  string
 
 	OnClose  func()
 	OnAction func()
@@ -45,13 +46,22 @@ func (c *ConfirmationModal) Render() app.UI {
 				OnClick(func(ctx app.Context, e app.Event) {
 					c.OnAction()
 				}),
-			app.Button().
-				Class("pf-c-button pf-m-link").
-				Type("button").
-				Text(c.CancelLabel).
-				OnClick(func(ctx app.Context, e app.Event) {
-					c.OnClose()
-				}),
+			app.If(
+				c.CancelLink == "",
+				app.Button().
+					Class("pf-c-button pf-m-link").
+					Type("button").
+					Text(c.CancelLabel).
+					OnClick(func(ctx app.Context, e app.Event) {
+						c.OnClose()
+					}),
+			).Else(
+				app.A().
+					Class("pf-c-button pf-m-link").
+					Target("_blank").
+					Href(c.CancelLink).
+					Text(c.CancelLabel),
+			),
 		},
 
 		OnClose: func() {

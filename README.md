@@ -10,6 +10,8 @@ Sign, verify, encrypt and decrypt data with GPG in your browser.
 
 ## Overview
 
+⚠️ gridge has not yet been audited! While we try to make gridge as secure as possible, it has not yet undergone a formal security audit by a third party. Please keep this in mind if you use it for security-critical applications. ⚠️
+
 🚧 This project is a work-in-progress! Instructions will be added as soon as it is usable. 🚧
 
 ## License
