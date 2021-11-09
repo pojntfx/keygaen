@@ -5,7 +5,7 @@ var goappOnUpdate = function () { };
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker
-    .register("/keygean/app-worker.js")
+    .register("/keygaen/app-worker.js")
     .then(reg => {
       console.log("registering app service worker");
 
@@ -28,7 +28,7 @@ if ("serviceWorker" in navigator) {
 // -----------------------------------------------------------------------------
 // Env
 // -----------------------------------------------------------------------------
-const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/keygean","GOAPP_STATIC_RESOURCES_URL":"/keygean","GOAPP_VERSION":"fd7f88ebd94a32079523a8cf43590a3ad9ea7c48"};
+const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/keygaen","GOAPP_STATIC_RESOURCES_URL":"/keygaen","GOAPP_VERSION":"8b1173eff92283629789f0ffb296c2d0374f1335"};
 
 function goappGetenv(k) {
   return goappEnv[k];
@@ -105,7 +105,7 @@ if (!/bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent)) {
 
   const go = new Go();
 
-  WebAssembly.instantiateStreaming(fetch("/keygean/web/app.wasm"), go.importObject)
+  WebAssembly.instantiateStreaming(fetch("/keygaen/web/app.wasm"), go.importObject)
     .then(result => {
       const loaderIcon = document.getElementById("app-wasm-loader-icon");
       loaderIcon.className = "goapp-logo";

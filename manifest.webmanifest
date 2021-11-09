@@ -1,21 +1,21 @@
 {
-  "short_name": "keygean",
-  "name": "keygean",
+  "short_name": "keygaen",
+  "name": "keygaen",
   "description": "Sign, verify, encrypt and decrypt data with GPG.",
   "icons": [
     {
-      "src": "/keygean/web/default.png",
+      "src": "/keygaen/web/default.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/keygean/web/large.png",
+      "src": "/keygaen/web/large.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "scope": "/keygean/",
-  "start_url": "/keygean/",
+  "scope": "/keygaen/",
+  "start_url": "/keygaen/",
   "background_color": "#151515",
   "theme_color": "#151515",
   "display": "standalone"
