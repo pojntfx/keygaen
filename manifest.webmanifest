@@ -1,21 +1,21 @@
 {
-  "short_name": "gridge",
-  "name": "gridge",
+  "short_name": "keygean",
+  "name": "keygean",
   "description": "Sign, verify, encrypt and decrypt data with GPG.",
   "icons": [
     {
-      "src": "/gridge/web/default.png",
+      "src": "/keygean/web/default.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/gridge/web/large.png",
+      "src": "/keygean/web/large.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "scope": "/gridge/",
-  "start_url": "/gridge/",
+  "scope": "/keygean/",
+  "start_url": "/keygean/",
   "background_color": "#151515",
   "theme_color": "#151515",
   "display": "standalone"
