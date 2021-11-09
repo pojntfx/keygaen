@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
-	"github.com/pojntfx/gridge/pkg/components"
-	"github.com/pojntfx/gridge/pkg/stories"
+	"github.com/pojntfx/keygean/pkg/components"
+	"github.com/pojntfx/keygean/pkg/stories"
 )
 
 func main() {
@@ -24,15 +24,15 @@ func main() {
 	serve := flag.Bool("serve", false, "Serve the app instead of building it")
 	laddr := flag.String("laddr", "0.0.0.0:22255", "Address to listen on when serving the app")
 	dist := flag.String("dist", "out/web", "Directory to build the app to")
-	prefix := flag.String("prefix", "/gridge", "Prefix to build the app for")
+	prefix := flag.String("prefix", "/keygean", "Prefix to build the app for")
 
 	flag.Parse()
 
 	// Define the handler
 	h := &app.Handler{
-		Title:           "gridge",
-		Name:            "gridge",
-		ShortName:       "gridge",
+		Title:           "keygean",
+		Name:            "keygean",
+		ShortName:       "keygean",
 		Description:     "Sign, verify, encrypt and decrypt data with GPG.",
 		LoadingLabel:    "Sign, verify, encrypt and decrypt data with GPG.",
 		Author:          "Felicitas Pojtinger",
@@ -50,10 +50,10 @@ func main() {
 			"signatures",
 		},
 		RawHeaders: []string{
-			`<meta property="og:url" content="https://pojntfx.github.io/gridge/">`,
-			`<meta property="og:title" content="gridge">`,
+			`<meta property="og:url" content="https://pojntfx.github.io/keygean/">`,
+			`<meta property="og:title" content="keygean">`,
 			`<meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">`,
-			`<meta property="og:image" content="https://pojntfx.github.io/gridge/web/default.png">`,
+			`<meta property="og:image" content="https://pojntfx.github.io/keygean/web/default.png">`,
 		},
 		Styles: []string{
 			`https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css`,

@@ -9,12 +9,12 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/gopenpgp/v2/crypto"
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
-	"github.com/pojntfx/gridge/pkg/crypt"
+	"github.com/pojntfx/keygean/pkg/crypt"
 )
 
 const (
-	keyringStorageKey = "gridgeKeys"
-	auditStorageKey   = "gridgeAudit"
+	keyringStorageKey = "keygeanKeys"
+	auditStorageKey   = "keygeanAudit"
 )
 
 type Home struct {
@@ -177,7 +177,7 @@ func (c *Home) Render() app.UI {
 		Body(
 			app.A().
 				Class("pf-c-skip-to-content pf-c-button pf-m-primary").
-				Href("#gridge-main").
+				Href("#keygean-main").
 				Body(
 					app.Text("Skip to content"),
 				),
@@ -348,7 +348,7 @@ func (c *Home) Render() app.UI {
 			),
 			app.Main().
 				Class("pf-c-page__main").
-				ID("gridge-main").
+				ID("keygean-main").
 				TabIndex(-1).
 				Body(
 					app.If(
@@ -1030,9 +1030,9 @@ func (c *Home) Render() app.UI {
 				&ConfirmationModal{
 					ID:    "audit-modal",
 					Icon:  "fas fa-exclamation-triangle",
-					Title: "gridge has not yet been audited!",
+					Title: "keygean has not yet been audited!",
 					Class: "pf-m-warning",
-					Body:  "While we try to make gridge as secure as possible, it has not yet undergone a formal security audit by a third party. Please keep this in mind if you use it for security-critical applications.",
+					Body:  "While we try to make keygean as secure as possible, it has not yet undergone a formal security audit by a third party. Please keep this in mind if you use it for security-critical applications.",
 
 					ActionLabel: "Yes, I understand",
 					ActionClass: "pf-m-warning",

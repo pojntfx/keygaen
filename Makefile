@@ -1,7 +1,7 @@
 # Variables
 DESTDIR ?=
 WWWROOT ?= /var/www/html
-WWWPREFIX ?= /gridge
+WWWPREFIX ?= /keygean
 
 all: build
 
@@ -10,7 +10,7 @@ build:
 	GOARCH=wasm GOOS=js go build -o web/app.wasm main.go
 	go run main.go -prefix $(WWWPREFIX)
 	cp -rf web/* out/web/web
-	tar -cvzf out/gridge.tar.gz -C out/web .
+	tar -cvzf out/keygean.tar.gz -C out/web .
 
 # Install
 install:

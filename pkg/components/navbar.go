@@ -19,7 +19,7 @@ func (c *Navbar) Render() app.UI {
 						Body(
 							app.Img().
 								Class("pf-c-brand").
-								Src("/gridge/web/logo-light.png").
+								Src("/keygean/web/logo-light.png").
 								Alt("Logo"),
 						),
 				),
@@ -33,7 +33,7 @@ func (c *Navbar) Render() app.UI {
 								Class("pf-c-page__header-tools-item").
 								Body(
 									app.A().
-										Href("https://github.com/pojntfx/gridge").
+										Href("https://github.com/pojntfx/keygean").
 										Target("_blank").
 										Class("pf-c-button pf-m-plain").
 										Aria("label", "Help").
