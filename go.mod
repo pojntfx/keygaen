@@ -1,10 +1,9 @@
-module github.com/pojntfx/keygean
+module github.com/pojntfx/keygaen
 
 go 1.17
 
 require (
 	github.com/ProtonMail/go-crypto v0.0.0-20210920160938-87db9fbc61c7
-	github.com/ProtonMail/gopenpgp v1.0.0
 	github.com/ProtonMail/gopenpgp/v2 v2.2.4
 	github.com/maxence-charriere/go-app/v9 v9.0.0
 )
