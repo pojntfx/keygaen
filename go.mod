@@ -1,4 +1,4 @@
-module github.com/pojntfx/gridge
+module github.com/pojntfx/keygean
 
 go 1.17
 
