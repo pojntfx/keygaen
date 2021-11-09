@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	storageKey = "gridge"
+	keyringStorageKey = "gridgeKeys"
+	auditStorageKey   = "gridgeAudit"
 )
 
 type Home struct {
@@ -71,11 +72,13 @@ type Home struct {
 	outputVerified  bool
 
 	removeEventListeners []func()
+
+	showAuditModal bool
 }
 
 func (c *Home) Render() app.UI {
 	if c.keys == nil {
-		c.readKeysFromToLocalStorage()
+		c.readFromLocalStorage()
 	}
 
 	if c.keyPasswordChan == nil {
@@ -423,7 +426,7 @@ func (c *Home) Render() app.UI {
 											}
 
 											c.keys = newKeys
-											c.writeKeysToLocalStorage()
+											c.writeToLocalStorage()
 
 											c.Update()
 										}
@@ -473,7 +476,7 @@ func (c *Home) Render() app.UI {
 							Public:   true,
 							Content:  key,
 						})
-						c.writeKeysToLocalStorage()
+						c.writeToLocalStorage()
 					},
 					OnCancel: func(dirty bool, clear chan struct{}) {
 						c.handleCancel(dirty, clear, func() {
@@ -566,7 +569,7 @@ func (c *Home) Render() app.UI {
 								Content:  key,
 							})
 							c.keys = newKeys
-							c.writeKeysToLocalStorage()
+							c.writeToLocalStorage()
 
 							c.keySuccessfullyImportedModalOpen = true
 
@@ -1022,13 +1025,42 @@ func (c *Home) Render() app.UI {
 					},
 				},
 			),
+			app.If(
+				c.showAuditModal,
+				&ConfirmationModal{
+					ID:    "audit-modal",
+					Icon:  "fas fa-exclamation-triangle",
+					Title: "gridge has not yet been audited!",
+					Class: "pf-m-warning",
+					Body:  "While we try to make gridge as secure as possible, it has not yet undergone a formal security audit by a third party. Please keep this in mind if you use it for security-critical applications.",
+
+					ActionLabel: "Yes, I understand",
+					ActionClass: "pf-m-warning",
+
+					CancelLink:  "https://en.wikipedia.org/wiki/Information_security_audit",
+					CancelLabel: "What is an audit?",
+
+					OnClose: func() {
+						c.showAuditModal = false
+						c.writeToLocalStorage()
+
+						c.Update()
+					},
+					OnAction: func() {
+						c.showAuditModal = false
+						c.writeToLocalStorage()
+
+						c.Update()
+					},
+				},
+			),
 		)
 }
 
 func (c *Home) OnMount(ctx app.Context) {
 	c.removeEventListeners = []func(){
 		app.Window().AddEventListener("storage", func(ctx app.Context, e app.Event) { // This event only fires in other tabs; it does not lead to local race conditions with c.writeKeysToLocalStorage
-			c.readKeysFromToLocalStorage()
+			c.readFromLocalStorage()
 
 			c.Update()
 		}),
@@ -1191,8 +1223,12 @@ func (c *Home) getPasswordForKey(ID string, checkPassword func(password string) 
 	}
 }
 
-func (c *Home) readKeysFromToLocalStorage() {
-	marshalledKeys := app.Window().Get("localStorage").Call("getItem", storageKey).String()
+func (c *Home) readFromLocalStorage() {
+	if showAuditModal := app.Window().Get("localStorage").Call("getItem", auditStorageKey); showAuditModal.IsNull() || showAuditModal.IsUndefined() || showAuditModal.String() == "true" {
+		c.showAuditModal = true
+	}
+
+	marshalledKeys := app.Window().Get("localStorage").Call("getItem", keyringStorageKey).String()
 
 	// Ignore errors in JSON parsing
 	newKeys := []GPGKey{}
@@ -1207,7 +1243,9 @@ func (c *Home) readKeysFromToLocalStorage() {
 	c.keys = newKeys
 }
 
-func (c *Home) writeKeysToLocalStorage() {
+func (c *Home) writeToLocalStorage() {
+	app.Window().Get("localStorage").Call("setItem", auditStorageKey, c.showAuditModal)
+
 	marshalledKeys, err := json.Marshal(c.keys)
 	if err != nil {
 		c.panic(err, func() {})
@@ -1215,7 +1253,7 @@ func (c *Home) writeKeysToLocalStorage() {
 		return
 	}
 
-	app.Window().Get("localStorage").Call("setItem", storageKey, string(marshalledKeys))
+	app.Window().Get("localStorage").Call("setItem", keyringStorageKey, string(marshalledKeys))
 }
 
 func getEncryptedExtensionAndMIME(content []byte, filename string) (string, string) {
