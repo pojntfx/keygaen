@@ -2,19 +2,21 @@ package components
 
 import "github.com/maxence-charriere/go-app/v9/pkg/app"
 
+// TextOutputModalTab is a tab which can be displayed in a text output modal
 type TextOutputModalTab struct {
-	Language string
-	Title    string
-	Body     string
+	Language string // Language of the text to be displayed (i.e. text/plain, French etc.)
+	Title    string // Title of the text to be displayed
+	Body     string // Text to be displayed
 }
 
+// TextOutputModal is a modal to display multiple text snippets
 type TextOutputModal struct {
 	app.Compo
 
-	Title string
-	Tabs  []TextOutputModalTab
+	Title string               // Title of the modal
+	Tabs  []TextOutputModalTab // Tabs to be displayed
 
-	OnClose func()
+	OnClose func() // Handler to call when closing/cancelling the modal
 
 	selectedIndex int
 }

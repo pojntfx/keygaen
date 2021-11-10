@@ -4,18 +4,19 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
+// FileUpload provides a way to upload/import a file by entering it's contents or selecting it
 type FileUpload struct {
 	app.Compo
 
-	ID                    string
-	FileSelectionLabel    string
-	ClearLabel            string
-	TextEntryLabel        string
-	TextEntryBlockedLabel string
-	FileContents          []byte
+	ID                         string // HTML ID of the modal; must be unique across the page
+	FileSelectionLabel         string // Text to display on the file selection input
+	ClearLabel                 string // Text to display on the clear action
+	TextEntryInputPlaceholder  string // Placeholder to display in the text input field
+	TextEntryInputBlockedLabel string // Text to display in the input if it is blocked (i.e. because a file has been selected)
+	FileContents               []byte // Contents of the file selected/text entered
 
-	OnChange func(fileContents []byte)
-	OnClear  func()
+	OnChange func(fileContents []byte) // Handler to call to set `FileContents`
+	OnClear  func()                    // Handler to call to clear `FileContents`
 
 	fileIsBinary bool
 }
@@ -78,8 +79,8 @@ func (c *FileUpload) Render() app.UI {
 				Body(
 					app.Textarea().
 						Class("pf-c-form-control pf-m-resize-vertical").
-						Aria("label", c.TextEntryLabel).
-						Placeholder(c.TextEntryLabel).
+						Aria("label", c.TextEntryInputPlaceholder).
+						Placeholder(c.TextEntryInputPlaceholder).
 						Required(true).
 						OnInput(func(ctx app.Context, e app.Event) {
 							c.OnChange([]byte(ctx.JSSrc().Get("value").String()))
@@ -92,7 +93,7 @@ func (c *FileUpload) Render() app.UI {
 						}).
 						Text(func() string {
 							if c.fileIsBinary {
-								return c.TextEntryBlockedLabel
+								return c.TextEntryInputBlockedLabel
 							}
 
 							return string(c.FileContents)

@@ -2,11 +2,12 @@ package components
 
 import "github.com/maxence-charriere/go-app/v9/pkg/app"
 
+// EmptyState is the initial placeholder of the key list
 type EmptyState struct {
 	app.Compo
 
-	OnCreateKey func()
-	OnImportKey func()
+	OnCreateKey func() // OnCreateKey is the handler to call to create a key
+	OnImportKey func() // OnCreateKey is the handler to call to import a key
 }
 
 func (c *EmptyState) Render() app.UI {

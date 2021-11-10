@@ -4,18 +4,19 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
+// Modal is a generic modal with a close handler
 type Modal struct {
 	app.Compo
 
-	ID           string
-	Icon         string
-	Title        string
-	Class        string
-	Body         []app.UI
-	Footer       []app.UI
-	DisableFocus bool
+	ID           string   // HTML ID of the modal; must be unique across the page
+	Icon         string   // Class of the icon to use to the left of the title; may be empty
+	Title        string   // Title of the modal
+	Class        string   // Class to be applied to the modal's outmost component
+	Body         []app.UI // Body of the modal
+	Footer       []app.UI // Footer of the modal
+	DisableFocus bool     // Disable auto-focusing the modal; useful if a child component, i.e. an input should be focused instead
 
-	OnClose func()
+	OnClose func() // Handler to call when closing/cancelling the modal
 
 	removeEventListener func()
 }

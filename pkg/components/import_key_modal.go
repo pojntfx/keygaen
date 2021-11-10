@@ -8,11 +8,12 @@ const (
 	selectKeyInput = "select-key-input"
 )
 
+// ImportKeyModal is a modal to import keys with
 type ImportKeyModal struct {
 	app.Compo
 
-	OnSubmit func(key []byte)
-	OnCancel func(dirty bool, clear chan struct{})
+	OnSubmit func(key []byte)                      // Handler to call to import the key
+	OnCancel func(dirty bool, clear chan struct{}) // Handler to call when closing/cancelling the modal
 
 	key []byte
 
@@ -39,12 +40,12 @@ func (c *ImportKeyModal) Render() app.UI {
 						Class("pf-c-form__group").
 						Body(
 							&FileUpload{
-								ID:                    selectKeyInput,
-								FileSelectionLabel:    "Drag and drop a key or select one",
-								ClearLabel:            "Clear",
-								TextEntryLabel:        "Or paste the key's contents here",
-								TextEntryBlockedLabel: "File has been selected.",
-								FileContents:          []byte(c.key),
+								ID:                         selectKeyInput,
+								FileSelectionLabel:         "Drag and drop a key or select one",
+								ClearLabel:                 "Clear",
+								TextEntryInputPlaceholder:  "Or paste the key's contents here",
+								TextEntryInputBlockedLabel: "File has been selected.",
+								FileContents:               []byte(c.key),
 
 								OnChange: func(fileContents []byte) {
 									c.key = fileContents

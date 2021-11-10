@@ -2,11 +2,12 @@ package components
 
 import "github.com/maxence-charriere/go-app/v9/pkg/app"
 
+// Controlled sets DOM properties of the encapsulated component after it is mounted
 type Controlled struct {
 	app.Compo
 
-	Component  app.UI
-	Properties map[string]interface{}
+	Component  app.UI                 // The component to be focused
+	Properties map[string]interface{} // Map of properties to set
 }
 
 func (c *Controlled) Render() app.UI {

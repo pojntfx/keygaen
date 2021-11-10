@@ -4,6 +4,7 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
+// CreateKeyModal is a modal which provides the information needed to create a key
 type CreateKeyModal struct {
 	app.Compo
 
@@ -11,8 +12,8 @@ type CreateKeyModal struct {
 		fullName string,
 		email string,
 		password string,
-	)
-	OnCancel func(dirty bool, clear chan struct{})
+	) // Handler to call to create the key
+	OnCancel func(dirty bool, clear chan struct{}) // Handler to call when closing/cancelling the modal
 
 	fullName             string
 	email                string
