@@ -4,14 +4,16 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
+// PasswordModal is a modal which allows to user to enter a password
 type PasswordModal struct {
 	app.Compo
 
-	Title              string
-	WrongPassword      bool
-	ClearWrongPassword func()
-	OnSubmit           func(password string)
-	OnCancel           func()
+	Title         string // Title of the modal
+	WrongPassword bool   // Whether the previously entered password was wrong
+
+	ClearWrongPassword func()                // Handler to call when clearing the password
+	OnSubmit           func(password string) // Handler to call to submit the password
+	OnCancel           func()                // Handler to call when closing/cancelling the modal
 
 	password string
 }

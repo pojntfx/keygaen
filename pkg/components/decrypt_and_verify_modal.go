@@ -9,18 +9,19 @@ const (
 	selectDetachedSignatureFileInput = "select-detached-signature-file-input"
 )
 
+// DecryptAndVerifyModal is a modal to provide the information needed to decrypt/verify something
 type DecryptAndVerifyModal struct {
 	app.Compo
 
-	Keys []GPGKey
+	Keys []GPGKey // GPG keys to be available for decryption/verification
 
 	OnSubmit func(
 		file []byte,
 		publicKeyID string,
 		privateKeyID string,
 		detachedSignature []byte,
-	)
-	OnCancel func(dirty bool, clear chan struct{})
+	) // Handler to call to decrypt/verify
+	OnCancel func(dirty bool, clear chan struct{}) // Handler to call when closing/cancelling the modal
 
 	fileContents []byte
 
@@ -73,12 +74,12 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 						Class("pf-c-form__group").
 						Body(
 							&FileUpload{
-								ID:                    selectDecryptionFileInput,
-								FileSelectionLabel:    "Drag and drop a file or select one",
-								ClearLabel:            "Clear",
-								TextEntryLabel:        "Or enter text here",
-								TextEntryBlockedLabel: "File has been selected.",
-								FileContents:          c.fileContents,
+								ID:                         selectDecryptionFileInput,
+								FileSelectionLabel:         "Drag and drop a file or select one",
+								ClearLabel:                 "Clear",
+								TextEntryInputPlaceholder:  "Or enter text here",
+								TextEntryInputBlockedLabel: "File has been selected.",
+								FileContents:               c.fileContents,
 
 								OnChange: func(fileContents []byte) {
 									c.fileContents = fileContents
@@ -282,12 +283,12 @@ func (c *DecryptAndVerifyModal) Render() app.UI {
 																						Class("pf-c-check__body pf-u-w-100").
 																						Body(
 																							&FileUpload{
-																								ID:                    selectDetachedSignatureFileInput,
-																								FileSelectionLabel:    "Drag and drop a detached signature or select one",
-																								ClearLabel:            "Clear",
-																								TextEntryLabel:        "Or enter the detached signature's content here",
-																								TextEntryBlockedLabel: "File has been selected.",
-																								FileContents:          []byte(c.detachedSignature),
+																								ID:                         selectDetachedSignatureFileInput,
+																								FileSelectionLabel:         "Drag and drop a detached signature or select one",
+																								ClearLabel:                 "Clear",
+																								TextEntryInputPlaceholder:  "Or enter the detached signature's content here",
+																								TextEntryInputBlockedLabel: "File has been selected.",
+																								FileContents:               []byte(c.detachedSignature),
 
 																								OnChange: func(fileContents []byte) {
 																									c.detachedSignature = fileContents

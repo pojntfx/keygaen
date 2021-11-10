@@ -4,22 +4,23 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
+// DownloadOrViewModal is a modal which provides the actions needed to download or view text
 type DownloadOrViewModal struct {
 	app.Compo
 
-	SubjectA     bool
-	SubjectANoun string
-	SubjectAVerb string
+	SubjectA          bool   // Whether to display the first subject to download or view
+	SubjectANoun      string // Noun form the first subject to download or view (i.e. "signature")
+	SubjectAAdjective string // Adjective of the first subject to download or view (i.e. "signed")
 
-	SubjectB     bool
-	SubjectBNoun string
-	SubjectBVerb string
+	SubjectB          bool   // Whether to display the second subject to download or view
+	SubjectBNoun      string // Noun form the second subject to download or view (i.e. "signature")
+	SubjectBAdjective string // Adjective of the second subject to download or view (i.e. "signed")
 
-	OnClose    func(used bool)
-	OnDownload func()
-	OnView     func()
+	OnClose    func(used bool) // Handler to call when closing/cancelling the modal
+	OnDownload func()          // Handler to call to download the subject(s)
+	OnView     func()          // Handler to view to download the subject(s)
 
-	ShowView bool
+	ShowView bool // Whether to show the view action
 
 	used bool
 }
@@ -30,7 +31,7 @@ func (c *DownloadOrViewModal) Render() app.UI {
 	viewLabel := "View "
 	body := "You may now download or view "
 	if c.SubjectA && c.SubjectB {
-		title += c.SubjectBVerb + " and " + c.SubjectAVerb
+		title += c.SubjectBAdjective + " and " + c.SubjectAAdjective
 
 		if c.SubjectANoun == "" {
 			downloadLabel += c.SubjectBNoun
@@ -46,12 +47,12 @@ func (c *DownloadOrViewModal) Render() app.UI {
 			body += "them"
 		}
 	} else if c.SubjectA {
-		title += c.SubjectAVerb
+		title += c.SubjectAAdjective
 		downloadLabel += c.SubjectANoun
 		viewLabel += c.SubjectANoun
 		body += "it"
 	} else {
-		title += c.SubjectBVerb
+		title += c.SubjectBAdjective
 		downloadLabel += c.SubjectBNoun
 		viewLabel += c.SubjectBNoun
 		body += "it"

@@ -8,13 +8,25 @@ const (
 	keyListID = "key-list"
 )
 
+// GPGKey is a GPG key an it's metadata
+type GPGKey struct {
+	ID       string `json:"id"`       // Internal unique ID of the GPG key, i.e. it's fingerprint
+	Label    string `json:"label"`    // Displayable ID of the GPG key
+	FullName string `json:"fullName"` // Full name of the GPG key's holder
+	Email    string `json:"email"`    // Email of the GPG key's holder
+	Private  bool   `json:"private"`  // Whether the GPG key is private
+	Public   bool   `json:"public"`   // Whether the GPG key is public
+	Content  []byte `json:"content"`  // Raw GPG key (Potentially protected or armored)
+}
+
+// KeyList is a list of GPG keys
 type KeyList struct {
 	app.Compo
 
-	Keys []GPGKey
+	Keys []GPGKey // GPG keys to list
 
-	OnExport func(keyID string)
-	OnDelete func(keyID string)
+	OnExport func(keyID string) // Handler to call to export a GPG key
+	OnDelete func(keyID string) // Handler to call to delete a GPG key
 
 	expandedKeyID string
 

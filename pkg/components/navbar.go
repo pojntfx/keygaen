@@ -2,6 +2,7 @@ package components
 
 import "github.com/maxence-charriere/go-app/v9/pkg/app"
 
+// Navbar is the primary navigation menu
 type Navbar struct {
 	app.Compo
 }

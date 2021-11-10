@@ -9,18 +9,19 @@ const (
 	exportPrivateKeyForm = "export-private-key-form"
 )
 
+// ExportKeyModal is a modal which provides the actions needed to export a key
 type ExportKeyModal struct {
 	app.Compo
 
-	PublicKey           bool
-	OnDownloadPublicKey func(armor bool)
-	OnViewPublicKey     func()
+	PublicKey           bool             // Whether to display the options for a public key
+	OnDownloadPublicKey func(armor bool) // Handler to call to download the public key
+	OnViewPublicKey     func()           // Handler to call to view the public key
 
-	PrivateKey           bool
-	OnDownloadPrivateKey func(armor bool)
-	OnViewPrivateKey     func()
+	PrivateKey           bool             // Whether to display the options for a private key
+	OnDownloadPrivateKey func(armor bool) // Handler to call to download the private key
+	OnViewPrivateKey     func()           // Handler to call to view the private key
 
-	OnOK func()
+	OnOK func() // Handler to call when dismissing the modal
 
 	skipPublicKeyArmor  bool
 	skipPrivateKeyArmor bool

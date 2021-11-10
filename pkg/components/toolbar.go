@@ -2,14 +2,15 @@ package components
 
 import "github.com/maxence-charriere/go-app/v9/pkg/app"
 
+// Toolbar is the secondary navigation menu and contains most actions
 type Toolbar struct {
 	app.Compo
 
-	OnCreateKey func()
-	OnImportKey func()
+	OnCreateKey func() // Handler to call to create a key
+	OnImportKey func() // Handler to call to import a key
 
-	OnEncryptAndSign   func()
-	OnDecryptAndVerify func()
+	OnEncryptAndSign   func() // Handler to call to encrypt/sign
+	OnDecryptAndVerify func() // Handler to call to decrypt/verify
 }
 
 func (c *Toolbar) Render() app.UI {

@@ -17,6 +17,7 @@ const (
 	auditStorageKey   = "keygaenAudit"
 )
 
+// Home is the home page
 type Home struct {
 	app.Compo
 
@@ -266,13 +267,13 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.encryptAndSignDownloadModalOpen,
 				&DownloadOrViewModal{
-					SubjectA:     c.privateKeyID != "",
-					SubjectANoun: "signature",
-					SubjectAVerb: "signed",
+					SubjectA:          c.privateKeyID != "",
+					SubjectANoun:      "signature",
+					SubjectAAdjective: "signed",
 
-					SubjectB:     c.publicKeyID != "",
-					SubjectBNoun: "cypher",
-					SubjectBVerb: "encrypted",
+					SubjectB:          c.publicKeyID != "",
+					SubjectBNoun:      "cypher",
+					SubjectBAdjective: "encrypted",
 
 					OnClose: func(used bool) {
 						if used {
@@ -310,13 +311,13 @@ func (c *Home) Render() app.UI {
 			app.If(
 				c.decryptAndVerifyDownloadModalOpen,
 				&DownloadOrViewModal{
-					SubjectA:     c.privateKeyID != "",
-					SubjectANoun: "file",
-					SubjectAVerb: "decrypted",
+					SubjectA:          c.privateKeyID != "",
+					SubjectANoun:      "file",
+					SubjectAAdjective: "decrypted",
 
-					SubjectB:     c.publicKeyID != "",
-					SubjectBNoun: "",
-					SubjectBVerb: "verified",
+					SubjectB:          c.publicKeyID != "",
+					SubjectBNoun:      "",
+					SubjectBAdjective: "verified",
 
 					OnClose: func(used bool) {
 						if used {

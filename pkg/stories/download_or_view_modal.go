@@ -125,13 +125,13 @@ func (c *DownloadOrViewModalStory) Render() app.UI {
 			c.modalOpen,
 			c.WithRoot(
 				&components.DownloadOrViewModal{
-					SubjectA:     c.subjectA,
-					SubjectANoun: c.subjectANoun,
-					SubjectAVerb: c.subjectAVerb,
+					SubjectA:          c.subjectA,
+					SubjectANoun:      c.subjectANoun,
+					SubjectAAdjective: c.subjectAVerb,
 
-					SubjectB:     c.subjectB,
-					SubjectBNoun: c.subjectBNoun,
-					SubjectBVerb: c.subjectBVerb,
+					SubjectB:          c.subjectB,
+					SubjectBNoun:      c.subjectBNoun,
+					SubjectBAdjective: c.subjectBVerb,
 
 					OnClose: func(_ bool) {
 						c.modalOpen = false

@@ -8,20 +8,11 @@ const (
 	selectEncryptionFileInput = "select-encryption-file-input"
 )
 
-type GPGKey struct {
-	ID       string `json:"id"`
-	Label    string `json:"label"`
-	FullName string `json:"fullName"`
-	Email    string `json:"email"`
-	Private  bool   `json:"private"`
-	Public   bool   `json:"public"`
-	Content  []byte `json:"content"`
-}
-
+// EncryptAndSignModal is a modal which provides the information needed to encrypt/sign something
 type EncryptAndSignModal struct {
 	app.Compo
 
-	Keys []GPGKey
+	Keys []GPGKey // GPG keys to be available for encryption/signing
 
 	OnSubmit func(
 		file []byte,
@@ -29,8 +20,8 @@ type EncryptAndSignModal struct {
 		privateKeyID string,
 		createDetachedSignature bool,
 		armor bool,
-	)
-	OnCancel func(dirty bool, clear chan struct{})
+	) // Handle to call to encrypt/sign
+	OnCancel func(dirty bool, clear chan struct{}) // Handler to call when closing/cancelling the modal
 
 	fileIsBinary bool
 	fileContents []byte
@@ -85,12 +76,12 @@ func (c *EncryptAndSignModal) Render() app.UI {
 						Class("pf-c-form__group").
 						Body(
 							&FileUpload{
-								ID:                    selectEncryptionFileInput,
-								FileSelectionLabel:    "Drag and drop a file or select one",
-								ClearLabel:            "Clear",
-								TextEntryLabel:        "Or enter text here",
-								TextEntryBlockedLabel: "File has been selected.",
-								FileContents:          c.fileContents,
+								ID:                         selectEncryptionFileInput,
+								FileSelectionLabel:         "Drag and drop a file or select one",
+								ClearLabel:                 "Clear",
+								TextEntryInputPlaceholder:  "Or enter text here",
+								TextEntryInputBlockedLabel: "File has been selected.",
+								FileContents:               c.fileContents,
 
 								OnChange: func(fileContents []byte) {
 									c.fileContents = fileContents

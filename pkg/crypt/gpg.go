@@ -45,6 +45,7 @@ func isEntityLocked(entity *openpgp.Entity) (bool, error) {
 	return false, nil
 }
 
+// IsKeyLocked tests if a key is locked (i.e. if it is password protected)
 func IsKeyLocked(key []byte) (bool, string, error) {
 	entity, err := getEntity(key)
 	if err != nil {
@@ -59,6 +60,7 @@ func IsKeyLocked(key []byte) (bool, string, error) {
 	return locked, hex.EncodeToString(entity.PrimaryKey.Fingerprint), err
 }
 
+// Unarmor armors data if it is armored
 func Unarmor(data []byte) ([]byte, error) {
 	if c, err := armor.Decode(bytes.NewBuffer(data)); err == nil {
 		return ioutil.ReadAll(c.Body)
@@ -67,6 +69,7 @@ func Unarmor(data []byte) ([]byte, error) {
 	return data, nil
 }
 
+// ReadKey parses a GPG key and unlocks it with a password, which may be empty if the key does not need to be unlocked
 func ReadKey(key []byte, password string) (*openpgp.Entity, string, error) {
 	entity, err := getEntity(key)
 	if err != nil {
@@ -92,10 +95,11 @@ func ReadKey(key []byte, password string) (*openpgp.Entity, string, error) {
 	return entity, hex.EncodeToString(entity.PrimaryKey.Fingerprint), nil
 }
 
+// GenerateKey generates a GPG key using x25519
 func GenerateKey(
-	fullName string,
-	email string,
-	password string,
+	fullName string, // Full name of the GPG key's holder
+	email string, // Email of the GPG key's holder
+	password string, // Password of the GPG key
 ) ([]byte, error) { // key, error
 	key, err := helper.GenerateKey(fullName, email, []byte(password), "x25519", 0)
 	if err != nil {
@@ -105,22 +109,25 @@ func GenerateKey(
 	return []byte(key), err
 }
 
+// EncryptConfig provides the information to encrypt something
 type EncryptConfig struct {
-	PublicKey       *openpgp.Entity
-	ArmorCyphertext bool
+	PublicKey       *openpgp.Entity // The GPG public key
+	ArmorCyphertext bool            // Enables armoring the cyphertext
 }
 
+// SignatureConfig provides the information to sign something
 type SignatureConfig struct {
-	PrivateKey      *openpgp.Entity
-	ArmorSignature  bool
-	DetachSignature bool
+	PrivateKey      *openpgp.Entity // The GPG private key
+	ArmorSignature  bool            // Enables armoring the signature
+	DetachSignature bool            // Enables creating a detached signature
 }
 
+// EncryptSign encrypts/signs plaintext
 func EncryptSign(
-	encryptConfig *EncryptConfig, // May also be nil
-	signatureConfig *SignatureConfig, // May also be nil
+	encryptConfig *EncryptConfig, // The config to encrypt with; may also be nil, in which case encryption is disabled
+	signatureConfig *SignatureConfig, // The config to sign with; may also be nil, in which case signing is disabled
 
-	plaintext []byte,
+	plaintext []byte, // The text to be encrypted/signed
 ) ([]byte, []byte, error) { // cyphertext, signature, error
 	cyphertext := []byte{}
 	signature := []byte{}
@@ -258,20 +265,23 @@ func EncryptSign(
 	return cyphertext, signature, nil
 }
 
+// DecryptConfig provides the information to decrypt something
 type DecryptConfig struct {
-	PrivateKey *openpgp.Entity
+	PrivateKey *openpgp.Entity // The GPG private key
 }
 
+// VerifyConfig provides the information to verify something
 type VerifyConfig struct {
-	PublicKey         *openpgp.Entity
-	DetachedSignature []byte // May also be armored
+	PublicKey         *openpgp.Entity // The GPG public key
+	DetachedSignature []byte          // The detached signature to use (may also be armored)
 }
 
+// DecryptVerify decrypts/verified plaintext
 func DecryptVerify(
-	decryptConfig *DecryptConfig, // May also be nil
-	verifyConfig *VerifyConfig, // May also be nil
+	decryptConfig *DecryptConfig, // The config to decrypt with; may also be nil, in which case decryption is disabled
+	verifyConfig *VerifyConfig, // The config to verify with; may also be nil, in which case verification is disabled
 
-	cyphertext []byte, // May also be armored
+	cyphertext []byte, // The text to be decrypt/verify (may also be armored)
 ) ([]byte, bool, error) { // plaintext, verified, error
 	// Unarmor the cyphertext
 	text, err := Unarmor(cyphertext)

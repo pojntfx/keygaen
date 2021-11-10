@@ -4,11 +4,12 @@ import (
 	"github.com/maxence-charriere/go-app/v9/pkg/app"
 )
 
+// Autofocused calls `focus` on the encapsulated component after it is mounted
 type Autofocused struct {
 	app.Compo
 
-	Disable   bool
-	Component app.UI
+	Disable   bool   // Disable the focus
+	Component app.UI // The component to be focused
 }
 
 func (c *Autofocused) Render() app.UI {
