@@ -28,7 +28,7 @@ if ("serviceWorker" in navigator) {
 // -----------------------------------------------------------------------------
 // Env
 // -----------------------------------------------------------------------------
-const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/keygaen","GOAPP_STATIC_RESOURCES_URL":"/keygaen","GOAPP_VERSION":"58da5a1078cb88eb153465dd23b810339f593ccd"};
+const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/keygaen","GOAPP_STATIC_RESOURCES_URL":"/keygaen","GOAPP_VERSION":"a0418fc0c8b03c6a6e8449066a5fa628149afa51"};
 
 function goappGetenv(k) {
   return goappEnv[k];
