@@ -33,9 +33,9 @@ func main() {
 		Title:           "keygaen",
 		Name:            "keygaen",
 		ShortName:       "keygaen",
-		Description:     "Sign, verify, encrypt and decrypt data with GPG.",
-		LoadingLabel:    "Sign, verify, encrypt and decrypt data with GPG.",
-		Author:          "Felix Pojtinger",
+		Description:     "Sign, verify, encrypt and decrypt data with PGP.",
+		LoadingLabel:    "Sign, verify, encrypt and decrypt data with PGP.",
+		Author:          "Felicitas Pojtinger",
 		ThemeColor:      "#151515",
 		BackgroundColor: "#151515",
 		Icon: app.Icon{
@@ -43,7 +43,7 @@ func main() {
 			Large:   `/web/large.png`,
 		},
 		Keywords: []string{
-			"gpg",
+			"pgp",
 			"pgp",
 			"gopenpgp",
 			"encryption",
@@ -52,13 +52,11 @@ func main() {
 		RawHeaders: []string{
 			`<meta property="og:url" content="https://pojntfx.github.io/keygaen/">`,
 			`<meta property="og:title" content="keygaen">`,
-			`<meta property="og:description" content="Sign, verify, encrypt and decrypt data with GPG.">`,
+			`<meta property="og:description" content="Sign, verify, encrypt and decrypt data with PGP.">`,
 			`<meta property="og:image" content="https://pojntfx.github.io/keygaen/web/default.png">`,
 		},
 		Styles: []string{
-			`https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly.css`,
-			`https://unpkg.com/@patternfly/patternfly@4.135.2/patternfly-addons.css`,
-			`/web/index.css`,
+			"/web/main.css",
 		},
 	}
 

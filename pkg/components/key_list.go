@@ -8,25 +8,25 @@ const (
 	keyListID = "key-list"
 )
 
-// GPGKey is a GPG key an it's metadata
-type GPGKey struct {
-	ID       string `json:"id"`       // Internal unique ID of the GPG key, i.e. it's fingerprint
-	Label    string `json:"label"`    // Displayable ID of the GPG key
-	FullName string `json:"fullName"` // Full name of the GPG key's holder
-	Email    string `json:"email"`    // Email of the GPG key's holder
-	Private  bool   `json:"private"`  // Whether the GPG key is private
-	Public   bool   `json:"public"`   // Whether the GPG key is public
-	Content  []byte `json:"content"`  // Raw GPG key (Potentially protected or armored)
+// PGPKey is a PGP key an it's metadata
+type PGPKey struct {
+	ID       string `json:"id"`       // Internal unique ID of the PGP key, i.e. it's fingerprint
+	Label    string `json:"label"`    // Displayable ID of the PGP key
+	FullName string `json:"fullName"` // Full name of the PGP key's holder
+	Email    string `json:"email"`    // Email of the PGP key's holder
+	Private  bool   `json:"private"`  // Whether the PGP key is private
+	Public   bool   `json:"public"`   // Whether the PGP key is public
+	Content  []byte `json:"content"`  // Raw PGP key (Potentially protected or armored)
 }
 
-// KeyList is a list of GPG keys
+// KeyList is a list of PGP keys
 type KeyList struct {
 	app.Compo
 
-	Keys []GPGKey // GPG keys to list
+	Keys []PGPKey // PGP keys to list
 
-	OnExport func(keyID string) // Handler to call to export a GPG key
-	OnDelete func(keyID string) // Handler to call to delete a GPG key
+	OnExport func(keyID string) // Handler to call to export a PGP key
+	OnDelete func(keyID string) // Handler to call to delete a PGP key
 
 	expandedKeyID string
 

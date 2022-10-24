@@ -13,7 +13,7 @@ const (
 type DecryptAndVerifyModal struct {
 	app.Compo
 
-	Keys []GPGKey // GPG keys to be available for decryption/verification
+	Keys []PGPKey // PGP keys to be available for decryption/verification
 
 	OnSubmit func(
 		file []byte,
@@ -38,8 +38,8 @@ type DecryptAndVerifyModal struct {
 }
 
 func (c *DecryptAndVerifyModal) Render() app.UI {
-	privateKeys := []GPGKey{}
-	publicKeys := []GPGKey{}
+	privateKeys := []PGPKey{}
+	publicKeys := []PGPKey{}
 	for _, key := range c.Keys {
 		if key.Private {
 			privateKeys = append(privateKeys, key)

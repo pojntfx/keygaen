@@ -12,7 +12,7 @@ const (
 type EncryptAndSignModal struct {
 	app.Compo
 
-	Keys []GPGKey // GPG keys to be available for encryption/signing
+	Keys []PGPKey // PGP keys to be available for encryption/signing
 
 	OnSubmit func(
 		file []byte,
@@ -39,8 +39,8 @@ type EncryptAndSignModal struct {
 }
 
 func (c *EncryptAndSignModal) Render() app.UI {
-	privateKeys := []GPGKey{}
-	publicKeys := []GPGKey{}
+	privateKeys := []PGPKey{}
+	publicKeys := []PGPKey{}
 	for _, key := range c.Keys {
 		if key.Private {
 			privateKeys = append(privateKeys, key)
@@ -374,6 +374,6 @@ func (c *EncryptAndSignModal) clear() {
 	c.dirty = false
 }
 
-func getKeySummary(key GPGKey) string {
+func getKeySummary(key PGPKey) string {
 	return key.Label + " " + key.FullName + " <" + key.Email + ">"
 }

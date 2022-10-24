@@ -1,2 +1,6 @@
-web/*.wasm
 out
+build
+web/*.wasm
+web/fonts
+web/*.css*
+node_modules

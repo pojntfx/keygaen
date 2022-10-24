@@ -1,0 +1,25 @@
+{
+  "name": "@pojntfx/keygaen",
+  "version": "0.0.1",
+  "description": "Sign, verify, encrypt and decrypt data with PGP in your browser.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pojntfx/keygaen.git"
+  },
+  "author": "Felicitas Pojtinger <felicitas@pojtinger.com>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/pojntfx/keygaen/issues"
+  },
+  "homepage": "https://github.com/pojntfx/keygaen#readme",
+  "dependencies": {
+    "@patternfly/patternfly": "^4.217.1"
+  },
+  "devDependencies": {
+    "sass": "^1.55.0"
+  }
+}

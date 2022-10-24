@@ -1,3 +1,20 @@
+@import "node_modules/@patternfly/patternfly/sass-utilities/all.scss";
+
+$pf-global--font-path: "fonts";
+$fa-font-path: $pf-global--font-path + "/webfonts";
+
+@import "node_modules/@patternfly/patternfly/patternfly.scss";
+@import "node_modules/@patternfly/patternfly/patternfly-addons.scss";
+
+.pf-x-m-backdrop-blur {
+  backdrop-filter: blur(0.5rem);
+  -webkit-backdrop-filter: blur(0.5rem);
+}
+
+.pf-c-backdrop {
+  @extend .pf-x-m-backdrop-blur;
+}
+
 .pf-x-c-tooltip-parent:hover .pf-x-c-tooltip,
 .pf-x-c-tooltip-parent:focus .pf-x-c-tooltip {
   visibility: visible;
