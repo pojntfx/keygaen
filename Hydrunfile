@@ -1,0 +1,68 @@
+#!/bin/bash
+
+set -e
+
+# Test
+if [ "$1" = "test" ]; then
+    # Install native dependencies
+    apt update
+    apt install -y make npm
+
+    # Generate dependencies
+    make depend
+
+    # Run tests
+    make test
+
+    exit 0
+fi
+
+# Go
+if [ "$1" = "go" ]; then
+    # Install native dependencies
+    apt update
+    apt install -y curl make npm
+
+    # Install bagop
+    curl -L -o /tmp/bagop "https://github.com/pojntfx/bagop/releases/latest/download/bagop.linux-$(uname -m)"
+    install /tmp/bagop /usr/local/bin
+
+    # Generate dependencies
+    make depend
+
+    # Build
+    CGO_ENABLED=0 bagop -j "$(nproc)" -b keygaen-cli -x '(android/*|ios/*)' -p 'make build-cli/keygaen-cli DST=$DST' -d out
+
+    exit 0
+fi
+
+# gccgo
+if [ "$1" = "gccgo" ]; then
+    # Install native dependencies
+    apt update
+    apt install -y curl npm
+
+    # Install bagccgop
+    curl -L -o /tmp/bagccgop "https://github.com/pojntfx/bagccgop/releases/latest/download/bagccgop.linux-$(uname -m)"
+    install /tmp/bagccgop /usr/local/bin
+
+    # Build
+    GOFLAGS='-gccgoflags=-static' bagccgop -x '(linux/alpha|linux/mipsle|linux/386|linux/amd64|linux/arm|linux/arm64|linux/mips|linux/mips64|linux/mips64le|linux/mipsle|linux/ppc64|linux/ppc64le|linux/riscv64|linux/s390x)' -j1 -b keygaen-cli -n -r 'make depend' -s 'build-essential,automake,npm' -p 'make build-cli/keygaen-cli DST=$DST' -d out
+
+    exit 0
+fi
+
+# PWA
+if [ "$1" = "pwa" ]; then
+    # Install native dependencies
+    apt update
+    apt install -y make npm
+
+    # Generate dependencies
+    make depend
+
+    # Build
+    make build-pwa/keygaen-pwa
+
+    exit 0
+fi
