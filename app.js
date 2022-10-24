@@ -1,62 +1,98 @@
 // -----------------------------------------------------------------------------
-// Init service worker
+// go-app
 // -----------------------------------------------------------------------------
-var goappOnUpdate = function () { };
+var goappNav = function () {};
+var goappOnUpdate = function () {};
+var goappOnAppInstallChange = function () {};
 
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker
-    .register("/keygaen/app-worker.js")
-    .then(reg => {
-      console.log("registering app service worker");
+const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/keygaen","GOAPP_STATIC_RESOURCES_URL":"/keygaen","GOAPP_VERSION":"965da4e4c1d1f26b84512fabbbedcc2dd27825f0"};
+const goappLoadingLabel = "Sign, verify, encrypt and decrypt data with PGP.";
+const goappWasmContentLengthHeader = "";
 
-      reg.onupdatefound = function () {
-        const installingWorker = reg.installing;
-        installingWorker.onstatechange = function () {
-          if (installingWorker.state == "installed") {
-            if (navigator.serviceWorker.controller) {
-              goappOnUpdate();
-            }
-          }
-        };
-      }
-    })
-    .catch(err => {
-      console.error("offline service worker registration failed", err);
-    });
-}
-
-// -----------------------------------------------------------------------------
-// Env
-// -----------------------------------------------------------------------------
-const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/keygaen","GOAPP_STATIC_RESOURCES_URL":"/keygaen","GOAPP_VERSION":"a0418fc0c8b03c6a6e8449066a5fa628149afa51"};
-
-function goappGetenv(k) {
-  return goappEnv[k];
-}
-
-// -----------------------------------------------------------------------------
-// App install
-// -----------------------------------------------------------------------------
+let goappServiceWorkerRegistration;
 let deferredPrompt = null;
-var goappOnAppInstallChange = function () { };
 
-window.addEventListener("beforeinstallprompt", e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  goappOnAppInstallChange();
-});
+goappInitServiceWorker();
+goappWatchForUpdate();
+goappWatchForInstallable();
+goappInitWebAssembly();
 
-window.addEventListener('appinstalled', () => {
-  deferredPrompt = null;
-  goappOnAppInstallChange();
-});
+// -----------------------------------------------------------------------------
+// Service Worker
+// -----------------------------------------------------------------------------
+async function goappInitServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register(
+        "/keygaen/app-worker.js"
+      );
+
+      goappServiceWorkerRegistration = registration;
+      goappSetupNotifyUpdate(registration);
+      goappSetupAutoUpdate(registration);
+      goappSetupPushNotification();
+    } catch (err) {
+      console.error("goapp service worker registration failed", err);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Update
+// -----------------------------------------------------------------------------
+function goappWatchForUpdate() {
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    goappOnAppInstallChange();
+  });
+}
+
+function goappSetupNotifyUpdate(registration) {
+  registration.onupdatefound = () => {
+    const installingWorker = registration.installing;
+
+    installingWorker.onstatechange = () => {
+      if (installingWorker.state != "installed") {
+        return;
+      }
+
+      if (!navigator.serviceWorker.controller) {
+        return;
+      }
+
+      goappOnUpdate();
+    };
+  };
+}
+
+function goappSetupAutoUpdate(registration) {
+  const autoUpdateInterval = "0";
+  if (autoUpdateInterval == 0) {
+    return;
+  }
+
+  window.setInterval(() => {
+    registration.update();
+  }, autoUpdateInterval);
+}
+
+// -----------------------------------------------------------------------------
+// Install
+// -----------------------------------------------------------------------------
+function goappWatchForInstallable() {
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    goappOnAppInstallChange();
+  });
+}
 
 function goappIsAppInstallable() {
   return !goappIsAppInstalled() && deferredPrompt != null;
 }
 
 function goappIsAppInstalled() {
-  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
   return isStandalone || navigator.standalone;
 }
 
@@ -67,7 +103,65 @@ async function goappShowInstallPrompt() {
 }
 
 // -----------------------------------------------------------------------------
-// Keep body clean
+// Environment
+// -----------------------------------------------------------------------------
+function goappGetenv(k) {
+  return goappEnv[k];
+}
+
+// -----------------------------------------------------------------------------
+// Notifications
+// -----------------------------------------------------------------------------
+function goappSetupPushNotification() {
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    const msg = event.data.goapp;
+    if (!msg) {
+      return;
+    }
+
+    if (msg.type !== "notification") {
+      return;
+    }
+
+    goappNav(msg.path);
+  });
+}
+
+async function goappSubscribePushNotifications(vapIDpublicKey) {
+  try {
+    const subscription =
+      await goappServiceWorkerRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: vapIDpublicKey,
+      });
+    return JSON.stringify(subscription);
+  } catch (err) {
+    console.error(err);
+    return "";
+  }
+}
+
+function goappNewNotification(jsonNotification) {
+  let notification = JSON.parse(jsonNotification);
+
+  const title = notification.title;
+  delete notification.title;
+
+  let path = notification.path;
+  if (!path) {
+    path = "/";
+  }
+
+  const webNotification = new Notification(title, notification);
+
+  webNotification.onclick = () => {
+    goappNav(path);
+    webNotification.close();
+  };
+}
+
+// -----------------------------------------------------------------------------
+// Keep Clean Body
 // -----------------------------------------------------------------------------
 function goappKeepBodyClean() {
   const body = document.body;
@@ -76,7 +170,7 @@ function goappKeepBodyClean() {
   const mutationObserver = new MutationObserver(function (mutationList) {
     mutationList.forEach((mutation) => {
       switch (mutation.type) {
-        case 'childList':
+        case "childList":
           while (body.children.length > bodyChildrenCount) {
             body.removeChild(body.lastChild);
           }
@@ -93,35 +187,99 @@ function goappKeepBodyClean() {
 }
 
 // -----------------------------------------------------------------------------
-// Init Web Assembly
+// Web Assembly
 // -----------------------------------------------------------------------------
-if (!/bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent)) {
-  if (!WebAssembly.instantiateStreaming) {
-    WebAssembly.instantiateStreaming = async (resp, importObject) => {
+async function goappInitWebAssembly() {
+  if (!goappCanLoadWebAssembly()) {
+    document.getElementById("app-wasm-loader").style.display = "none";
+    return;
+  }
+
+  let instantiateStreaming = WebAssembly.instantiateStreaming;
+  if (!instantiateStreaming) {
+    instantiateStreaming = async (resp, importObject) => {
       const source = await (await resp).arrayBuffer();
       return await WebAssembly.instantiate(source, importObject);
     };
   }
 
-  const go = new Go();
+  const loaderIcon = document.getElementById("app-wasm-loader-icon");
+  const loaderLabel = document.getElementById("app-wasm-loader-label");
 
-  WebAssembly.instantiateStreaming(fetch("/keygaen/web/app.wasm"), go.importObject)
-    .then(result => {
-      const loaderIcon = document.getElementById("app-wasm-loader-icon");
-      loaderIcon.className = "goapp-logo";
+  try {
+    const showProgress = (progress) => {
+      loaderLabel.innerText = goappLoadingLabel.replace("{progress}", progress);
+    };
+    showProgress(0);
 
-      go.run(result.instance);
-    })
-    .catch(err => {
-      const loaderIcon = document.getElementById("app-wasm-loader-icon");
-      loaderIcon.className = "goapp-logo";
+    const go = new Go();
+    const wasm = await instantiateStreaming(
+      fetchWithProgress("/keygaen/web/app.wasm", showProgress),
+      go.importObject
+    );
 
-      const loaderLabel = document.getElementById("app-wasm-loader-label");
-      loaderLabel.innerText = err;
-
-      console.error("loading wasm failed: " + err);
-    });
-} else {
-  document.getElementById('app-wasm-loader').style.display = "none";
+    go.run(wasm.instance);
+  } catch (err) {
+    loaderIcon.className = "goapp-logo";
+    loaderLabel.innerText = err;
+    console.error("loading wasm failed: ", err);
+  }
 }
 
+function goappCanLoadWebAssembly() {
+  return !/bot|googlebot|crawler|spider|robot|crawling/i.test(
+    navigator.userAgent
+  );
+}
+
+async function fetchWithProgress(url, progess) {
+  const response = await fetch(url);
+
+  let contentLength;
+  try {
+    contentLength = response.headers.get(goappWasmContentLengthHeader);
+  } catch {}
+  if (!goappWasmContentLengthHeader || !contentLength) {
+    contentLength = response.headers.get("Content-Length");
+  }
+
+  const total = parseInt(contentLength, 10);
+  let loaded = 0;
+
+  const progressHandler = function (loaded, total) {
+    progess(Math.round((loaded * 100) / total));
+  };
+
+  var res = new Response(
+    new ReadableStream(
+      {
+        async start(controller) {
+          var reader = response.body.getReader();
+          for (;;) {
+            var { done, value } = await reader.read();
+
+            if (done) {
+              progressHandler(total, total);
+              break;
+            }
+
+            loaded += value.byteLength;
+            progressHandler(loaded, total);
+            controller.enqueue(value);
+          }
+          controller.close();
+        },
+      },
+      {
+        status: response.status,
+        statusText: response.statusText,
+      }
+    )
+  );
+
+  for (var pair of response.headers.entries()) {
+    res.headers.set(pair[0], pair[1]);
+  }
+
+  return res;
+}

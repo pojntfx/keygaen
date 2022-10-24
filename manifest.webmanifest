@@ -1,7 +1,7 @@
 {
   "short_name": "keygaen",
   "name": "keygaen",
-  "description": "Sign, verify, encrypt and decrypt data with GPG.",
+  "description": "Sign, verify, encrypt and decrypt data with PGP.",
   "icons": [
     {
       "src": "/keygaen/web/default.png",

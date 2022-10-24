@@ -1,0 +1,43 @@
+@import "node_modules/@patternfly/patternfly/sass-utilities/all.scss";
+
+$pf-global--font-path: "fonts";
+$fa-font-path: $pf-global--font-path + "/webfonts";
+
+@import "node_modules/@patternfly/patternfly/patternfly.scss";
+@import "node_modules/@patternfly/patternfly/patternfly-addons.scss";
+
+.pf-x-m-backdrop-blur {
+  backdrop-filter: blur(0.5rem);
+  -webkit-backdrop-filter: blur(0.5rem);
+}
+
+.pf-c-backdrop {
+  @extend .pf-x-m-backdrop-blur;
+}
+
+.pf-x-c-tooltip-parent:hover .pf-x-c-tooltip,
+.pf-x-c-tooltip-parent:focus .pf-x-c-tooltip {
+  visibility: visible;
+}
+
+.pf-x-c-tooltip {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+}
+
+.pf-x-c-tooltip.pf-m-left {
+  top: 0;
+  right: calc(100% + (var(--pf-c-tooltip__arrow--Width) / 2));
+}
+
+.pf-x-c-tooltip.pf-m-right {
+  top: 0;
+  left: calc(100% + (var(--pf-c-tooltip__arrow--Width) / 2));
+}
+
+.pf-x-c-tooltip.pf-m-top {
+  bottom: calc(100% + (var(--pf-c-tooltip__arrow--Height) / 2));
+  transform: translateX(-50%);
+  left: 50%;
+}
