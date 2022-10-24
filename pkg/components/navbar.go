@@ -20,7 +20,7 @@ func (c *Navbar) Render() app.UI {
 						Body(
 							app.Img().
 								Class("pf-c-brand").
-								Src("/keygaen/web/logo-light.png").
+								Src("/web/logo-light.png").
 								Alt("Logo"),
 						),
 				),
@@ -40,7 +40,7 @@ func (c *Navbar) Render() app.UI {
 										Aria("label", "Help").
 										Body(
 											app.I().
-												Class("pf-icon pf-icon-help").
+												Class("pf-icon fas fa-question-circle").
 												Aria("hidden", true),
 										),
 								),

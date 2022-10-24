@@ -69,7 +69,7 @@ func Unarmor(data []byte) ([]byte, error) {
 	return data, nil
 }
 
-// ReadKey parses a GPG key and unlocks it with a password, which may be empty if the key does not need to be unlocked
+// ReadKey parses a PGP key and unlocks it with a password, which may be empty if the key does not need to be unlocked
 func ReadKey(key []byte, password string) (*openpgp.Entity, string, error) {
 	entity, err := getEntity(key)
 	if err != nil {
@@ -95,11 +95,11 @@ func ReadKey(key []byte, password string) (*openpgp.Entity, string, error) {
 	return entity, hex.EncodeToString(entity.PrimaryKey.Fingerprint), nil
 }
 
-// GenerateKey generates a GPG key using x25519
+// GenerateKey generates a PGP key using x25519
 func GenerateKey(
-	fullName string, // Full name of the GPG key's holder
-	email string, // Email of the GPG key's holder
-	password string, // Password of the GPG key
+	fullName string, // Full name of the PGP key's holder
+	email string, // Email of the PGP key's holder
+	password string, // Password of the PGP key
 ) ([]byte, error) { // key, error
 	key, err := helper.GenerateKey(fullName, email, []byte(password), "x25519", 0)
 	if err != nil {
@@ -111,13 +111,13 @@ func GenerateKey(
 
 // EncryptConfig provides the information to encrypt something
 type EncryptConfig struct {
-	PublicKey       *openpgp.Entity // The GPG public key
+	PublicKey       *openpgp.Entity // The PGP public key
 	ArmorCyphertext bool            // Enables armoring the cyphertext
 }
 
 // SignatureConfig provides the information to sign something
 type SignatureConfig struct {
-	PrivateKey      *openpgp.Entity // The GPG private key
+	PrivateKey      *openpgp.Entity // The PGP private key
 	ArmorSignature  bool            // Enables armoring the signature
 	DetachSignature bool            // Enables creating a detached signature
 }
@@ -267,12 +267,12 @@ func EncryptSign(
 
 // DecryptConfig provides the information to decrypt something
 type DecryptConfig struct {
-	PrivateKey *openpgp.Entity // The GPG private key
+	PrivateKey *openpgp.Entity // The PGP private key
 }
 
 // VerifyConfig provides the information to verify something
 type VerifyConfig struct {
-	PublicKey         *openpgp.Entity // The GPG public key
+	PublicKey         *openpgp.Entity // The PGP public key
 	DetachedSignature []byte          // The detached signature to use (may also be armored)
 }
 

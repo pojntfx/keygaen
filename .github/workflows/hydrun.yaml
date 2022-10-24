@@ -3,6 +3,8 @@ name: hydrun CI
 on:
   push:
   pull_request:
+  schedule:
+    - cron: "0 0 * * 0"
 
 jobs:
   build-linux:
@@ -10,14 +12,37 @@ jobs:
     strategy:
       matrix:
         target:
+          - id: test
+            src: .
+            os: golang:bullseye
+            flags: ""
+            cmd: GOFLAGS="-short" ./Hydrunfile test
+            dst: out/*
+          - id: go
+            src: .
+            os: golang:bullseye
+            flags: ""
+            cmd: ./Hydrunfile go
+            dst: out/*
+          - id: gccgo
+            src: .
+            os: ghcr.io/pojntfx/bagccgop-base-sid
+            flags: -e '--privileged'
+            cmd: ./Hydrunfile gccgo
+            dst: out/*
           - id: pwa
             src: .
             os: golang:bullseye
             flags: ""
-            cmd: make -j "$(nproc)"
+            cmd: ./Hydrunfile pwa
             dst: out/*
 
     steps:
+      - name: Maximize build space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set up QEMU
@@ -49,10 +74,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           path: /tmp/out
-      - name: Isolate the repositories
+      - name: Isolate the PWA
         run: |
           mkdir -p /tmp/github-pages
-          cp -r /tmp/out/pwa/web/* /tmp/github-pages
+
+          tar -xvzf /tmp/out/pwa/keystoregaen-pwa.tar.gz --directory /tmp/github-pages
       - name: Publish pre-release to GitHub releases
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: marvinpinto/action-automatic-releases@latest
@@ -71,7 +97,8 @@ jobs:
           files: |
             /tmp/out/*/*
       - name: Publish release to GitHub pages
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') # Uncomment on first release
+        # if: ${{ github.ref == 'refs/heads/main' }} # Comment on first release
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
           branch: gh-pages

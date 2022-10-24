@@ -5,7 +5,7 @@ import (
 	"github.com/pojntfx/keygaen/pkg/components"
 )
 
-var demoKeys = []components.GPGKey{
+var demoKeys = []components.PGPKey{
 	{
 		ID:       "039292",
 		Label:    "039292",

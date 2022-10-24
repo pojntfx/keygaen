@@ -58,7 +58,7 @@ type Home struct {
 	err       error
 	onRecover func()
 
-	keys []GPGKey
+	keys []PGPKey
 
 	keyPasswordChan chan string
 
@@ -86,7 +86,7 @@ func (c *Home) Render() app.UI {
 		c.keyPasswordChan = make(chan string)
 	}
 
-	privateKey := GPGKey{}
+	privateKey := PGPKey{}
 	privateKeyExport := []byte{}
 	privateKeyExportArmored := ""
 	for _, candidate := range c.keys {
@@ -125,7 +125,7 @@ func (c *Home) Render() app.UI {
 		}
 	}
 
-	publicKey := GPGKey{}
+	publicKey := PGPKey{}
 	publicKeyExport := []byte{}
 	publicKeyExportArmored := ""
 	for _, candidate := range c.keys {
@@ -164,7 +164,7 @@ func (c *Home) Render() app.UI {
 		}
 	}
 
-	selectedKey := GPGKey{}
+	selectedKey := PGPKey{}
 	for _, candidate := range c.keys {
 		if candidate.ID == c.selectedKeyID {
 			selectedKey = candidate
@@ -417,7 +417,7 @@ func (c *Home) Render() app.UI {
 										c.selectedKeyID = keyID
 
 										c.confirmDeleteKey = func() {
-											newKeys := []GPGKey{}
+											newKeys := []PGPKey{}
 											for _, candidate := range c.keys {
 												if candidate.ID == c.selectedKeyID {
 													continue
@@ -468,7 +468,7 @@ func (c *Home) Render() app.UI {
 							return
 						}
 
-						c.keys = append(c.keys, GPGKey{
+						c.keys = append(c.keys, PGPKey{
 							ID:       fingerprint,       // Since we don't generate subkeys, we'll only have one fingerprint
 							Label:    fingerprint[0:10], // We can safely assume that the fingerprint is at least 10 chars long
 							FullName: id.Name,
@@ -541,7 +541,7 @@ func (c *Home) Render() app.UI {
 								return
 							}
 
-							newKeys := []GPGKey{}
+							newKeys := []PGPKey{}
 							for _, candidate := range c.keys {
 								if candidate.ID == fingerprint {
 									// Replace the key if the existing key is a public key and the imported key is a private key
@@ -560,7 +560,7 @@ func (c *Home) Render() app.UI {
 								newKeys = append(newKeys, candidate)
 							}
 
-							newKeys = append(newKeys, GPGKey{
+							newKeys = append(newKeys, PGPKey{
 								ID:       fingerprint,       // Since we don't generate subkeys, we'll only have one fingerprint
 								Label:    fingerprint[0:10], // We can safely assume that the fingerprint is at least 10 chars long
 								FullName: id.Name,
@@ -886,7 +886,7 @@ func (c *Home) Render() app.UI {
 						if armor {
 							c.download([]byte(publicKeyExportArmored), publicKey.Label+".asc", "text/plain")
 						} else {
-							c.download(publicKeyExport, publicKey.Label+".gpg", "application/octet-stream")
+							c.download(publicKeyExport, publicKey.Label+".pgp", "application/octet-stream")
 						}
 					},
 					OnViewPublicKey: func() {
@@ -900,7 +900,7 @@ func (c *Home) Render() app.UI {
 						if armor {
 							c.download([]byte(privateKeyExportArmored), privateKey.Label+".asc", "text/plain")
 						} else {
-							c.download(privateKeyExport, privateKey.Label+".gpg", "application/octet-stream")
+							c.download(privateKeyExport, privateKey.Label+".pgp", "application/octet-stream")
 						}
 					},
 					OnViewPrivateKey: func() {
@@ -1232,11 +1232,11 @@ func (c *Home) readFromLocalStorage() {
 	marshalledKeys := app.Window().Get("localStorage").Call("getItem", keyringStorageKey).String()
 
 	// Ignore errors in JSON parsing
-	newKeys := []GPGKey{}
+	newKeys := []PGPKey{}
 	_ = json.Unmarshal([]byte(marshalledKeys), &newKeys)
 
 	if newKeys == nil {
-		c.keys = []GPGKey{}
+		c.keys = []PGPKey{}
 
 		return
 	}
@@ -1262,7 +1262,7 @@ func getEncryptedExtensionAndMIME(content []byte, filename string) (string, stri
 		return filename + ".asc", "text/plain"
 	}
 
-	return filename + ".gpg", "application/octet-stream"
+	return filename + ".pgp", "application/octet-stream"
 }
 
 func getDecryptedExtensionAndMIME(content []byte, filename string) (string, string) {
