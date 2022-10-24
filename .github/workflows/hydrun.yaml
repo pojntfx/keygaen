@@ -78,7 +78,7 @@ jobs:
         run: |
           mkdir -p /tmp/github-pages
 
-          tar -xvzf /tmp/out/pwa/keystoregaen-pwa.tar.gz --directory /tmp/github-pages
+          tar -xvzf /tmp/out/pwa/keygaen-pwa.tar.gz --directory /tmp/github-pages
       - name: Publish pre-release to GitHub releases
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: marvinpinto/action-automatic-releases@latest
