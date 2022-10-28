@@ -27,19 +27,19 @@ func (c *ExportKeyModalStory) Render() app.UI {
 			c.WithRoot(
 				&components.ExportKeyModal{
 					PublicKey: true,
-					OnDownloadPublicKey: func(armor bool) {
-						app.Window().Call("alert", fmt.Sprintf("Downloaded public key with armor set to %v", armor))
+					OnDownloadPublicKey: func(armor, base64encode bool) {
+						app.Window().Call("alert", fmt.Sprintf("Downloaded public key with armor set to %v with base64encode %v", armor, base64encode))
 					},
-					OnViewPublicKey: func() {
-						app.Window().Call("alert", "Viewed public key")
+					OnViewPublicKey: func(armor, base64encode bool) {
+						app.Window().Call("alert", fmt.Sprintf("Viewed public key with armor set to %v with base64encode %v", armor, base64encode))
 					},
 
 					PrivateKey: true,
-					OnDownloadPrivateKey: func(armor bool) {
-						app.Window().Call("alert", fmt.Sprintf("Downloaded private key with armor set to %v", armor))
+					OnDownloadPrivateKey: func(armor, base64encode bool) {
+						app.Window().Call("alert", fmt.Sprintf("Downloaded private key with armor set to %v with base64encode %v", armor, base64encode))
 					},
-					OnViewPrivateKey: func() {
-						app.Window().Call("alert", "Viewed private key")
+					OnViewPrivateKey: func(armor, base64encode bool) {
+						app.Window().Call("alert", fmt.Sprintf("Viewed private key with armor set to %v with base64encode %v", armor, base64encode))
 					},
 
 					OnOK: func() {

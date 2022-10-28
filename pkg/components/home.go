@@ -1,6 +1,7 @@
 package components
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"log"
@@ -55,6 +56,9 @@ type Home struct {
 
 	viewPrivateKey bool
 
+	viewArmor  bool
+	viewBase64 bool
+
 	err       error
 	onRecover func()
 
@@ -88,7 +92,9 @@ func (c *Home) Render() app.UI {
 
 	privateKey := PGPKey{}
 	privateKeyExport := []byte{}
+	privateKeyExportBase64 := ""
 	privateKeyExportArmored := ""
+	privateKeyExportArmoredBase64 := ""
 	for _, candidate := range c.keys {
 		if candidate.ID == c.privateKeyID {
 			privateKey = candidate
@@ -99,6 +105,8 @@ func (c *Home) Render() app.UI {
 
 				break
 			}
+
+			privateKeyExportBase64 = base64.StdEncoding.EncodeToString(rawKey)
 
 			parsedKey, err := crypto.NewKey(rawKey)
 			if err != nil {
@@ -121,13 +129,17 @@ func (c *Home) Render() app.UI {
 				break
 			}
 
+			privateKeyExportArmoredBase64 = base64.StdEncoding.EncodeToString(privateKeyExport)
+
 			break
 		}
 	}
 
 	publicKey := PGPKey{}
 	publicKeyExport := []byte{}
+	publicKeyExportBase64 := ""
 	publicKeyExportArmored := ""
+	publicKeyExportArmoredBase64 := ""
 	for _, candidate := range c.keys {
 		if candidate.ID == c.publicKeyID {
 			publicKey = candidate
@@ -138,6 +150,8 @@ func (c *Home) Render() app.UI {
 
 				break
 			}
+
+			publicKeyExportBase64 = base64.StdEncoding.EncodeToString(rawKey)
 
 			parsedKey, err := crypto.NewKey(rawKey)
 			if err != nil {
@@ -159,6 +173,8 @@ func (c *Home) Render() app.UI {
 
 				break
 			}
+
+			publicKeyExportArmoredBase64 = base64.StdEncoding.EncodeToString(publicKeyExport)
 
 			break
 		}
@@ -882,31 +898,51 @@ func (c *Home) Render() app.UI {
 				c.exportKeyModalOpen,
 				&ExportKeyModal{
 					PublicKey: c.publicKeyID != "",
-					OnDownloadPublicKey: func(armor bool) {
+					OnDownloadPublicKey: func(armor, base64encode bool) {
 						if armor {
-							c.download([]byte(publicKeyExportArmored), publicKey.Label+".asc", "text/plain")
+							if base64encode {
+								c.download([]byte(publicKeyExportArmoredBase64), publicKey.Label+".asc.txt", "text/plain")
+							} else {
+								c.download([]byte(publicKeyExportArmored), publicKey.Label+".asc", "text/plain")
+							}
 						} else {
-							c.download(publicKeyExport, publicKey.Label+".pgp", "application/octet-stream")
+							if base64encode {
+								c.download([]byte(publicKeyExportBase64), publicKey.Label+".pgp.txt", "application/octet-stream")
+							} else {
+								c.download(publicKeyExport, publicKey.Label+".pgp", "application/octet-stream")
+							}
 						}
 					},
-					OnViewPublicKey: func() {
+					OnViewPublicKey: func(armor, base64encode bool) {
 						c.exportKeyModalOpen = false
 						c.viewPrivateKey = false
 						c.viewKeyModalOpen = true
+						c.viewArmor = armor
+						c.viewBase64 = base64encode
 					},
 
 					PrivateKey: c.privateKeyID != "",
-					OnDownloadPrivateKey: func(armor bool) {
+					OnDownloadPrivateKey: func(armor, base64encode bool) {
 						if armor {
-							c.download([]byte(privateKeyExportArmored), privateKey.Label+".asc", "text/plain")
+							if base64encode {
+								c.download([]byte(privateKeyExportArmoredBase64), privateKey.Label+".asc.txt", "text/plain")
+							} else {
+								c.download([]byte(privateKeyExportArmored), privateKey.Label+".asc", "text/plain")
+							}
 						} else {
-							c.download(privateKeyExport, privateKey.Label+".pgp", "application/octet-stream")
+							if base64encode {
+								c.download([]byte(privateKeyExportBase64), privateKey.Label+".pgp.txt", "application/octet-stream")
+							} else {
+								c.download(privateKeyExport, privateKey.Label+".pgp", "application/octet-stream")
+							}
 						}
 					},
-					OnViewPrivateKey: func() {
+					OnViewPrivateKey: func(armor, base64encode bool) {
 						c.exportKeyModalOpen = false
 						c.viewPrivateKey = true
 						c.viewKeyModalOpen = true
+						c.viewArmor = armor
+						c.viewBase64 = base64encode
 					},
 
 					OnOK: func() {
@@ -922,8 +958,24 @@ func (c *Home) Render() app.UI {
 					tabs := []TextOutputModalTab{
 						{
 							Language: "text/plain",
-							Title:    publicKey.Label + ".pub",
-							Body:     publicKeyExportArmored,
+							Title: publicKey.Label + func() string {
+								if c.viewArmor {
+									if c.viewBase64 {
+										return ".asc.txt"
+									}
+
+									return ".asc"
+								}
+
+								return ".txt"
+							}(),
+							Body: func() string {
+								if c.viewBase64 {
+									return publicKeyExportArmoredBase64
+								}
+
+								return publicKeyExportArmored
+							}(),
 						},
 					}
 					title := `View Public Key "` + publicKey.Label + `"`
@@ -932,8 +984,24 @@ func (c *Home) Render() app.UI {
 						tabs = []TextOutputModalTab{
 							{
 								Language: "text/plain",
-								Title:    privateKey.Label,
-								Body:     privateKeyExportArmored,
+								Title: privateKey.Label + ".asc" + func() string {
+									if c.viewArmor {
+										if c.viewBase64 {
+											return ".asc.txt"
+										}
+
+										return ".asc"
+									}
+
+									return ".txt"
+								}(),
+								Body: func() string {
+									if c.viewBase64 {
+										return privateKeyExportArmoredBase64
+									}
+
+									return privateKeyExportArmored
+								}(),
 							},
 						}
 						title = `View Private Key "` + privateKey.Label + `"`
@@ -945,6 +1013,7 @@ func (c *Home) Render() app.UI {
 						OnClose: func() {
 							c.viewKeyModalOpen = false
 							c.exportKeyModalOpen = true
+							c.viewBase64 = false
 
 							c.Update()
 						},

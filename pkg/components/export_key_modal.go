@@ -13,18 +13,21 @@ const (
 type ExportKeyModal struct {
 	app.Compo
 
-	PublicKey           bool             // Whether to display the options for a public key
-	OnDownloadPublicKey func(armor bool) // Handler to call to download the public key
-	OnViewPublicKey     func()           // Handler to call to view the public key
+	PublicKey           bool                           // Whether to display the options for a public key
+	OnDownloadPublicKey func(armor, base64encode bool) // Handler to call to download the public key
+	OnViewPublicKey     func(armor, base64encode bool) // Handler to call to view the public key
 
-	PrivateKey           bool             // Whether to display the options for a private key
-	OnDownloadPrivateKey func(armor bool) // Handler to call to download the private key
-	OnViewPrivateKey     func()           // Handler to call to view the private key
+	PrivateKey           bool                           // Whether to display the options for a private key
+	OnDownloadPrivateKey func(armor, base64encode bool) // Handler to call to download the private key
+	OnViewPrivateKey     func(armor, base64encode bool) // Handler to call to view the private key
 
 	OnOK func() // Handler to call when dismissing the modal
 
-	skipPublicKeyArmor  bool
-	skipPrivateKeyArmor bool
+	skipPublicKeyArmor    bool
+	publicKeyBase64Encode bool
+
+	skipPrivateKeyArmor    bool
+	privateKeyBase64Encode bool
 }
 
 func (c *ExportKeyModal) Render() app.UI {
@@ -91,6 +94,42 @@ func (c *ExportKeyModal) Render() app.UI {
 															),
 													),
 											),
+										app.Div().
+											Aria("role", "group").
+											Class("pf-c-form__group").
+											Body(
+												app.Div().
+													Class("pf-c-form__group-control").
+													Body(
+														app.Div().
+															Class("pf-c-check").
+															Body(
+																&Controlled{
+																	Component: app.Input().
+																		Class("pf-c-check__input").
+																		Type("checkbox").
+																		ID("public-base64-checkbox").
+																		OnInput(func(ctx app.Context, e app.Event) {
+																			c.publicKeyBase64Encode = !c.publicKeyBase64Encode
+																		}),
+																	Properties: map[string]interface{}{
+																		"checked": c.publicKeyBase64Encode,
+																	},
+																},
+																app.Label().
+																	Class("pf-c-check__label").
+																	For("public-base64-checkbox").
+																	Body(
+																		app.I().
+																			Class("fas fa-shield-alt pf-u-mr-sm"),
+																		app.Text("Base64 encode"),
+																	),
+																app.Span().
+																	Class("pf-c-check__description").
+																	Text("Use a reduced alphabet for better portability."),
+															),
+													),
+											),
 									),
 							),
 						app.Div().
@@ -108,7 +147,7 @@ func (c *ExportKeyModal) Render() app.UI {
 									Type("submit").
 									Form(exportPublicKeyForm).
 									OnClick(func(ctx app.Context, e app.Event) {
-										c.OnDownloadPublicKey(!c.skipPublicKeyArmor)
+										c.OnDownloadPublicKey(!c.skipPublicKeyArmor, c.publicKeyBase64Encode)
 									}).
 									Body(
 										app.Span().
@@ -121,13 +160,13 @@ func (c *ExportKeyModal) Render() app.UI {
 										app.Text("Download public key"),
 									),
 								app.If(
-									!c.skipPublicKeyArmor,
+									!c.skipPublicKeyArmor || c.publicKeyBase64Encode,
 									app.Button().
 										Class("pf-c-button pf-m-control pf-u-mr-sm pf-u-display-block pf-u-display-inline-block-on-md pf-u-w-100 pf-u-w-initial-on-md").
 										Type("submit").
 										Form(exportPublicKeyForm).
 										OnClick(func(ctx app.Context, e app.Event) {
-											c.OnViewPublicKey()
+											c.OnViewPublicKey(!c.skipPublicKeyArmor, c.publicKeyBase64Encode)
 										}).
 										Body(
 											app.Span().
@@ -202,6 +241,42 @@ func (c *ExportKeyModal) Render() app.UI {
 															),
 													),
 											),
+										app.Div().
+											Aria("role", "group").
+											Class("pf-c-form__group").
+											Body(
+												app.Div().
+													Class("pf-c-form__group-control").
+													Body(
+														app.Div().
+															Class("pf-c-check").
+															Body(
+																&Controlled{
+																	Component: app.Input().
+																		Class("pf-c-check__input").
+																		Type("checkbox").
+																		ID("private-base64-checkbox").
+																		OnInput(func(ctx app.Context, e app.Event) {
+																			c.privateKeyBase64Encode = !c.privateKeyBase64Encode
+																		}),
+																	Properties: map[string]interface{}{
+																		"checked": c.privateKeyBase64Encode,
+																	},
+																},
+																app.Label().
+																	Class("pf-c-check__label").
+																	For("private-base64-checkbox").
+																	Body(
+																		app.I().
+																			Class("fas fa-shield-alt pf-u-mr-sm"),
+																		app.Text("Base64 encode"),
+																	),
+																app.Span().
+																	Class("pf-c-check__description").
+																	Text("Use a reduced alphabet for better portability."),
+															),
+													),
+											),
 									),
 							),
 						app.Div().
@@ -219,7 +294,7 @@ func (c *ExportKeyModal) Render() app.UI {
 									Type("submit").
 									Form(exportPrivateKeyForm).
 									OnClick(func(ctx app.Context, e app.Event) {
-										c.OnDownloadPrivateKey(!c.skipPrivateKeyArmor)
+										c.OnDownloadPrivateKey(!c.skipPrivateKeyArmor, c.privateKeyBase64Encode)
 									}).
 									Body(
 										app.Span().
@@ -232,13 +307,13 @@ func (c *ExportKeyModal) Render() app.UI {
 										app.Text("Download private key"),
 									),
 								app.If(
-									!c.skipPrivateKeyArmor,
+									!c.skipPrivateKeyArmor || c.privateKeyBase64Encode,
 									app.Button().
 										Class("pf-c-button pf-m-control pf-u-mr-sm pf-u-display-block pf-u-display-inline-block-on-md pf-u-w-100 pf-u-w-initial-on-md").
 										Type("submit").
 										Form(exportPrivateKeyForm).
 										OnClick(func(ctx app.Context, e app.Event) {
-											c.OnViewPrivateKey()
+											c.OnViewPrivateKey(!c.skipPrivateKeyArmor, c.privateKeyBase64Encode)
 										}).
 										Body(
 											app.Span().
@@ -274,5 +349,8 @@ func (c *ExportKeyModal) Render() app.UI {
 
 func (c *ExportKeyModal) clear() {
 	c.skipPublicKeyArmor = false
+	c.publicKeyBase64Encode = false
+
 	c.skipPrivateKeyArmor = false
+	c.privateKeyBase64Encode = false
 }
