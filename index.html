@@ -7,21 +7,21 @@
 <meta name="keywords" content="pgp, pgp, gopenpgp, encryption, signatures">
 <meta name="theme-color" content="#151515">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
-<meta content="http://127.0.0.1:40291/" property="og:url">
+<meta property="og:url" content="http://127.0.0.1:34079/">
 <meta property="og:title" content="keygaen">
 <meta content="Sign, verify, encrypt and decrypt data with PGP." property="og:description">
-<meta property="og:type" content="website">
+<meta content="website" property="og:type">
 <meta property="og:image" content>
 <title>
 keygaen
 </title>
-<link href="/keygaen/web/default.png" rel="icon">
+<link rel="icon" href="/keygaen/web/default.png">
 <link rel="apple-touch-icon" href="/keygaen/web/default.png">
 <link rel="manifest" href="/keygaen/manifest.webmanifest">
-<link type="text/css" rel="stylesheet" href="/keygaen/app.css">
+<link rel="stylesheet" href="/keygaen/app.css" type="text/css">
 <script defer="true" src="/keygaen/wasm_exec.js"></script>
 <script defer="true" src="/keygaen/app.js"></script>
-<link type="text/css" rel="stylesheet" href="/keygaen/web/main.css">
+<link href="/keygaen/web/main.css" type="text/css" rel="stylesheet">
 <meta property="og:url" content="https://pojntfx.github.io/keygaen/">
 <meta property="og:title" content="keygaen">
 <meta property="og:description" content="Sign, verify, encrypt and decrypt data with PGP.">
@@ -37,7 +37,7 @@ Sign, verify, encrypt and decrypt data with PGP.
 </aside>
 <div id="app-pre-render">
 <div class="pf-c-page">
-<a class="pf-c-skip-to-content pf-c-button pf-m-primary" href="#keygaen-main">
+<a href="#keygaen-main" class="pf-c-skip-to-content pf-c-button pf-m-primary">
 Skip to content
 </a>
 <header class="pf-c-page__header">
@@ -49,14 +49,14 @@ Skip to content
 <div class="pf-c-page__header-tools">
 <div class="pf-c-page__header-tools-group">
 <div class="pf-c-page__header-tools-item">
-<a class="pf-c-button pf-m-plain" aria-label="Help" href="https://github.com/pojntfx/keygaen" target="_blank">
-<i class="pf-icon fas fa-question-circle" aria-hidden="true"></i>
+<a href="https://github.com/pojntfx/keygaen" target="_blank" class="pf-c-button pf-m-plain" aria-label="Help">
+<i aria-hidden="true" class="pf-icon fas fa-question-circle"></i>
 </a>
 </div>
 </div>
 </div>
 </header>
-<main tabindex="-1" class="pf-c-page__main" id="keygaen-main">
+<main class="pf-c-page__main" id="keygaen-main" tabindex="-1">
 <section class="pf-c-page__main-section pf-m-fill">
 <div class="pf-c-empty-state">
 <div class="pf-c-empty-state__content">
@@ -82,7 +82,7 @@ Or import key
 <div class="pf-c-backdrop">
 <div class="pf-l-bullseye">
 <div aria-role="dialog" aria-label="keygaen has not yet been audited!" aria-labelledby="audit-modal" aria-modal="true" class="pf-c-modal-box pf-m-modal pf-m-sm pf-m-warning" tabindex="-1">
-<button aria-disabled="false" aria-label="Close" class="pf-c-button pf-m-plain" type="button">
+<button type="button" aria-disabled="false" aria-label="Close" class="pf-c-button pf-m-plain">
 <i class="fas fa-times" aria-hidden="true"></i>
 </button>
 <header class="pf-c-modal-box__header">
@@ -102,7 +102,7 @@ keygaen has not yet been audited!
 While we try to make keygaen as secure as possible, it has not yet undergone a formal security audit by a third party. Please keep this in mind if you use it for security-critical applications.
 </div>
 <footer class="pf-c-modal-box__footer">
-<button aria-disabled="false" class="pf-c-button pf-m-warning" type="button">
+<button type="button" aria-disabled="false" class="pf-c-button pf-m-warning">
 Yes, I understand
 </button>
 <a class="pf-c-button pf-m-link" target="_blank" href="https://en.wikipedia.org/wiki/Information_security_audit">

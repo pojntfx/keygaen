@@ -5,7 +5,7 @@ var goappNav = function () {};
 var goappOnUpdate = function () {};
 var goappOnAppInstallChange = function () {};
 
-const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/keygaen","GOAPP_STATIC_RESOURCES_URL":"/keygaen","GOAPP_VERSION":"965da4e4c1d1f26b84512fabbbedcc2dd27825f0"};
+const goappEnv = {"GOAPP_INTERNAL_URLS":"null","GOAPP_ROOT_PREFIX":"/keygaen","GOAPP_STATIC_RESOURCES_URL":"/keygaen","GOAPP_VERSION":"ce548ed44d23aa69a80e0a77962ddd71f1ff5488"};
 const goappLoadingLabel = "Sign, verify, encrypt and decrypt data with PGP.";
 const goappWasmContentLengthHeader = "";
 
