@@ -454,7 +454,7 @@ func (c *Home) Render() app.UI {
 						c.createKeyModalOpen = false
 						c.keySuccessfullyGeneratedModalOpen = true
 
-						parsedKey, fingerprint, err := crypt.ReadKey(key, password)
+						parsedKey, _, err := crypt.ReadKey(key, password)
 						if err != nil {
 							c.panic(err, func() {})
 
@@ -469,8 +469,8 @@ func (c *Home) Render() app.UI {
 						}
 
 						c.keys = append(c.keys, PGPKey{
-							ID:       fingerprint,       // Since we don't generate subkeys, we'll only have one fingerprint
-							Label:    fingerprint[0:10], // We can safely assume that the fingerprint is at least 10 chars long
+							ID:       parsedKey.PrimaryKey.KeyIdString(),
+							Label:    parsedKey.PrimaryKey.KeyIdShortString(),
 							FullName: id.Name,
 							Email:    id.UserId.Email,
 							Private:  parsedKey.PrivateKey != nil,
@@ -526,7 +526,7 @@ func (c *Home) Render() app.UI {
 							}
 
 							if parsedKey == nil {
-								parsedKey, fingerprint, err = crypt.ReadKey(key, "")
+								parsedKey, _, err = crypt.ReadKey(key, "")
 								if err != nil {
 									c.panic(err, func() {})
 
@@ -543,7 +543,7 @@ func (c *Home) Render() app.UI {
 
 							newKeys := []PGPKey{}
 							for _, candidate := range c.keys {
-								if candidate.ID == fingerprint {
+								if candidate.ID == parsedKey.PrimaryKey.KeyIdString() {
 									// Replace the key if the existing key is a public key and the imported key is a private key
 									if !candidate.Private && parsedKey.PrivateKey != nil {
 										continue
@@ -561,8 +561,8 @@ func (c *Home) Render() app.UI {
 							}
 
 							newKeys = append(newKeys, PGPKey{
-								ID:       fingerprint,       // Since we don't generate subkeys, we'll only have one fingerprint
-								Label:    fingerprint[0:10], // We can safely assume that the fingerprint is at least 10 chars long
+								ID:       parsedKey.PrimaryKey.KeyIdString(),
+								Label:    parsedKey.PrimaryKey.KeyIdShortString(),
 								FullName: id.Name,
 								Email:    id.UserId.Email,
 								Private:  parsedKey.PrivateKey != nil,
