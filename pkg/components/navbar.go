@@ -19,8 +19,8 @@ func (c *Navbar) Render() app.UI {
 						Href("#").
 						Body(
 							app.Img().
-								Class("pf-c-brand").
-								Src("/web/logo-light.png").
+								Class("pf-c-brand", "pf-u-p-xs").
+								Src("/web/logo-dark.png").
 								Alt("Logo"),
 						),
 				),

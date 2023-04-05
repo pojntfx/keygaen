@@ -76,8 +76,6 @@ Click on an image to see a larger version.
 - The open source [PatternFly design system](https://www.patternfly.org/v4/) provides the components for the project.
 - [GopenPGP](https://gopenpgp.org/) is the PGP library in use.
 
-To all the rest of the authors who worked on the dependencies used: **Thanks a lot!**
-
 ## Contributing
 
 To contribute, please use the [GitHub flow](https://guides.github.com/introduction/flow/) and follow our [Code of Conduct](./CODE_OF_CONDUCT.md).
@@ -87,13 +85,14 @@ To build and start a development version of keygaen locally, run the following:
 ```shell
 $ git clone https://github.com/pojntfx/keygaen.git
 $ cd keygaen
-$ make run
+$ make depend
+$ make run-pwa/keygaen-pwa
 ```
 
 Have any questions or need help? Chat with us [on Matrix](https://matrix.to/#/#keygaen:matrix.org?via=matrix.org)!
 
 ## License
 
-keygaen (c) 2022 Felicitas Pojtinger and contributors
+keygaen (c) 2023 Felicitas Pojtinger and contributors
 
 SPDX-License-Identifier: AGPL-3.0
