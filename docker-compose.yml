@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+
+  keygaen:
+    build: .
+    ports:
+      - 8080:22255
