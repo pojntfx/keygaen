@@ -18,9 +18,19 @@ keygaen is an app to work with PGP without having to install anything on your lo
 
 ## Installation
 
+### Binary
+
 The web app is available on [GitHub releases](https://github.com/pojntfx/keygaen/releases) in the form of a static `.tar.gz` archive; to deploy it, simply upload it to a CDN or copy it to a web server. For most users, this shouldn't be necessary though; thanks to [@maxence-charriere](https://github.com/maxence-charriere)'s [go-app package](https://go-app.dev/), keygaen is a progressive web app. By simply visiting the [public deployment](https://pojntfx.github.io/keygaen/) once, it will be available for offline use whenever you need it:
 
 [<img src="https://github.com/alphahorizonio/webnetesctl/raw/main/img/launch.png" width="240">](https://pojntfx.github.io/keygaen/)
+
+### Docker
+
+```bash
+docker-compose up --build -d
+```
+
+The app will be exposed on `http://localhost:8080`.
 
 ## Screenshots
 
