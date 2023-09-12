@@ -27,12 +27,6 @@ jobs:
             flags: ""
             cmd: ./Hydrunfile go keygaen-cli
             dst: out/*
-          - id: gccgo-keygaen-cli
-            src: .
-            os: ghcr.io/pojntfx/bagccgop-base-sid
-            flags: -e '--privileged'
-            cmd: ./Hydrunfile gccgo keygaen-cli
-            dst: out/*
           - id: pwa
             src: .
             os: golang:bookworm
