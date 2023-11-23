@@ -91,6 +91,12 @@ $ make run-pwa/keygaen-pwa
 
 Have any questions or need help? Chat with us [on Matrix](https://matrix.to/#/#keygaen:matrix.org?via=matrix.org)!
 
+
+## Forking
+
+Fork the repo and enable github workflows in the web GUI, so that your changes are good before pushig a PR.
+
+
 ## License
 
 keygaen (c) 2023 Felicitas Pojtinger and contributors
